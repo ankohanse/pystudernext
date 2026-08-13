@@ -1,0 +1,25 @@
+import asyncio
+import logging
+import sys
+
+from datetime import datetime
+
+from pystudernext import AsyncNextDiscover, NextDiscover
+from helper import RunHelper
+
+# Setup logging to StdOut
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+
+async def main():
+    # Discover IP address of Xcom-LAN / Moxa
+    # Can be usefull to open the Moxa NPort Web Config
+    url = await AsyncNextDiscover.discover_gateway_webconfig()
+    if url:
+        logger.info(f"NX Gateway Web Config found at: {url}")
+    else:
+        logger.info(f"NX Gateway Web Config not found")
+
+
+RunHelper.run(main)  # main loop

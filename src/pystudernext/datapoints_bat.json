@@ -1,0 +1,54 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+
+    {  "_rem": "Column descriptions:"},
+    {  "_rem": "  fam  = Device Family"},
+    {  "_rem": "  par  = Parent address in menu structure"},
+    {  "_rem": "  addr = Address of the param"},
+    {  "_rem": "  size = Size of the param data"},
+    {  "_rem": "  lvl  = User level required to read the param"},
+    {  "_rem": "  id   = Id of the param"},
+    {  "_rem": "  name = Friendly name of the param or info"},
+    {  "_rem": "  def  = Default value"},
+    {  "_rem": "  unit = Data unit of measurement"},
+    {  "_rem": "  min  = Minimum value"},
+    {  "_rem": "  max  = Maximum value"},
+    {  "_rem": "  fmt  = Data format"},
+    {  "_rem": "  rw   = Read/Write allowed"},
+    {  "_rem": "  opt  = Options for selection in Enums"},
+    {  "_rem": "  rem  = Remarks"},
+    
+
+    {  "_rem": "###"},
+    {  "_rem": "### Battery Root Menu"},
+    {  "_rem": "###"},
+    {   "fam": "bat", "par": 0, "addr": 901001, "size": 0, "lvl": "Basic", "id": "1.x.1",   "lbl": "Battery common",   "fmt": "menu" },
+    {   "fam": "bat", "par": 0, "addr": 901002, "size": 0, "lvl": "Basic", "id": "1.x.2",   "lbl": "Battery",   "fmt": "menu" },
+    {   "fam": "bat", "par": 0, "addr": 901003, "size": 0, "lvl": "Basic", "id": "1.x.3",   "lbl": "Battery cycle",   "fmt": "menu" },
+    {   "fam": "bat", "par": 0, "addr": 901004, "size": 0, "lvl": "Basic", "id": "1.x.4",   "lbl": "Battery protection",   "fmt": "menu" },
+    {   "fam": "bat", "par": 0, "addr": 901005, "size": 0, "lvl": "Basic", "id": "1.x.5",   "lbl": "SOC estimator",   "fmt": "menu" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Battery - Battery common    TODO, (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "bat", "par": 901002, "addr": 318, "size": 2, "lvl": "ViewOnly", "id": "9",  "lbl": "Voltage", "def": 0, "unit": "V", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "bat", "par": 901002, "addr": 320, "size": 2, "lvl": "ViewOnly", "id": "13", "lbl": "Charging current", "def": 0, "unit": "A", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "bat", "par": 901002, "addr": 326, "size": 2, "lvl": "ViewOnly", "id": "18", "lbl": "State of health", "def": 0, "unit": "%", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "bat", "par": 901002, "addr": 329, "size": 2, "lvl": "ViewOnly", "id": "20", "lbl": "Temp", "def": 0, "unit": "°C", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "bat", "par": 901002, "addr": 342, "size": 2, "lvl": "Expert",   "id": "30", "lbl": "SOC for end of charge", "def": 100, "unit": "%", "min": "", "max": "", "fmt": "float", "rw": "R/W" },
+    {   "fam": "bat", "par": 901002, "addr": 344, "size": 2, "lvl": "Expert",   "id": "31", "lbl": "SOC for grid feeding", "def": 100, "unit": "%", "min": "", "max": "", "fmt": "float", "rw": "R/W" },
+    {   "fam": "bat", "par": 901002, "addr": 346, "size": 2, "lvl": "Expert",   "id": "32", "lbl": "SOC for backup", "def": 0, "unit": "%", "min": "", "max": "", "fmt": "float", "rw": "R/W" },
+  
+    {  "_rem": "###"},
+    {  "_rem": "### Battery xyz  TODO"},
+    {  "_rem": "###"},
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

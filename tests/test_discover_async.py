@@ -1,0 +1,172 @@
+import asyncio
+import copy
+import threading
+import pytest
+import pytest_asyncio
+
+from pystudernext import AsyncNextDiscover, NextDiscover
+from pystudernext import AsyncNextFactory, NextFactory
+from pystudernext import NextDataset
+from pystudernext import NextApiTimeoutException, NextApiResponseIsError
+from pystudernext import NextFormat
+from pystudernext import NextData
+from . import AsyncTestApi, TestApi
+
+
+async def on_receive(api: AsyncTestApi):
+    """Helper to turn a request into a response"""
+    # req: NextPackage = api.request_package
+    # if req:
+    #     if req.header.dst_addr not in api.rsp_dest:
+    #         flags = 0x03
+    #         data = XcomData.pack(ScomErrorCode.DEVICE_NOT_FOUND, XcomFormat.ERROR)
+
+    #     elif str(req.frame_data.service_data.object_id) not in api.rsp_dict:
+    #         flags = 0x03
+    #         data = XcomData.pack(ScomErrorCode.READ_PROPERTY_FAILED, XcomFormat.ERROR)
+
+    #     else:
+    #         flags = 0x02
+    #         data = api.rsp_dict[str(req.frame_data.service_data.object_id)]
+
+    #     api.response_package = copy.deepcopy(api.request_package)
+    #     api.response_package.frame_data.service_flags = flags
+    #     api.response_package.frame_data.service_data.property_data = data
+    #     api.response_package.header.data_length = len(api.response_package.frame_data)
+
+    pass
+
+
+class TestContext():
+
+    def __init__(self):
+        self.dataset = None
+        self.api = None
+        self.discover = None
+
+    async def start_discover(self, rsp_slaves, rsp_dict):
+        self.dataset = await AsyncNextFactory.create_dataset()
+        self.api = AsyncTestApi(on_receive_handler=on_receive, rsp_slaves=rsp_slaves, rsp_dict=rsp_dict)
+    
+        self.discover = AsyncNextDiscover(self.api, self.dataset)    
+
+    async def stop_discover(self):
+        self.api = None
+        self.dataset = None
+        self.discover = None
+
+
+@pytest_asyncio.fixture
+async def context():
+    # Prepare
+    ctx = TestContext()
+
+    # pass objects to tests
+    yield ctx
+
+    # cleanup
+    await ctx.stop_discover()
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("context")
+@pytest.mark.parametrize(
+    "name, rsp_slaves, rsp_dict, exp_devices",
+    [
+        ("SYS",               [1],         { "1200": 1234.0 },  ["SYS"]),
+        ("BAT_1",             [2],         { "318": 1234.0 },   ["BAT_1"]),
+        ("BAT_1,BAT_2,BAT_3", [2,3,4],     { "318": 1234.0 },   ["BAT_1", "BAT_2", "BAT3"]),
+        ("ACS_1",             [7],         { "2": 1234.0 },     ["ACS_1"]),
+        ("ACS_1,ACS_2",       [7,8],       { "2": 1234.0 },     ["ACS_1", "ACS_2"]),
+        ("ACF_1",             [9],         { "0": 1234.0 },     ["ACF_1"]),
+        ("ACF_1,ACF_2,ACF_3", [9,10,11],   { "0": 1234.0 },     ["ACF_1", "ACF_2","ACF_3"]),
+        ("NX3_1",             [14],        { "5100": 1234.0 },  ["NX3_1"]),
+        ("NX3_1,NX3_2,NX3_3", [14,15,16],  { "5100": 1234.0 },  ["NX3_1", "NX3_2", "NX3_3"]),
+        ("NX1_1",             [29],        { "2700": 1234.0 },  ["NX1_1"]),
+        ("NX1_1,NX1_2,NX1_3", [29,30,31],  { "2700": 1234.0 },  ["NX1_1", "NX1_2", "NX1_3"]),
+        ("NXG_1",             [59],        { "0": 1234.0 },     ["NXG_1"]),
+        ("NXG_1,NXG_2",       [59,60],     { "0": 1234.0 },     ["NXG_1", "NXG_2"]),
+    ]
+)
+async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
+    # Create discover instance
+    context = request.getfixturevalue("context")
+    await context.start_discover(rsp_slaves, rsp_dict)
+
+    # Perform the discover
+    devices = await context.discover.discover_devices(getExtendedInfo=False)
+
+    # Check discovered devices
+    assert len(devices) == len(exp_devices)
+    for device in devices:
+        assert device.code in exp_devices
+        assert device.slave in rsp_slaves
+        assert device.family_id is not None
+        assert device.family_model is not None
+        
+        assert device.device_model is None
+        assert device.hw_version is None
+        assert device.sw_version is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("context")
+@pytest.mark.parametrize(
+    "name, rsp_slaves, rsp_dict, exp_code, exp_model, exp_hw_version, exp_sw_version",
+    [
+        ("NX3 none",    [14], {
+                            "5100": 1234.0  # detect
+                        }, "NX3_1", None, None, None),
+        ("NX3 ext",     [14], {
+                            "5100": 1234.0, # detect
+                            "5201": 1,      # device_model
+                            "5202": 2,      # hw_version
+                            "5203": 3,      # hw_version
+                            "5204": 4,      # sw_version
+                            "5205": 5,      # sw_version
+                        }, "NX3_1", "fiep", "2.3", "4.5"),
+    ]
+)
+async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_code, exp_model, exp_hw_version, exp_sw_version, request):
+    # Create discover instance
+    context = request.getfixturevalue("context")
+    await context.start_discover(rsp_slaves, rsp_dict)
+
+    # Perform the discover
+    devices = await context.discover.discover_devices(getExtendedInfo=True)
+
+    # Check discovered devices
+    assert len(devices) == 1
+    device = devices[0]
+
+    assert device.code in exp_code
+    assert device.device_model == exp_model
+    assert device.hw_version == exp_hw_version
+    assert device.sw_version == exp_sw_version
+
+
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("context", "unused_tcp_port")
+@pytest.mark.parametrize(
+    "name, rsp_slaves, rsp_dict, exp_ip, exp_guid",
+    [
+        ("guid none",   [1], {
+                            "0": NextData.pack("137aef81-08b7-4e70-ad89-0dad0563d627", NextFormat.STRING),    
+                    }, "127.0.0.1", None),
+        ("guid ok",     [1], {
+                            "2103": NextData.pack("137aef81-08b7-4e70-ad89-0dad0563d627", NextFormat.STRING),      
+                    }, "127.0.0.1", "137aef81-08b7-4e70-ad89-0dad0563d627"),
+    ]        
+)
+async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_ip, exp_guid, request):
+    # Create discover instance
+    context = request.getfixturevalue("context")
+    await context.start_discover(rsp_slaves, rsp_dict)
+
+    # Perform the discover
+    gateway_info = await context.discover.discover_gateway_info()
+
+    # Check discovered info
+    assert gateway_info is not None
+    assert gateway_info.ip == exp_ip
+    assert gateway_info.guid == exp_guid

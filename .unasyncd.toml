@@ -1,0 +1,35 @@
+[tool.unasyncd]
+remove_unused_imports = false
+no_cache = false
+force_regen = false
+add_editors_note = true
+exclude = [
+    "Something",
+    "SomethingElse.within"
+]
+
+[tool.unasyncd.files]
+    "src/pystudernext/discover_async.py" = "src/pystudernext/discover_sync.py"
+    "src/pystudernext/factory_async.py" = "src/pystudernext/factory_sync.py"
+    "tests/test_datapoints_async.py" = "tests/test_datapoints_sync.py"
+    "tests/test_discover_async.py" = "tests/test_discover_sync.py"
+    "example_discover_devices_async.py" = "example_discover_devices.py"
+    "example_discover_gateway_async.py" = "example_discover_gateway.py"
+    "example_menu_async.py" = "example_menu.py"
+
+[tool.unasyncd.add_replacements]
+    "AsyncNextFactory" = "NextFactory"
+    "aiofiles_open" = "open"
+    "asyncio.StreamReader" = "io.BufferedReader"
+    "asyncio.StreamWriter" = "io.BufferedWriter"
+    "AsyncReader" = "SyncReader"
+    "httpx.AsyncClient" = "httpx.Client"
+    "asyncudp" = "udp"
+    "asyncio.Lock" = "threading.Lock"
+    "aclose" = "close"
+    "CALL_CONTEXT_ASYNC" = "CALL_CONTEXT_SYNC"
+    "pytest_asyncio" = "pytest"
+    "AsyncTaskHelper" = "TaskHelper"
+    "AsyncTestApi" = "TestApi"
+    "asyncio.as_completed" = "concurrent.futures.as_completed"
+

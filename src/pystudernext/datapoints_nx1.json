@@ -1,0 +1,70 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+
+    {  "_rem": "Column descriptions:"},
+    {  "_rem": "  fam  = Device Family"},
+    {  "_rem": "  par  = Parent address in menu structure"},
+    {  "_rem": "  addr = Address of the param"},
+    {  "_rem": "  size = Size of the param data"},
+    {  "_rem": "  lvl  = User level required to read the param"},
+    {  "_rem": "  id   = Id of the param"},
+    {  "_rem": "  name = Friendly name of the param or info"},
+    {  "_rem": "  def  = Default value"},
+    {  "_rem": "  unit = Data unit of measurement"},
+    {  "_rem": "  min  = Minimum value"},
+    {  "_rem": "  max  = Maximum value"},
+    {  "_rem": "  fmt  = Data format"},
+    {  "_rem": "  rw   = Read/Write allowed"},
+    {  "_rem": "  opt  = Options for selection in Enums"},
+    {  "_rem": "  rem  = Remarks"},
+    
+
+    {  "_rem": "###"},
+    {  "_rem": "### Next1 Root Menu"},
+    {  "_rem": "###"},
+    {   "fam": "nx1", "par": 0, "addr": 911001, "size": 0, "lvl": "Basic", "id": "11.x.1",   "lbl": "ID card",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911002, "size": 0, "lvl": "Basic", "id": "11.x.2",   "lbl": "Application",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911004, "size": 0, "lvl": "Basic", "id": "11.x.4",   "lbl": "CAN node",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911007, "size": 0, "lvl": "Basic", "id": "11.x.7",   "lbl": "Device",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911010, "size": 0, "lvl": "Basic", "id": "11.x.10",  "lbl": "Next1",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911011, "size": 0, "lvl": "Basic", "id": "11.x.11",  "lbl": "Aux relay 1",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911012, "size": 0, "lvl": "Basic", "id": "11.x.12",  "lbl": "Aux relay 2",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911013, "size": 0, "lvl": "Basic", "id": "11.x.13",  "lbl": "Aux relay 1 time control",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911014, "size": 0, "lvl": "Basic", "id": "11.x.14",  "lbl": "Next3 converterAux relay 2 time control",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911015, "size": 0, "lvl": "Basic", "id": "11.x.15",  "lbl": "Cmd input 1",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911016, "size": 0, "lvl": "Basic", "id": "11.x.16",  "lbl": "Cmd input 2",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911017, "size": 0, "lvl": "Basic", "id": "11.x.17",  "lbl": "Battery contributor",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911018, "size": 0, "lvl": "Basic", "id": "11.x.18",  "lbl": "RS485i bus",   "fmt": "menu" },
+    {   "fam": "nx1", "par": 0, "addr": 911019, "size": 0, "lvl": "Basic", "id": "11.x.19",  "lbl": "CANi bus",   "fmt": "menu" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Next1 - Next1  TODO (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "nx1", "par": 911010, "addr": 2700, "size": 2, "lvl": "ViewOnly", "id": "0", "lbl": "Status", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R", "opt": {"0":"No warning(s) or error(s)", "1":"In warning", "2":"In error restarting", "3":"In error halted"} },
+    {   "fam": "nx1", "par": 911010, "addr": 2702, "size": 2, "lvl": "ViewOnly", "id": "1", "lbl": "Errors", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R", "opt": {"0":"No errors", "1":"Fans failure", "2":"Internal temperature sensor failure", "4":"Abnormal voltage detected on acLoad port", "8":"AcLoad port broken connexion", "16":"Battery port broken connexion", "32":"Inverter overcurrent", "64":"Inverter failure", "128":"Internal power supply failure", "256":"Internal power supply overvoltage", "512":"Internal power supply undervoltage", "1024":"Battery overvoltage", "2048":"Battery undervoltage", "4096":"Communication error", "8192":"Battery temperature sensor in short circuit", "16384":"Battery fault"} },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Next1 - Aux relay 1  TODO (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "nx1", "par": 911011, "addr": 3001, "size": 2, "lvl": "ViewOnly", "id": "1", "lbl": "Position", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R", "opt": {"0":"Safe state opened", "1":"Safe state closed", "2":"Rel. man. opened", "3":"Rel. man. closed", "4":"Rel. auto opened", "5":"Rel. auto closed"} },
+    {   "fam": "nx1", "par": 911011, "addr": 3007, "size": 2, "lvl": "Basic",    "id": "4", "lbl": "Operating mode", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R/W", "opt": {"0":"Manual Off", "1":"Manual On", "2":"Auto"} },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Next1 - Aux relay 2  TODO (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "nx1", "par": 911012, "addr": 3301, "size": 2, "lvl": "ViewOnly", "id": "1", "lbl": "Position", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R", "opt": {"0":"Safe state opened", "1":"Safe state closed", "2":"Rel. man. opened", "3":"Rel. man. closed", "4":"Rel. auto opened", "5":"Rel. auto closed"} },
+    {   "fam": "nx1", "par": 911012, "addr": 3307, "size": 2, "lvl": "Basic",    "id": "4", "lbl": "Operating mode", "def": 0, "unit": "", "min": "", "max": "", "fmt": "enum", "rw": "R/W", "opt": {"0":"Manual Off", "1":"Manual On", "2":"Auto"} },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Next1 xyz  TODO"},
+    {  "_rem": "###"},
+
+    
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

@@ -1,0 +1,56 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+
+    {  "_rem": "Column descriptions:"},
+    {  "_rem": "  fam  = Device Family"},
+    {  "_rem": "  par  = Parent address in menu structure"},
+    {  "_rem": "  addr = Address of the param"},
+    {  "_rem": "  size = Size of the param data"},
+    {  "_rem": "  lvl  = User level required to read the param"},
+    {  "_rem": "  id   = Id of the param"},
+    {  "_rem": "  name = Friendly name of the param or info"},
+    {  "_rem": "  def  = Default value"},
+    {  "_rem": "  unit = Data unit of measurement"},
+    {  "_rem": "  min  = Minimum value"},
+    {  "_rem": "  max  = Maximum value"},
+    {  "_rem": "  fmt  = Data format"},
+    {  "_rem": "  rw   = Read/Write allowed"},
+    {  "_rem": "  opt  = Options for selection in Enums"},
+    {  "_rem": "  rem  = Remarks"},
+    
+
+    {  "_rem": "###"},
+    {  "_rem": "### AcSource Root Menu"},
+    {  "_rem": "###"},
+    {   "fam": "acs", "par": 0, "addr": 902001, "size": 0, "lvl": "Basic", "id": "2.x.1",   "lbl": "3-Phase measure",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902002, "size": 0, "lvl": "Basic", "id": "2.x.2",   "lbl": "Measure L1",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902003, "size": 0, "lvl": "Basic", "id": "2.x.3",   "lbl": "Measure L2",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902004, "size": 0, "lvl": "Basic", "id": "2.x.4",   "lbl": "Measure L3",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902005, "size": 0, "lvl": "Basic", "id": "2.x.5",   "lbl": "3-Phase input config",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902006, "size": 0, "lvl": "Basic", "id": "2.x.6",   "lbl": "L1 input config",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902007, "size": 0, "lvl": "Basic", "id": "2.x.7",   "lbl": "L2 input config",   "fmt": "menu" },
+    {   "fam": "acs", "par": 0, "addr": 902008, "size": 0, "lvl": "Basic", "id": "2.x.8",   "lbl": "L3 input config",   "fmt": "menu" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### AcSource  TODO, (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "acs", "par": 902001, "addr": 0, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Frequency measured", "def": 0, "unit": "Hz", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "par": 902001, "addr": 2, "size": 1, "lvl": "ViewOnly", "id": "4",   "lbl": "Line voltage L1-L2", "def": 0, "unit": "V", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "par": 902001, "addr": 8, "size": 1, "lvl": "ViewOnly", "id": "16",  "lbl": "Total active power", "def": 0, "unit": "W", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "par": 902001, "addr": 24, "size": 1, "lvl": "ViewOnly", "id": "29", "lbl": "Total consumed energy", "def": 0, "unit": "Wh", "min": "", "max": "", "fmt": "float64", "rw": "R" },
+    {   "fam": "acs", "par": 902001, "addr": 36, "size": 1, "lvl": "ViewOnly", "id": "33", "lbl": "Total produced energy", "def": 0, "unit": "Wh", "min": "", "max": "", "fmt": "float64", "rw": "R" },
+    {   "fam": "acs", "par": 902006, "addr": 1815, "size": 1, "lvl": "Basic", "id": "8",   "lbl": "Grid-feeding allowed", "def": 1, "unit": "", "min": "", "max": "", "fmt": "bool", "rw": "R/W" },
+  
+    {  "_rem": "###"},
+    {  "_rem": "### AcSource xyz  TODO"},
+    {  "_rem": "###"},
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

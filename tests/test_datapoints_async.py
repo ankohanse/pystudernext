@@ -1,0 +1,104 @@
+import pytest
+import pytest_asyncio
+
+from pystudernext import (
+    NextDataset, 
+    NextFormat, 
+    NextDatapointUnknownException,
+    AsyncNextFactory,
+    NextFactory,
+)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "exp_len",
+    [
+        (163),
+    ]
+)
+async def test_create(exp_len):
+    dataset = await AsyncNextFactory.create_dataset()    
+
+    assert len(dataset._datapoints) == exp_len
+
+
+@pytest.mark.asyncio
+async def test_addr():
+    dataset = await AsyncNextFactory.create_dataset()
+
+    param = dataset.get_by_addr(6900)
+    assert param.family_id == "nx3"
+    assert param.addr == 6900
+    assert param.format == NextFormat.FLOAT
+
+    param = dataset.get_by_addr(5100)
+    assert param.family_id == "nx3"
+    assert param.addr == 5100
+    assert param.format == NextFormat.ENUM
+    assert param.options != None
+    assert type(param.options) is dict
+    assert len(param.options) == 4
+
+    param = dataset.get_by_addr(6900, "nx3")
+    assert param.family_id == "nx3"
+    assert param.addr == 6900
+    assert param.format == NextFormat.FLOAT
+
+    param = dataset.get_by_addr(1200, "sys")
+    assert param.family_id == "sys"
+    assert param.addr == 1200
+    assert param.format == NextFormat.ENUM
+    assert param.options != None
+    assert type(param.options) is dict
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_addr(9999)
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_addr(5100, "bat")
+
+
+@pytest.mark.asyncio
+async def test_enum():
+    dataset = await AsyncNextFactory.create_dataset()
+
+    param = dataset.get_by_addr(5100)
+    assert param.options != None
+    assert type(param.options) is dict
+    assert len(param.options) == 4
+
+    assert param.enum_value(0) == "No warning(s) or error(s)"
+    assert param.enum_value("0") == "No warning(s) or error(s)"
+    assert param.enum_value(9) == "9"
+    assert param.enum_value("9") == "9"
+
+    assert param.enum_key("No warning(s) or error(s)") == 0
+    assert param.enum_key("Unknown") == None
+    assert param.enum_key(9) == None
+    assert param.enum_key("9") == None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "family_id, exp_len",
+    [
+        ("sys", 25),
+        ("bat", 5),
+        ("acs", 8),
+        ("acf", 14),
+        ("nx3", 26),
+        ("nx1", 14),
+        ("nxg", 29),
+    ]
+)
+async def test_menu(family_id, exp_len):
+    dataset = await AsyncNextFactory.create_dataset()
+    
+    root_items = dataset.get_menu_items(0, family_id)
+    assert len(root_items) == exp_len
+
+    for item in root_items:
+        sub_items = dataset.get_menu_items(item.addr, family_id)
+        assert len(sub_items) >= 0
+
