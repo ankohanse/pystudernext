@@ -44,7 +44,7 @@ class NextDeviceFamilies:
         "sys",              # id
         "System",           # model 
         1, 1,               # modbus device slaves,  start to end
-        1200,               # address for discovery
+        2103,               # address for discovery
     )
     BATTERY = NextDeviceFamily(
         "bat",              # id
@@ -68,19 +68,19 @@ class NextDeviceFamilies:
         "nx3",              # id
         "Next3",            # model 
         14, 28,             # modbus device slaves,  start to end
-        5100,               # address for discovery
+        4,                  # address for discovery
     )
     NEXT1 = NextDeviceFamily(
         "nx1",              # id
         "Next1",            # model 
         29, 58,             # modbus device slaves,  start to end
-        2700,               # address for discovery
+        4,                  # address for discovery
     )
     NEXT_GATEWAY = NextDeviceFamily(
         "nxg",              # id
         "NextGateway",      # model 
         59, 60,             # modbus device slaves,  start to end
-        0,                  # address for discovery
+        4,                  # address for discovery
     )
 
 

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    api = AsyncNextApi(server="192.186.1.50", port=502)    # port number configured in Xcom-LAN/Moxa NPort
+    api = NextApi(server="192.186.1.50", port=502)    # port number configured in Xcom-LAN/Moxa NPort
     dataset = NextFactory.create_dataset()
 
     try:
@@ -25,7 +25,7 @@ def main():
             logger.info(f"Did not connect to Xcom")
             return
         
-        helper = AsyncNextDiscover(api, dataset)
+        helper = NextDiscover(api, dataset)
 
         # Discover NX Gateway info
         gw_info = helper.discover_gateway_info()

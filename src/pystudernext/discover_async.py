@@ -9,12 +9,12 @@ import struct
 
 from dataclasses import dataclass
 
-from .api_base_async import (
-    AsyncNextApi,
-)
-from .api_base_sync import (
-    NextApi,
-)
+# from .api_async import (
+#     AsyncNextApi,
+# )
+# from .api_sync import (
+#     NextApi,
+# )
 from .const import (
     NextDiscoverNotConnected,
 )
@@ -36,7 +36,12 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
-class AsyncXcomDiscover:
+#AJH temp
+class AsyncNextApi:
+    pass
+
+
+class AsyncNextDiscover:
 
     def __init__(self, api: AsyncNextApi, dataset: NextDataset):
         """
@@ -123,17 +128,13 @@ class AsyncXcomDiscover:
             _LOGGER.info(f"Trying to get extended device info for device {device.code})")
             family = NextDeviceFamilies.get_by_id(device.family_id)
 
-            id_type    = await self._request_value_by_name("ID type",     family.id, device.slave, verbose=verbose)
-            id_hw      = await self._request_value_by_name("ID HW",       family.id, device.slave, verbose=verbose)
-            id_hw_pwr  = await self._request_value_by_name("ID HW PWR",   family.id, device.slave, verbose=verbose)
-            id_sw_msb  = await self._request_value_by_name("ID SOFT msb", family.id, device.slave, verbose=verbose)
-            id_sw_lsb  = await self._request_value_by_name("ID SOFT lsb", family.id, device.slave, verbose=verbose)
+            id_serial  = await self._request_value_by_name("Serial number",            family.id, device.slave, verbose=verbose)
+            id_sw      = await self._request_value_by_name("Software package version", family.id, device.slave, verbose=verbose)
 
-            device.device_model = self._decode_type(id_type, "ID type", family.id)
-            device.hw_version   = self._decode_id_hw(id_hw, id_hw_pwr)
-            device.sw_version   = self._decode_id_sw(id_sw_msb, id_sw_lsb)
+            device.serial       = id_serial # String
+            device.sw_version   = self._decode_sw_version(id_sw) # Major.Middle.Minor.Patch
 
-            _LOGGER.info(f"  Found extended device info: model: {device.device_model}, hw_version: {device.hw_version}, sw_version: {device.sw_version}")
+            _LOGGER.info(f"  Found extended device info: model: {device.device_model}, serial: {device.serial}, sw_version: {device.sw_version}")
 
         except Exception as e:
             _LOGGER.warning(f"  Exception in getExtendedDeviceInfo: {e}")
@@ -150,40 +151,12 @@ class AsyncXcomDiscover:
             return None
         
 
-    def _decode_type(self, val, param_name, family_id):
+    def _decode_sw_version(self, val):
         if val is None:
             return None
-
-        param = self._dataset.get_by_name(param_name, family_id)
-        return param.options.get(str(int(val)), None) if param.options else None
-
-
-    def _decode_id_hw(self, cmd, pwr):
-        if cmd is None:
-            return None
         
-        bytes_cmd = struct.pack(">H", int(cmd))
-        if pwr is None:
-            return f"{int(bytes_cmd[0])}.{int(bytes_cmd[1])}"
-        else:
-            bytes_pwr = struct.pack(">H", int(pwr))
-            return f"{int(bytes_cmd[0])}.{int(bytes_cmd[1])} / {int(bytes_pwr[0])}.{int(bytes_pwr[1])}"
-
-
-    def _decode_id_sw(self, msb, lsb):
-        if msb is None or lsb is None:
-            return None
-        
-        bytes = struct.pack(">H", int(msb)) + struct.pack(">H", int(lsb))
-        return f"{int(bytes[0])}.{int(bytes[2])}.{int(bytes[3])}"
-
-
-    def _decode_fid(self, msb, lsb):
-        if msb is None or lsb is None:
-            return None
-        
-        bytes = struct.pack(">H", int(msb)) + struct.pack(">H", int(lsb))
-        return bytes.hex(' ',4).upper()
+        bytes = struct.pack(">H", int(val))
+        return f"{int(bytes[0])}.{int(bytes[1])}.{int(bytes[2])}.{int(bytes[3])}"
 
 
     async def discover_gateway_info(self, verbose=False) -> NextDiscoveredGateway:
@@ -211,7 +184,8 @@ class AsyncXcomDiscover:
             _LOGGER.warning(f"  Exception in discoverClientInfo: {e}")
 
         try:
-            gateway_guid = await self._api.request_guid(verbose=verbose)
+            param = self._dataset.get_by_addr(2103, NextDeviceFamilies.SYSTEM.id)
+            gateway_guid = await self._api.request_value(param, NextDeviceFamilies.SYSTEM.slaves_start, verbose)
 
             _LOGGER.info(f"  Found guid: {gateway_guid}")
 

@@ -1,5 +1,7 @@
 from .factory_async import AsyncNextFactory
 from .factory_sync import NextFactory
+from .discover_async import AsyncNextDiscover, AsyncNextApi
+from .discover_sync import NextDiscover, NextApi
 
 from .const import NextUserLevel, NextFormat, NextCategory
 from .const import NextApiWriteException, NextApiReadException, NextApiTimeoutException, NextApiUnpackException, NextApiResponseIsError, NextDiscoverNotConnected, NextParamException

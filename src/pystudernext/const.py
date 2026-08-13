@@ -69,18 +69,18 @@ class NextUserLevel(IntEnum):
 
 
 class NextFormat(StrEnum):
-    BOOL       = "bool"         # 1 register/byte
-    SIGNAL     = "signal"       # 1 register/byte
-    INT        = "int"          # 2 registers/bytes
-    UINT       = "uint"         # 2 registers/bytes
-    FLOAT      = "float"        # 2 registers/bytes
-    ENUM       = "enum"         # 2 registers/bytes
-    BITFIELD   = "bitfield"     # 2 registers/bytes
-    INT64      = "int64"        # 4 registers/bytes
-    UINT64     = "uint64"       # 4 registers/bytes
-    FLOAT64    = "float64"      # 4 registers/bytes
-    STRING     = "string"       # n registers/bytes
-    BYTES      = "bytes"        # n registers/bytes
+    BOOL       = "bool"         # 1 register / 1 byte
+    SIGNAL     = "signal"       # 1 register / 1byte
+    INT        = "int"          # 2 registers / 4 bytes
+    UINT       = "uint"         # 2 registers / 4 bytes
+    FLOAT      = "float"        # 2 registers / 4 bytes
+    ENUM       = "enum"         # 2 registers / 4 bytes
+    BITFIELD   = "bitfield"     # 2 registers / 4 bytes
+    INT64      = "int64"        # 4 registers / 8 bytes
+    UINT64     = "uint64"       # 4 registers / 8 bytes
+    FLOAT64    = "float64"      # 4 registers / 8 bytes
+    STRING     = "string"       # n registers / 2n bytes
+    BYTES      = "bytes"        # n registers / 2n bytes
     MENU       = "menu"         # n.a.
     INVALID    = "invalid"      # n.a.
 

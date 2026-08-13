@@ -27,12 +27,12 @@ class NextDatapointUnknownException(Exception):
 @dataclass
 class NextDatapoint:
     family_id: str
-    parent: int | None
+    parent_id: str
     addr: int
-    size: int | None
-    level_r: NextUserLevel | None
-    level_w: NextUserLevel | None
-    id: int | None
+    size: int
+    level_r: NextUserLevel
+    level_w: NextUserLevel
+    id: int
     label: str
     default: float|str = None
     unit: str = None
@@ -45,7 +45,7 @@ class NextDatapoint:
     @staticmethod
     def from_dict(d):
         fam = d.get('fam', None)
-        par = d.get('par', None)
+        pid = d.get('pid', None)
         addr  = d.get('addr', None)
         size = d.get('size', None)
         lvl = d.get('lvl', None)
@@ -60,27 +60,27 @@ class NextDatapoint:
         opt = d.get('opt', None)
 
         # Check and convert properties
-        if not fam or not addr or not lvl or not lbl or not fmt:
+        if fam is None or pid is None or addr is None or lvl is None or id is None or lbl is None or fmt is None:
             return None
         
-        if type(par) is not int:
+        if type(fam) is not str or type(pid) is not str or type(lvl) is not str or type(id) is not str or type(lbl) is not str or type(fmt) is not str:
             return None
 
-        if type(addr) is not int:
+        if type(addr) is not int or type(size) is not int:
             return None
 
         # lvl might be split into a read and write part
         lvl_parts = lvl.split('/', maxsplit=1) if '/' in lvl else [lvl, lvl]
 
         # Compose the Datapoint
-        family_id = str(fam)
-        parent = int(par)
-        addr = int(addr)
-        size = int(size)
+        family_id = fam
+        parent_id = pid
+        addr = addr
+        size = size
         level_r = NextUserLevel.from_str(lvl_parts[0])
         level_w = NextUserLevel.from_str(lvl_parts[1])
-        id = str(id) if id is not None else None
-        label = str(lbl).strip()
+        id = '.'.join(filter(None, [pid,id]))
+        label = lbl.strip()
         default = float(dft) if (type(dft) is int or type(dft) is float) else None
         unit = unit if type(unit) is str else None
         min = float(min) if (type(min) is int or type(min) is float) else None
@@ -89,7 +89,7 @@ class NextDatapoint:
         read_write = NextRW.from_str(rw) if type(rw) is str else None
         options = opt if type(opt) is dict else None
             
-        return NextDatapoint(family_id, parent, addr, size, level_r, level_w, id, label, default, unit, min, max, format, read_write, options)
+        return NextDatapoint(family_id, parent_id, addr, size, level_r, level_w, id, label, default, unit, min, max, format, read_write, options)
 
     @property
     def name(self):
@@ -183,6 +183,14 @@ class NextDataset:
         raise NextDatapointUnknownException(addr, family_id)
     
 
+    def get_by_id(self, id: str, family_id: str|None = None) -> NextDatapoint:
+        for point in self._datapoints:
+            if point.id == id and (point.family_id == family_id or family_id is None):
+                return point
+
+        raise NextDatapointUnknownException(id, family_id)
+    
+
     def get_by_name(self, name: str, family_id: str|None = None) -> NextDatapoint:
         for point in self._datapoints:
             if point.name == name and (point.family_id == family_id or family_id is None):
@@ -191,10 +199,10 @@ class NextDataset:
         raise NextDatapointUnknownException(name, family_id)
     
 
-    def get_menu_items(self, parent: int = 0, family_id: str|None = None):
+    def get_menu_items(self, family_id:str=None, parent_id:str=""):
         datapoints = []
         for point in self._datapoints:
-            if point.parent == parent and (point.family_id == family_id or family_id is None):
+            if point.parent_id == parent_id and (point.family_id == family_id or family_id is None):
                 datapoints.append(point)
 
         return datapoints

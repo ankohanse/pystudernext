@@ -50,7 +50,7 @@ class TestContext():
         self.dataset = NextFactory.create_dataset()
         self.api = TestApi(on_receive_handler=on_receive, rsp_slaves=rsp_slaves, rsp_dict=rsp_dict)
     
-        self.discover = AsyncNextDiscover(self.api, self.dataset)    
+        self.discover = NextDiscover(self.api, self.dataset)    
 
     def stop_discover(self):
         self.api = None
@@ -117,19 +117,29 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
     "name, rsp_slaves, rsp_dict, exp_code, exp_model, exp_hw_version, exp_sw_version",
     [
         ("NX3 none",    [14], {
-                            "5100": 1234.0  # detect
+                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
                         }, "NX3_1", None, None, None),
         ("NX3 ext",     [14], {
-                            "5100": 1234.0, # detect
-                            "5201": 1,      # device_model
-                            "5202": 2,      # hw_version
-                            "5203": 3,      # hw_version
-                            "5204": 4,      # sw_version
-                            "5205": 5,      # sw_version
-                        }, "NX3_1", "fiep", "2.3", "4.5"),
+                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
+                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
+                        }, "NX3_1", "123456789ABCDEF", None, "1.2.3.4"),
+        ("NX1 none",    [29], {
+                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
+                        }, "NX1_1", None, None, None),
+        ("NX1 ext",     [29], {
+                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
+                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
+                        }, "NX1_1", "123456789ABCDEF", None, "1.2.3.4"),
+        ("NXG none",    [59], {
+                           "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
+                        }, "NX1_1", None, None, None),
+        ("NXG ext",     [59], {
+                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
+                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
+                        }, "NX1_1", "123456789ABCDEF", None, "1.2.3.4"),
     ]
 )
-def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_code, exp_model, exp_hw_version, exp_sw_version, request):
+def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_code, exp_serial, exp_hw_version, exp_sw_version, request):
     # Create discover instance
     context = request.getfixturevalue("context")
     context.start_discover(rsp_slaves, rsp_dict)
@@ -142,7 +152,7 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_code, exp_model, 
     device = devices[0]
 
     assert device.code in exp_code
-    assert device.device_model == exp_model
+    assert device.serial == exp_serial
     assert device.hw_version == exp_hw_version
     assert device.sw_version == exp_sw_version
 

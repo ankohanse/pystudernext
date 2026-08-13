@@ -18,7 +18,9 @@ exclude = [
     "example_menu_async.py" = "example_menu.py"
 
 [tool.unasyncd.add_replacements]
+    "AsyncNextApi" = "NextApi"
     "AsyncNextFactory" = "NextFactory"
+    "AsyncNextDiscover" = "NextDiscover"
     "aiofiles_open" = "open"
     "asyncio.StreamReader" = "io.BufferedReader"
     "asyncio.StreamWriter" = "io.BufferedWriter"

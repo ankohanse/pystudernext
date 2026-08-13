@@ -16,7 +16,7 @@ from pystudernext import (
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (163),
+        (184),
     ]
 )
 def test_create(exp_len):
@@ -97,10 +97,10 @@ def test_enum():
 def test_menu(family_id, exp_len):
     dataset = NextFactory.create_dataset()
     
-    root_items = dataset.get_menu_items(0, family_id)
+    root_items = dataset.get_menu_items(family_id)
     assert len(root_items) == exp_len
 
     for item in root_items:
-        sub_items = dataset.get_menu_items(item.addr, family_id)
+        sub_items = dataset.get_menu_items(family_id, item.id)
         assert len(sub_items) >= 0
 
