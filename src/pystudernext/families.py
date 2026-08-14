@@ -21,11 +21,14 @@ class NextDeviceSlaveUnknownException(Exception):
     
 @dataclass
 class NextDeviceFamily:
-    id: str
-    model: str
-    slaves_start: int
-    slaves_end: int
-    address_discover: int
+    id: str                 # Short id
+    model: str              # Model name
+    slaves_start: int       # First possible slave number
+    slaves_end: int         # Last possible slave number
+    address_discover: int   # Address used to discover presence of the device
+    address_serial: int     # Serial number
+    address_sw_version: int # Software version
+    address_om_version: int # ObjectModel version
 
     def get_code(self, slave):
         if self.slaves_start == slave == self.slaves_end:
@@ -45,42 +48,63 @@ class NextDeviceFamilies:
         "System",           # model 
         1, 1,               # modbus device slaves,  start to end
         2103,               # address for discovery
+        0,                  # no address for Serial number
+        0,                  # no address for Software version
+        0,                  # no address for ObjectModel version
     )
     BATTERY = NextDeviceFamily(
         "bat",              # id
         "Battery",          # model 
         2, 6,               # modbus device slaves,  start to end
         318,                # address for discovery
+        0,                  # no address for Serial number
+        0,                  # no address for Software version
+        0,                  # no address for ObjectModel version
     )
     AC_SOURCE = NextDeviceFamily(
         "acs",              # id
         "AcSource",         # model 
         7, 8,               # modbus device slaves,  start to end
         2,                  # nr for discovery
+        0,                  # no address for Serial number
+        0,                  # no address for Software version
+        0,                  # no address for ObjectModel version
     )
     AC_FLEX_LOAD = NextDeviceFamily(
         "acf",              # id
         "AcFlexLoad",       # model 
         9, 13,              # modbus device slaves,  start to end
-        0,                  # address for discovery
+        0,                  # no address for discovery (yet)
+        0,                  # no address for Serial number
+        0,                  # no address for Software versionn
+        0,                  # no address for ObjectModel version
     )
     NEXT3 = NextDeviceFamily(
         "nx3",              # id
         "Next3",            # model 
         14, 28,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        4,                  # address for Serial number
+        14,                 # address for Software version
+        30,                 # address for ObjectModel version
     )
     NEXT1 = NextDeviceFamily(
         "nx1",              # id
         "Next1",            # model 
         29, 58,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        4,                  # address for Serial number
+        14,                 # address for Software version
+        30,                 # address for ObjectModel version
     )
     NEXT_GATEWAY = NextDeviceFamily(
         "nxg",              # id
         "NextGateway",      # model 
         59, 60,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        4,                  # address for Serial number
+        14,                 # address for Software version
+        30,                 # address for ObjectModel version
     )
 
 
@@ -134,7 +158,7 @@ class NextDeviceFamilies:
     @staticmethod
     def get_slave_by_code(code: str) -> int:
         """
-        Lookup the code to find the addr
+        Lookup the code to find the slave
         """
         NextDeviceFamilies._build_static_maps()
 
@@ -142,10 +166,10 @@ class NextDeviceFamilies:
 
 
     @staticmethod
-    def get_code_by_slave(addr: str) -> int:
+    def get_code_by_slave(slave: str) -> int:
         """
-        Lookup the code to find the addr
+        Lookup the slave to find the code
         """
         NextDeviceFamilies._build_static_maps()
 
-        return NextDeviceFamilies._slave_to_code_map.get(addr, None)
+        return NextDeviceFamilies._slave_to_code_map.get(slave, None)

@@ -41,6 +41,17 @@ class AsyncNextFactory:
             item_values = orjson.loads(item_text)
             item_datapoints = list(filter(None, [NextDatapoint.from_dict(val) for val in item_values]))
 
+            # Resolve Name for each datapoint. It is composed of the parent label and the datapoint label.
+            # Datapoints are clustered with ones sharing the same parent next to each other.
+            # Therefore we often do not need to search the entire set for the parent but can use the last used one.
+            dp_parent = None
+            for dp in item_datapoints:
+                # If needed, resolve the parent. Should be in the same file.
+                if dp_parent is None or dp_parent.id != dp.parent_id:
+                    dp_parent = next( (d for d in item_datapoints if d.id==dp.parent_id), None)
+
+                dp.name = dp_parent.name + ' - ' + dp.label if dp_parent is not None else dp.label
+
             # Merge the datapoints from this file
             datapoints = datapoints + item_datapoints
 

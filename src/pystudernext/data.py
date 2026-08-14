@@ -29,6 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 @dataclass
 class NextDiscoveredGateway:
     ip: str = None
+    port: int = None
     guid: str = None
 
 
@@ -41,9 +42,9 @@ class NextDiscoveredDevice:
     family_model: str
 
     # Extended info
-    serial: str = None
-    hw_version: str = None
-    sw_version: str = None
+    serial: str = None      # Serial number
+    sw_version: str = None  # Softwate version
+    om_version: str = None  # ObjectModel version
 
 
 class NextData:

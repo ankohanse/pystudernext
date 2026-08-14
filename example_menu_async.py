@@ -22,11 +22,11 @@ async def main():
         items = dataset.get_menu_items(family_id, parent_id)
         for item in items:
             if item.format == NextFormat.MENU:
-                logger.info(f"{indent}{item.id} {item.label}")
-                
+                logger.info(f"{indent}{item.label}")
+
                 await print_menu(family_id, item.id, indent+"  ")
             else:
-                logger.info(f"{indent}{item.id} {item.label} ({item.addr})")
+                logger.info(f"{indent}{item.label} ({item.address})")
 
     for family in NextDeviceFamilies.get_list():
         logger.info(f"")

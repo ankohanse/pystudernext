@@ -70,13 +70,12 @@ class NextDiscover:
 
             _LOGGER.info(f"Trying family {family.id} ({family.model})")
 
-            # Get value for the specific discovery addr
-            addr = family.addr_discover or None
-            if not addr:
+            # Get value for the specific discovery address
+            if family.address_discover is None:
                 continue
 
             # Iterate all slaves in the family, up to the first slave that is not found
-            for device_slave in range(family.slave_devices_start, family.slave_devices_end+1):
+            for device_slave in range(family.slaves_start, family.slaves_end+1):
 
                 device_code = family.get_code(device_slave)
 
@@ -91,11 +90,12 @@ class NextDiscover:
                 # - the device does not exist (DEVICE_NOT_FOUND)
                 # - the device does not support the param (INVALID_DATA), used to distinguish BSP from BMS
                 try:
-                    param = self._dataset.get_by_addr(addr, family.id)
+                    address_discover = family.address_discover
+                    param_discover = self._dataset.get_by_address(address_discover, family.id)
 
-                    _LOGGER.info(f"Trying device {device_code} (slave {device_slave}) for addr {addr}")
+                    _LOGGER.info(f"Trying device {device_code} (slave {device_slave}) for address {address_discover}")
 
-                    value = self._api.request_value(param, device_slave, verbose=verbose)
+                    value = self._api.request_value(param_discover, device_slave, verbose=verbose)
                     if value is not None:
                         _LOGGER.info(f"  Found device {device_code}")
 
@@ -131,13 +131,19 @@ class NextDiscover:
             _LOGGER.info(f"Trying to get extended device info for device {device.code})")
             family = NextDeviceFamilies.get_by_id(device.family_id)
 
-            id_serial  = self._request_value_by_name("Serial number",            family.id, device.slave, verbose=verbose)
-            id_sw      = self._request_value_by_name("Software package version", family.id, device.slave, verbose=verbose)
+            param_serial     = self._dataset.get_by_address(family.address_serial,     family.id)
+            param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id)
+            param_om_version = self._dataset.get_by_address(family.address_om_version, family.id)
 
-            device.serial       = id_serial # String
-            device.sw_version   = self._decode_sw_version(id_sw) # Major.Middle.Minor.Patch
+            value_serial     = self._request_value(param_serial,     device.slave, verbose=verbose)
+            value_sw_version = self._request_value(param_sw_version, device.slave, verbose=verbose)
+            value_om_version = self._request_value(param_om_version, device.slave, verbose=verbose)
 
-            _LOGGER.info(f"  Found extended device info: model: {device.device_model}, serial: {device.serial}, sw_version: {device.sw_version}")
+            device.serial       = value_serial # String
+            device.sw_version   = self._decode_sw_version(value_sw_version) # Major.Middle.Minor.Patch
+            device.om_version   = self._decode_om_version(value_om_version) # Major.Minor
+
+            _LOGGER.info(f"  Found extended device info: Serial: {device.serial}, Software version: {device.sw_version}, ObjectModel version: {device.om_version}")
 
         except Exception as e:
             _LOGGER.warning(f"  Exception in getExtendedDeviceInfo: {e}")
@@ -145,21 +151,20 @@ class NextDiscover:
         return device
 
 
-    def _request_value_by_name(self, param_name, family_id, device_slave, verbose=False):
-        try:
-            param = self._dataset.get_by_name(param_name, family_id)
-            return self._api.request_value(param, device_slave, verbose=verbose)
-        except:
-            # Not all devices have these IDs
-            return None
-        
-
     def _decode_sw_version(self, val):
         if val is None:
             return None
         
         bytes = struct.pack(">H", int(val))
         return f"{int(bytes[0])}.{int(bytes[1])}.{int(bytes[2])}.{int(bytes[3])}"
+
+
+    def _decode_om_version(self, val):
+        if val is None:
+            return None
+        
+        bytes = struct.pack(">H", int(val))
+        return f"{int.from_bytes(bytes[0:2], byteorder='big')}.{int.from_bytes(bytes[2:4], byteorder='big')}"
 
 
     def discover_gateway_info(self, verbose=False) -> NextDiscoveredGateway:
@@ -176,18 +181,20 @@ class NextDiscover:
 
         _LOGGER.info(f"Trying to get gateway info")
         gateway_ip = None
+        gateway_port = None
         gateway_guid = None
 
         try:
             gateway_ip = str(ipaddress.ip_address(self._api.remote_ip))
+            gateway_port = self._api.remote_port
 
-            _LOGGER.info(f"  Found ip: {gateway_ip}")
+            _LOGGER.info(f"  Found ip: {gateway_ip}, port: {gateway_port}")
 
         except Exception as e:
             _LOGGER.warning(f"  Exception in discoverClientInfo: {e}")
 
         try:
-            param = self._dataset.get_by_addr(2103, NextDeviceFamilies.SYSTEM.id)
+            param = self._dataset.get_by_address(NextDataset.ID_INSTALLATION_GUID)
             gateway_guid = self._api.request_value(param, NextDeviceFamilies.SYSTEM.slaves_start, verbose)
 
             _LOGGER.info(f"  Found guid: {gateway_guid}")
@@ -197,6 +204,7 @@ class NextDiscover:
 
         return NextDiscoveredGateway(
             ip = gateway_ip,
+            port = gateway_port,
             guid = gateway_guid,
         )
 

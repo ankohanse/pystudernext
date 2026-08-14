@@ -24,46 +24,88 @@ async def test_create(exp_len):
 
 
 @pytest.mark.asyncio
-async def test_addr():
+async def test_address():
     dataset = await AsyncNextFactory.create_dataset()
 
-    param = dataset.get_by_addr(6900)
+    param = dataset.get_by_address(6900)
     assert param.family_id == "nx3"
-    assert param.addr == 6900
+    assert param.address == 6900
     assert param.format == NextFormat.FLOAT
 
-    param = dataset.get_by_addr(5100)
+    param = dataset.get_by_address(5100)
     assert param.family_id == "nx3"
-    assert param.addr == 5100
+    assert param.address == 5100
     assert param.format == NextFormat.ENUM
     assert param.options != None
     assert type(param.options) is dict
     assert len(param.options) == 4
 
-    param = dataset.get_by_addr(6900, "nx3")
+    param = dataset.get_by_address(6900, "nx3")
     assert param.family_id == "nx3"
-    assert param.addr == 6900
+    assert param.address == 6900
     assert param.format == NextFormat.FLOAT
 
-    param = dataset.get_by_addr(1200, "sys")
+    param = dataset.get_by_address(1200, "sys")
     assert param.family_id == "sys"
-    assert param.addr == 1200
+    assert param.address == 1200
     assert param.format == NextFormat.ENUM
     assert param.options != None
     assert type(param.options) is dict
 
     with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_addr(9999)
+        param = dataset.get_by_address(9999)
 
     with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_addr(5100, "bat")
+        param = dataset.get_by_address(5100, "bat")
+
+
+@pytest.mark.asyncio
+async def test_id():
+    dataset = await AsyncNextFactory.create_dataset()
+
+    param = dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
+    assert param.family_id == "sys"
+    assert param.address == 2103
+    assert param.format == NextFormat.STRING
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_id(None)
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_id("")
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_id("9.9.9.9")
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_id("dummy")
+
+
+@pytest.mark.asyncio
+async def test_name():
+    dataset = await AsyncNextFactory.create_dataset()
+
+    param = dataset.get_by_name("Installation configuration - Installation GUID")
+    assert param.family_id == "sys"
+    assert param.address == 2103
+    assert param.id == NextDataset.ID_INSTALLATION_GUID
+    assert param.format == NextFormat.STRING
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_name(None)
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_name("")
+
+    with pytest.raises(NextDatapointUnknownException):
+        param = dataset.get_by_name("dummy")
 
 
 @pytest.mark.asyncio
 async def test_enum():
     dataset = await AsyncNextFactory.create_dataset()
 
-    param = dataset.get_by_addr(5100)
+    param = dataset.get_by_address(5100)
     assert param.options != None
     assert type(param.options) is dict
     assert len(param.options) == 4

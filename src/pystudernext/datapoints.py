@@ -28,12 +28,13 @@ class NextDatapointUnknownException(Exception):
 class NextDatapoint:
     family_id: str
     parent_id: str
-    addr: int
+    address: int
     size: int
     level_r: NextUserLevel
     level_w: NextUserLevel
     id: int
     label: str
+    name: str = None
     default: float|str = None
     unit: str = None
     min: float = None
@@ -75,7 +76,7 @@ class NextDatapoint:
         # Compose the Datapoint
         family_id = fam
         parent_id = pid
-        addr = addr
+        address = addr
         size = size
         level_r = NextUserLevel.from_str(lvl_parts[0])
         level_w = NextUserLevel.from_str(lvl_parts[1])
@@ -89,22 +90,31 @@ class NextDatapoint:
         read_write = NextRW.from_str(rw) if type(rw) is str else None
         options = opt if type(opt) is dict else None
             
-        return NextDatapoint(family_id, parent_id, addr, size, level_r, level_w, id, label, default, unit, min, max, format, read_write, options)
-
-    @property
-    def name(self):
-        """Label is not unique enough within a device; i.e. Aux1 and Aux2 both have a datapoint 'position'"""
-        # TODO lookup parent and use its label as prefix
-        parent = None
-        if parent is not None:
-            return parent.label + " " + self.label
-        else:
-            return self.label
+        return NextDatapoint(
+            family_id = family_id, 
+            parent_id = parent_id, 
+            address = address, 
+            size = size, 
+            level_r = level_r, 
+            level_w = level_w,
+            id = id, 
+            label = label,
+            name = None,    # Will be resolved later as it needs label from parent
+            default = default, 
+            unit = unit, 
+            min = min, 
+            max = max, 
+            format = format,
+            read_write = read_write, 
+            options = options
+        )
 
 
     @property
     def userlevel(self, action_rw:NextRW):
-        # First check if this datapoint can be read and/or written
+        """
+        Check if this datapoint can be read and/or written
+        """
         match action_rw:
             case NextRW.READ:
                 if self.read_write not in [NextRW.READ, NextRW.READ_WRITE]:
@@ -161,6 +171,7 @@ class NextDatapoint:
 
 class NextDataset:
 
+    # Paths to all files definining the datapoints
     PATHS = [
         __file__.replace('.py', '_sys.json'),
         __file__.replace('.py', '_bat.json'),
@@ -171,16 +182,23 @@ class NextDataset:
         __file__.replace('.py', '_nxg.json')
     ]
 
+    # Some known datapoint ID's
+    ID_INSTALLATION_GUID = "0.1.6.2"    # family="System", address=2103
+
+
     def __init__(self, datapoints: list[NextDatapoint] | None = None):
+        """
+        Datapoints are read from file(s) in (Async)NextFactory.create_dataset()
+        """
         self._datapoints = datapoints
 
 
-    def get_by_addr(self, addr: int, family_id: str|None = None) -> NextDatapoint:
+    def get_by_address(self, address: int, family_id: str|None = None) -> NextDatapoint:
         for point in self._datapoints:
-            if point.addr == addr and (point.family_id == family_id or family_id is None):
+            if point.address == address and (point.family_id == family_id or family_id is None):
                 return point
 
-        raise NextDatapointUnknownException(addr, family_id)
+        raise NextDatapointUnknownException(address, family_id)
     
 
     def get_by_id(self, id: str, family_id: str|None = None) -> NextDatapoint:
