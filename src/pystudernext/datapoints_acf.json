@@ -42,6 +42,16 @@
     {   "fam": "acf", "pid": "", "addr": 0, "size": 0, "lvl": "Basic", "id": "3.x.14",  "lbl": "L3 FlexLoads",   "fmt": "menu" },
 
     {  "_rem": "###"},
+    {  "_rem": "### AcFlexLoads - 3-Phase measure   TODO, (incomplete)"},
+    {  "_rem": "###"},
+    {   "fam": "acs", "pid": "3.x.1", "addr": 0,  "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Frequency measured", "def": 0, "unit": "Hz", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "pid": "3.x.1", "addr": 2,  "size": 1, "lvl": "ViewOnly", "id": "4",   "lbl": "Line voltage L1-L2", "def": 0, "unit": "V", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "pid": "3.x.1", "addr": 4,  "size": 1, "lvl": "ViewOnly", "id": "8",   "lbl": "Line voltage L2-L3", "def": 0, "unit": "V", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "pid": "3.x.1", "addr": 6,  "size": 1, "lvl": "ViewOnly", "id": "12",  "lbl": "Line voltage L3-L1", "def": 0, "unit": "V", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "pid": "3.x.1", "addr": 8,  "size": 1, "lvl": "ViewOnly", "id": "16",  "lbl": "Total active power", "def": 0, "unit": "W", "min": "", "max": "", "fmt": "float", "rw": "R" },
+    {   "fam": "acs", "pid": "3.x.1", "addr": 10, "size": 1, "lvl": "ViewOnly", "id": "20",  "lbl": "Total apparent power", "def": 0, "unit": "VA", "min": "", "max": "", "fmt": "float", "rw": "R" },
+
+    {  "_rem": "###"},
     {  "_rem": "### AcFlexLoads xyz  TODO"},
     {  "_rem": "###"},
 

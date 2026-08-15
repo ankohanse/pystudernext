@@ -12,6 +12,7 @@ import asyncio
 from dataclasses import dataclass
 import io
 import logging
+import math
 import struct
 import uuid
 
@@ -51,52 +52,55 @@ class NextData:
     NONE = b''
 
     @staticmethod
-    def unpack(value: bytes, format):
+    def unpack(registers: list[int], format: NextFormat) -> Any:
+        """
+        Unpack registers (list of uint16) into a value of specified type
+        """
+        # Convert from list[uint16] into bytes
+        bytes = struct.pack(f">{len(registers)}H", *registers)
+
         match format:
-            case NextFormat.BOOL: return struct.unpack("<?", value)[0]          # 1 byte, little endian, bool
-            case NextFormat.SIGNAL: return struct.unpack("<?", value)[0]        # 1 byte, little endian, bool
-            case NextFormat.INT:  return struct.unpack("<i", value)[0]          # 4 bytes, little endian, signed short/int32
-            case NextFormat.UINT: return struct.unpack("<I", value)[0]          # 4 bytes, little endian, unsigned short/int32
-            case NextFormat.FLOAT: return struct.unpack("<f", value)[0]         # 4 bytes, little endian, float
-            case NextFormat.INT64: return struct.unpack("<q", value)[0]         # 8 bytes, little endian, signed long/int64
-            case NextFormat.UINT64: return struct.unpack("<Q", value)[0]        # 8 bytes, little endian, unsigned long/int64
-            case NextFormat.FLOAT64: return struct.unpack("<d", value)[0]       # 8 bytes, little endian, float64
-            case NextFormat.STRING: return value.decode('iso-8859-15')          # n bytes, ISO_8859-15 string of 8 bit characters
-            case NextFormat.BYTES: return int.from_bytes(value, byteorder='little') # n bytes, little endian
+            case NextFormat.BOOL: return struct.unpack(">?", bytes[:1])[0]      # 1 byte,  big endian, bool
+            case NextFormat.SIGNAL: return struct.unpack(">?", bytes[:1])[0]    # 1 byte,  big endian, bool
+            case NextFormat.INT:  return struct.unpack(">i", bytes)[0]          # 4 bytes, big endian, signed short/int32
+            case NextFormat.UINT: return struct.unpack(">I", bytes)[0]          # 4 bytes, big endian, unsigned short/int32
+            case NextFormat.FLOAT: return struct.unpack(">f", bytes)[0]         # 4 bytes, big endian, float
+            case NextFormat.INT64: return struct.unpack(">q", bytes)[0]         # 8 bytes, big endian, signed long/int64
+            case NextFormat.UINT64: return struct.unpack(">Q", bytes)[0]        # 8 bytes, big endian, unsigned long/int64
+            case NextFormat.FLOAT64: return struct.unpack(">d", bytes)[0]       # 8 bytes, big endian, float64
+            case NextFormat.BYTES: return bytes                                 # n bytes, big endian, array of bytes
+            case NextFormat.STRING:                                             # n bytes, string of 8 bit characters                           
+                str = bytes.decode('utf-8')
+                return str.rstrip("\x00")                                   
             case _: 
-                msg = "Unknown data format '{format}"
-                raise TypeError(msg)
+                msg = "Unknown data format '{format}'"
+                raise NextParamException(msg)
+
 
     @staticmethod
-    def pack(value, format) -> bytes:
+    def pack(value: Any, format: NextFormat) -> list[int]:
+        """
+        Pack a value of specified type into registers (list of uint16)
+        """
         match format:
-            case NextFormat.BOOL: return struct.pack("<?", int(value))          # 1 byte, little endian, bool
-            case NextFormat.SIGNAL: return struct.pack("<?", int(value))        # 1 byte, little endian, bool
-            case NextFormat.INT: return struct.pack("<i", int(value))           # 4 bytes, little endian, unsigned short/int32
-            case NextFormat.UINT: return struct.pack("<I", int(value))          # 4 bytes, little endian, unsigned short/int32
-            case NextFormat.FLOAT: return struct.pack("<f", float(value))       # 4 bytes, little endian, float
-            case NextFormat.INT64: return struct.pack("<q", int(value))         # 8 bytes, little endian, signed long/int64
-            case NextFormat.UINT64: return struct.pack("<Q", int(value))        # 8 bytes, little endian, unsigned long/int64
-            case NextFormat.FLOAT64: return struct.pack("<d", float(value))     # 8 bytes, little endian, float64
-            case NextFormat.STRING: return value.encode('iso-8859-15')          # n bytes, ISO_8859-15 string of 8 bit characters
-            case NextFormat.BYTES: return int(value).to_bytes(8, byteorder='little') # n bytes, little endian
+            case NextFormat.BOOL: bytes = struct.pack(">?", int(value))          # 1 byte, big endian, bool
+            case NextFormat.SIGNAL: bytes = struct.pack(">?", int(value))        # 1 byte, big endian, bool
+            case NextFormat.INT: bytes = struct.pack(">i", int(value))           # 4 bytes, big endian, unsigned short/int32
+            case NextFormat.UINT: bytes = struct.pack(">I", int(value))          # 4 bytes, big endian, unsigned short/int32
+            case NextFormat.FLOAT: bytes = struct.pack(">f", float(value))       # 4 bytes, big endian, float
+            case NextFormat.INT64: bytes = struct.pack(">q", int(value))         # 8 bytes, big endian, signed long/int64
+            case NextFormat.UINT64: bytes = struct.pack(">Q", int(value))        # 8 bytes, big endian, unsigned long/int64
+            case NextFormat.FLOAT64: bytes = struct.pack(">d", float(value))     # 8 bytes, big endian, float64
+            case NextFormat.BYTES: bytes = value                                 # n bytes, big endian, array of bytes
+            case NextFormat.STRING: bytes = value.encode('utf-8', errors="ignore") # n bytes, string of 8 bit characters                           
             case _: 
                 msg = "Unknown data format '{format}"
-                raise TypeError(msg)
+                raise NextParamException(msg)
 
-    @staticmethod
-    def cast(value: Any, format):
-        match format:
-            case NextFormat.BOOL: return bool(value)
-            case NextFormat.SIGNAL: return bool(value)
-            case NextFormat.INT: return int(value)
-            case NextFormat.UINT: return int(value)
-            case NextFormat.FLOAT: return float(value)
-            case NextFormat.INT64: return int(value)
-            case NextFormat.UINT64: return int(value)
-            case NextFormat.FLOAT64: return float(value)
-            case NextFormat.STRING: return value.decode('iso-8859-15') 
-            case NextFormat.BYTES: return value.to_bytes(8, byteorder='little')
-            case _: 
-                msg = f"Unknown data format '{format}"
-                raise TypeError(msg)
+        # Make sure the byte array length is a multiple of 2
+        len16   = math.ceil(len(bytes)/2)
+        bytes16 = bytes.ljust(len16*2, b"\x00")                     
+
+        # Convert into array of uint16
+        return list(struct.unpack(f">{len16}H", bytes16))
+

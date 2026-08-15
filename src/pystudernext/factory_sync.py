@@ -3,7 +3,7 @@
 #! /usr/bin/env python3
 
 ##
-# Definition of all parameters / constants used in the Xcom protocol
+# Definition of all parameters / constants used in the Next protocol
 ##
 
 import asyncio

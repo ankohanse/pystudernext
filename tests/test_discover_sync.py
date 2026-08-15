@@ -9,7 +9,7 @@ import pytest_asyncio
 from pystudernext import AsyncNextDiscover, NextDiscover
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset
-from pystudernext import NextApiTimeoutException, NextApiResponseIsError
+from pystudernext import NextApiTimeoutException
 from pystudernext import NextFormat
 from pystudernext import NextData
 from . import AsyncTestApi, TestApi
@@ -21,11 +21,11 @@ def on_receive(api: TestApi):
     # if req:
     #     if req.header.dst_addr not in api.rsp_dest:
     #         flags = 0x03
-    #         data = XcomData.pack(ScomErrorCode.DEVICE_NOT_FOUND, XcomFormat.ERROR)
+    #         data = NextData.pack(ScomErrorCode.DEVICE_NOT_FOUND, NextFormat.ERROR)
 
     #     elif str(req.frame_data.service_data.object_id) not in api.rsp_dict:
     #         flags = 0x03
-    #         data = XcomData.pack(ScomErrorCode.READ_PROPERTY_FAILED, XcomFormat.ERROR)
+    #         data = NextData.pack(ScomErrorCode.READ_PROPERTY_FAILED, NextFormat.ERROR)
 
     #     else:
     #         flags = 0x02

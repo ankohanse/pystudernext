@@ -135,18 +135,6 @@ class NextDatapoint:
                     return self.level_w
 
             
-    @property
-    def category(self) -> NextCategory:
-        if self.read_write in [NextRW.READ]:
-            return NextCategory.INFO
-
-        if self.read_write in [NextRW.READ_WRITE, NextRW.WRITE]:
-            return NextCategory.PARAMETER
-            
-        _LOGGER.debug(f"Unknown category for datapoint {self.nr} with level {self.level} and format {self.format}")
-        return NextCategory.INFO
-
-
     def enum_value(self, key):
         if self.format not in [NextFormat.ENUM]:
             return None
@@ -207,14 +195,6 @@ class NextDataset:
                 return point
 
         raise NextDatapointUnknownException(id, family_id)
-    
-
-    def get_by_name(self, name: str, family_id: str|None = None) -> NextDatapoint:
-        for point in self._datapoints:
-            if point.name == name and (point.family_id == family_id or family_id is None):
-                return point
-
-        raise NextDatapointUnknownException(name, family_id)
     
 
     def get_menu_items(self, family_id:str=None, parent_id:str=""):

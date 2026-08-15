@@ -16,7 +16,7 @@ from pystudernext import (
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (184),
+        (190),
     ]
 )
 def test_create(exp_len):
@@ -81,26 +81,6 @@ def test_id():
 
     with pytest.raises(NextDatapointUnknownException):
         param = dataset.get_by_id("dummy")
-
-
-@pytest.mark.asyncio
-def test_name():
-    dataset = NextFactory.create_dataset()
-
-    param = dataset.get_by_name("Installation configuration - Installation GUID")
-    assert param.family_id == "sys"
-    assert param.address == 2103
-    assert param.id == NextDataset.ID_INSTALLATION_GUID
-    assert param.format == NextFormat.STRING
-
-    with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_name(None)
-
-    with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_name("")
-
-    with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_name("dummy")
 
 
 @pytest.mark.asyncio

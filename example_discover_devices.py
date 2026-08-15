@@ -17,12 +17,12 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    api = NextApi(server="192.186.1.50", port=502)    # port number configured in Xcom-LAN/Moxa NPort
+    api = NextApi(server="192.186.1.50", port=502)    # port number configured in Next-LAN/Moxa NPort
     dataset = NextFactory.create_dataset()
 
     try:
         if not api.start():
-            logger.info(f"Did not connect to Xcom")
+            logger.info(f"Did not connect to Next")
             return
         
         helper = NextDiscover(api, dataset)

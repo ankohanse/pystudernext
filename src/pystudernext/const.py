@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 ##
-# Definition of all parameters / constants used in the Xcom protocol
+# Definition of all parameters / constants used in the Next protocol
 ##
 
 from dataclasses import dataclass
@@ -9,30 +9,30 @@ from enum import IntEnum, StrEnum
 from typing import Iterable
 
 
-class NextApiWriteException(Exception):
-    """Exception to indicate failure while writing data to the next gateway"""
-    
-class NextApiReadException(Exception):
-    """Exception to indicate failure while reading data from the next gateway"""
-    
+class NextApiConnectException(Exception):
+    """Exception to indicate failure while connecting to the Next Gateway"""
+
 class NextApiTimeoutException(Exception):
     """Exception to indicate a timeout while reading from the next gateway"""
 
-class NextApiUnpackException(Exception):
-    """Exception to indicate faulure to unpack a response package from the next gateway"""
+class NextUnpackException(Exception):
+    """Exception to indicate faulure to unpack a response value"""
 
-class NextApiResponseIsError(Exception):
-    """Exception to indicate an error message was received back from the next gateway"""
+class NextPackException(Exception):
+    """Exception to indicate faulure to pack a update value"""
 
 class NextDiscoverNotConnected(Exception):
     """Exception to indicate that remote next gateway is not connected"""
 
 class NextParamException(Exception):
-    pass
+    """Exeption to indicaye that something is wrong with the parameters passed to a call"""
 
 
-START_TIMEOUT = 30 # seconds
-STOP_TIMEOUT = 5
+DEFAULT_HOST = ""
+DEFAULT_PORT = 502
+
+CONNECT_TIMEOUT = 10 # seconds
+CLOSE_TIMEOUT = 5
 REQ_TIMEOUT = 3
 REQ_RETRIES = 3
 REQ_BURST_PERIOD = 5 # do burst of requests for 5 seconds, then wait a second, then the next burst

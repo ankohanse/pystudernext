@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    # Discover IP address of Xcom-LAN / Moxa
+    # Discover IP address of Next-LAN / Moxa
     # Can be usefull to open the Moxa NPort Web Config
     url = await AsyncNextDiscover.discover_gateway_webconfig()
     if url:

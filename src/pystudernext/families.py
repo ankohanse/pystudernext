@@ -48,36 +48,36 @@ class NextDeviceFamilies:
         "System",           # model 
         1, 1,               # modbus device slaves,  start to end
         2103,               # address for discovery
-        0,                  # no address for Serial number
-        0,                  # no address for Software version
-        0,                  # no address for ObjectModel version
+        None,               # address for Serial number
+        None,               # address for Software version
+        None,               # address for ObjectModel version
     )
     BATTERY = NextDeviceFamily(
         "bat",              # id
         "Battery",          # model 
         2, 6,               # modbus device slaves,  start to end
         318,                # address for discovery
-        0,                  # no address for Serial number
-        0,                  # no address for Software version
-        0,                  # no address for ObjectModel version
+        None,               # address for Serial number
+        None,               # address for Software version
+        None,               # address for ObjectModel version
     )
     AC_SOURCE = NextDeviceFamily(
         "acs",              # id
         "AcSource",         # model 
         7, 8,               # modbus device slaves,  start to end
-        2,                  # nr for discovery
-        0,                  # no address for Serial number
-        0,                  # no address for Software version
-        0,                  # no address for ObjectModel version
+        0,                  # address for discovery
+        None,               # address for Serial number
+        None,               # address for Software version
+        None,               # address for ObjectModel version
     )
     AC_FLEX_LOAD = NextDeviceFamily(
         "acf",              # id
         "AcFlexLoad",       # model 
         9, 13,              # modbus device slaves,  start to end
-        0,                  # no address for discovery (yet)
-        0,                  # no address for Serial number
-        0,                  # no address for Software versionn
-        0,                  # no address for ObjectModel version
+        0,                  # address for discovery (yet)
+        None,               # address for Serial number
+        None,               # address for Software version
+        None,               # address for ObjectModel version
     )
     NEXT3 = NextDeviceFamily(
         "nx3",              # id

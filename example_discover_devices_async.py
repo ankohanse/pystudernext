@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    api = AsyncNextApi(server="192.186.1.50", port=502)    # port number configured in Xcom-LAN/Moxa NPort
+    api = AsyncNextApi(server="192.186.1.50", port=502)    # port number configured in Next-LAN/Moxa NPort
     dataset = await AsyncNextFactory.create_dataset()
 
     try:
         if not await api.start():
-            logger.info(f"Did not connect to Xcom")
+            logger.info(f"Did not connect to Next")
             return
         
         helper = AsyncNextDiscover(api, dataset)
