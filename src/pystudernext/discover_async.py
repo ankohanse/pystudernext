@@ -9,12 +9,12 @@ import struct
 
 from dataclasses import dataclass
 
-# from .api_async import (
-#     AsyncNextApi,
-# )
-# from .api_sync import (
-#     NextApi,
-# )
+from .api_async import (
+    AsyncNextApi,
+)
+#from .api_sync import (
+#    NextApi,
+#)
 from .const import (
     NextDiscoverNotConnected,
 )
@@ -34,11 +34,6 @@ from .families import (
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
-
-
-#AJH temp
-class AsyncNextApi:
-    pass
 
 
 class AsyncNextDiscover:

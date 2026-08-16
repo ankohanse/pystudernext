@@ -132,7 +132,7 @@ class AsyncModbusTcpClient:
             raise OSError(f"Unexpected Modbus TCP error: {err}") from err
 
 
-    async def write_holding_registers(self, address: int, values: list[int], slave: int) -> None:
+    async def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
         """
         Write `values` (list of uint16) to holding registers starting at `address` on `slave`.
 
@@ -145,10 +145,10 @@ class AsyncModbusTcpClient:
 
         self._transaction_id = (self._transaction_id + 1) & 0xFFFF
 
-        byte_count = len(values) * 2
+        byte_count = len(registers) * 2
         # PDU: FC + starting address + quantity + byte count + register data
-        pdu = struct.pack(">BHHB", _FC_WRITE_MULTIPLE, address, len(values), byte_count)
-        pdu += struct.pack(f">{len(values)}H", *values)
+        pdu = struct.pack(">BHHB", _FC_WRITE_MULTIPLE, address, len(registers), byte_count)
+        pdu += struct.pack(f">{len(registers)}H", *registers)
 
         mbap = struct.pack(
             ">HHHB",

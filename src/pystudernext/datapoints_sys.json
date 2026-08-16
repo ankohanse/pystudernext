@@ -80,7 +80,7 @@
     {  "_rem": "###"},
     {  "_rem": "### System - 3-Phase AC-Loads    TODO, (incomplete)"},
     {  "_rem": "###"},
-    {   "fam": "sys", "pid": "0.1.12", "addr": 3908, "size": 2, "lvl": "ViewOnly", "id": "16",   "lbl": "Total active power", "def": 0, "unit": "W", "min": "", "max": "", "fmt": "float", "rw": "R", "opt": {"0":"Priority to grid", "1":"Priority to getset"} },
+    {   "fam": "sys", "pid": "0.1.12", "addr": 3908, "size": 2, "lvl": "ViewOnly", "id": "16",   "lbl": "Total active power", "def": 0, "unit": "W", "min": "", "max": "", "fmt": "float", "rw": "R"},
     {   "fam": "sys", "pid": "0.1.12", "addr": 3924, "size": 4, "lvl": "ViewOnly", "id": "29",   "lbl": "Total consumed energy", "def": 0, "unit": "Wh", "min": "", "max": "", "fmt": "float64", "rw": "R"},
 
     {  "_rem": "###"},

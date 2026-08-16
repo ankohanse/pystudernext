@@ -4,6 +4,7 @@ from .factory_sync import NextFactory
 from .discover_async import AsyncNextDiscover, AsyncNextApi
 from .discover_sync import NextDiscover, NextApi
 
+from .const import DEFAULT_HOST, DEFAULT_PORT
 from .const import NextUserLevel, NextFormat, NextCategory
 from .const import NextApiConnectException, NextApiTimeoutException, NextPackException, NextUnpackException, NextDiscoverNotConnected, NextParamException
 from .data import NextDiscoveredGateway, NextDiscoveredDevice, NextData

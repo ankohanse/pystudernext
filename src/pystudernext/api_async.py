@@ -155,7 +155,7 @@ class AsyncNextApi:
 
         # Unpack the data
         try:
-            return NextData.unpack(regs, parameter.format, parameter.size)
+            return NextData.unpack(regs, parameter.format)
         
         except Exception as e:
             _LOGGER.warning(f"Failed to unpack response registers for '{parameter.name}' ({parameter.address} via {slave}): registers={regs.hex()}, format={parameter.format}, size={parameter.size}")
@@ -191,7 +191,7 @@ class AsyncNextApi:
 
         # Pack the data
         try:
-            regs = NextData.pack(value, parameter.format, parameter.size)
+            regs = NextData.pack(value, parameter.format)
 
         except Exception as e:
             _LOGGER.warning(f"Failed to pack request registers for '{parameter.name}' ({parameter.address} via {slave}): value={value}, format={parameter.format}, size={parameter.size}")
