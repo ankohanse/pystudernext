@@ -23,7 +23,7 @@ class AsyncNextApiStub(AsyncNextApi):
     Is using a stub modbus client to skip actual communication
     """
     def __init__(self, on_read_handler=None, on_write_handler=None):
-        super().__init__(remote_host="127.0.0.1", remote_port=DEFAULT_PORT)
+        super().__init__(host="127.0.0.1", port=DEFAULT_PORT)
         self._on_read = on_read_handler
         self._on_write = on_write_handler
 
@@ -40,7 +40,7 @@ class NextApiStub(NextApi):
     Is using a stub modbus client to skip actual communication
     """
     def __init__(self, on_read_handler=None, on_write_handler=None):
-        super().__init__(remote_host="127.0.0.1", remote_port=DEFAULT_PORT)
+        super().__init__(host="127.0.0.1", port=DEFAULT_PORT)
         self._on_read = on_read_handler
         self._on_write = on_write_handler
 
