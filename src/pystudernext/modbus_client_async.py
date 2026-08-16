@@ -1,5 +1,5 @@
 """Minimal async Modbus TCP client — no external dependencies."""
-from __future__ import annotations
+from abc import ABC, abstractmethod
 
 import asyncio
 import logging
@@ -16,29 +16,37 @@ class ModbusTcpError(Exception):
     """Raised when the device returns a Modbus exception response."""
 
 
-class AsyncModbusClientBase:
-    def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
-        raise NotImplementedError()
+class AsyncModbusClientBase(ABC):
+    """
+    Interface definition for any Async Modbus Client
+    """
 
     @property
+    @abstractmethod
     def connected(self) -> bool:
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     async def connect(self) -> bool:
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def close(self) -> None:
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     async def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     async def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
-        raise NotImplementedError()
+        pass
 
 
 class AsyncModbusTcpClient(AsyncModbusClientBase):
-    """Bare-bones async Modbus TCP client using raw asyncio sockets."""
+    """
+    Bare-bones async Modbus TCP client using raw asyncio sockets.
+    """
 
     def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
         self._host = host
@@ -62,6 +70,7 @@ class AsyncModbusTcpClient(AsyncModbusClientBase):
                 timeout=self._timeout,
             )
             return True
+        
         except Exception as err:
             _LOGGER.debug("Modbus connect failed: %s", err)
             self._reader = None

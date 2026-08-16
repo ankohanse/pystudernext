@@ -49,21 +49,20 @@ _FC_READ_HOLDING = 0x03
 _FC_WRITE_MULTIPLE = 0x10
 
 
-##
-## Base cass abstracting Next Api
-##
-class AsyncNextApiBase:
+class AsyncNextApi:
+    """
+    The actual Api for requesting and updating parameters via an async modbus tcp client.
+    """
 
-    def __init__(self, modbus_client_class: type[ModbusClientBase], remote_host:str=DEFAULT_HOST, remote_port:int=DEFAULT_PORT):
+    def __init__(self, remote_host:str=DEFAULT_HOST, remote_port:int=DEFAULT_PORT):
         """
         We connect to the MX Gateway.
         Once it is connected we can send Modbus requests.
         """
         self._remote_host = remote_host
         self._remote_port = remote_port
-        self._modbus_client_class = modbus_client_class
 
-        self._client: ModbusClientBase | None = None
+        self._client: AsyncModbusTcpClient | None = None
         self._lock = asyncio.Lock()
 
         # Diagnostics gathering
@@ -76,7 +75,7 @@ class AsyncNextApiBase:
         Connect the client.
         """
         try:
-            await self._get_client()
+            await self._get_connected_client()
             return True
         
         except Exception as err:
@@ -132,18 +131,18 @@ class AsyncNextApiBase:
         if parameter is None:
             return None
             
-        if slave is not None:
-            pass
-        elif device is not None:
+        if isinstance(device, NextDiscoveredDevice):
             slave = device.slave
-        elif code is not None:  
-            slave = NextDeviceFamilies.get_slave_by_code(code)
+        elif isinstance(device, int):
+            slave = device
+        elif isinstance(device, str):  
+            slave = NextDeviceFamilies.get_slave_by_code(code=device)
         else:
-            raise NextParamException(f"Either device or slave or code must be passed in call to request_value")
+            raise NextParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
 
         # Send the request
         try:
-            client = await self._get_client()
+            client = await self._get_connected_client()
             regs = await client.read_holding_registers(parameter.address, parameter.size, slave)
 
         except ModbusTcpError as err:
@@ -172,10 +171,9 @@ class AsyncNextApiBase:
             raise NextUnpackException() from None
 
 
-    async def update_value(self, parameter: NextDatapoint, value: Any, device: NextDiscoveredDevice=None, slave: int=None, code:str=None, retries = None, timeout = None, verbose=False):
+    async def update_value(self, parameter: NextDatapoint, value: Any, device: NextDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):
         """
         Update a parameter
-        One of device, slave or code needs to be passed.
         Returns None if not connected, otherwise returns True on success
 
         Throws
@@ -188,14 +186,14 @@ class AsyncNextApiBase:
         if parameter is None or value is None:
             return None
             
-        if slave is not None:
-            pass
-        elif device is not None:
+        if isinstance(device, NextDiscoveredDevice):
             slave = device.slave
-        elif code is not None:  
-            slave = NextDeviceFamilies.get_slave_by_code(code)
+        elif isinstance(device, int):
+            slave = device
+        elif isinstance(device, str):  
+            slave = NextDeviceFamilies.get_slave_by_code(code=device)
         else:
-            raise NextParamException(f"Either device or slave or code must be passed in call to request_value")
+            raise NextParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to update_value")
 
         _LOGGER.debug(f"Update '{parameter.name}' ({parameter.address} via {slave}) to {value}")
 
@@ -209,7 +207,7 @@ class AsyncNextApiBase:
         
         # Send the request
         try:
-            client = await self._get_client()
+            client = await self._get_connected_client()
             await client.write_holding_registers(parameter.address, regs, slave)
         
         except ModbusTcpError as err:
@@ -224,18 +222,26 @@ class AsyncNextApiBase:
         return None
 
 
-    async def _get_client(self):
+    async def _get_connected_client(self):
         """
         Return a connected client, reconnecting if needed.
         """
         if not self.connected:
-            self._client = self._modbus_client_class(self._remote_host, self._remote_port, timeout=CONNECT_TIMEOUT)
+            self._client = self._create_client(self._remote_host, self._remote_port, timeout=CONNECT_TIMEOUT)
 
             if not await self._client.connect():
                 self._client = None
                 raise NextApiConnectException(f"Cannot connect to Studer Gateway at {self._host}:{self._port}")
             
         return self._client            
+
+
+    def _create_client(self, host, port, timeout):
+        """
+        Helper to create the Modbus Client.
+        In a separate function to make it easier to replace the client with a stub for unit-tests.
+        """
+        return ModbusTcpClient(host, port, timeout)
 
 
     async def _add_diagnostics(self, retries: int = None, duration: timedelta = None):
@@ -260,11 +266,4 @@ class AsyncNextApiBase:
                 "durations": dict(sorted(self._diag_durations.items())),
             }
         }
-
-
-class AsyncNextApi(AsyncNextApiBase):
-    # The actual Api, using an async modbus tcp client
-
-    def __init__(self, remote_host:str=DEFAULT_HOST, remote_port:int=DEFAULT_PORT):
-        super().__init__(AsyncModbusTcpClient, remote_host, remote_port)
 

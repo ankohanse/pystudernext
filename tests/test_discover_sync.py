@@ -13,7 +13,7 @@ from pystudernext import NextDeviceFamilies
 from pystudernext import NextFormat
 from pystudernext import NextData
 
-from . import AsyncTestApi, TestApi
+from . import AsyncNextApiStub, NextApiStub
 
 
 @pytest.mark.asyncio
@@ -65,7 +65,7 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
     dataset = NextFactory.create_dataset()
 
-    def on_read(api: TestApi, address: int, count: int, slave: int):
+    def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
@@ -78,7 +78,7 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
             return None
 
     # Perform the discover
-    api = TestApi(on_read_handler=on_read)
+    api = NextApiStub(on_read_handler=on_read)
     api.start()
 
     discover = NextDiscover(api, dataset)   
@@ -134,7 +134,7 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_seri
 
     dataset = NextFactory.create_dataset()
 
-    def on_read(api: TestApi, address: int, count: int, slave: int):
+    def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
@@ -147,7 +147,7 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_seri
             return None
 
     # Perform the discover
-    api = TestApi(on_read_handler=on_read)
+    api = NextApiStub(on_read_handler=on_read)
     api.start()
 
     discover = NextDiscover(api, dataset)   
@@ -183,7 +183,7 @@ def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
     dataset = NextFactory.create_dataset()
 
-    def on_read(api: TestApi, address: int, count: int, slave: int):
+    def on_read(api: NextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""
             if slave in rsp_slaves and str(address) in rsp_dict:
                 family = NextDeviceFamilies.get_by_slave(slave)
@@ -195,7 +195,7 @@ def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
             else:
                 return None
     
-    api = TestApi(on_read_handler=on_read)
+    api = NextApiStub(on_read_handler=on_read)
     api.start()
     
     discover = NextDiscover(api, dataset) 

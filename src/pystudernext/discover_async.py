@@ -87,7 +87,7 @@ class AsyncNextDiscover:
 
                     _LOGGER.info(f"Trying device {device_code} (slave {device_slave}) for address {address_discover}")
 
-                    value = await self._api.request_value(param_discover, slave=device_slave, verbose=verbose)
+                    value = await self._api.request_value(param_discover, device_slave, verbose=verbose)
                     if value is not None:
                         _LOGGER.info(f"  Found device {device_code}")
 
@@ -126,9 +126,9 @@ class AsyncNextDiscover:
             param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id) if family.address_sw_version is not None else None
             param_om_version = self._dataset.get_by_address(family.address_om_version, family.id) if family.address_om_version is not None else None
 
-            value_serial     = await self._api.request_value(param_serial,     slave=device.slave, verbose=verbose)
-            value_sw_version = await self._api.request_value(param_sw_version, slave=device.slave, verbose=verbose)
-            value_om_version = await self._api.request_value(param_om_version, slave=device.slave, verbose=verbose)
+            value_serial     = await self._api.request_value(param_serial,     device.slave, verbose=verbose)
+            value_sw_version = await self._api.request_value(param_sw_version, device.slave, verbose=verbose)
+            value_om_version = await self._api.request_value(param_om_version, device.slave, verbose=verbose)
 
             device.serial       = value_serial # String
             device.sw_version   = self._decode_sw_version(value_sw_version) # Major.Middle.Minor.Patch
@@ -192,7 +192,7 @@ class AsyncNextDiscover:
 
         try:
             param = self._dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
-            gateway_guid = await self._api.request_value(param, slave=NextDeviceFamilies.SYSTEM.slaves_start, verbose=verbose)
+            gateway_guid = await self._api.request_value(param, NextDeviceFamilies.SYSTEM.slaves_start, verbose=verbose)
 
             _LOGGER.info(f"  Found guid: {gateway_guid}")
 

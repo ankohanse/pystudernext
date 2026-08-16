@@ -1,7 +1,8 @@
 """Minimal async Modbus TCP client — no external dependencies."""
-from __future__ import annotations
+from abc import ABC, abstractmethod
 
 import logging
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -14,28 +15,36 @@ class ModbusTcpError(Exception):
     """Raised when the device returns a Modbus exception response."""
 
 
-class ModbusClientBase:
-    def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
-        raise NotImplementedError()
+class ModbusClientBase(ABC):
+    """
+    Interface definition for any Async Modbus Client
+    """
 
     @property
+    @abstractmethod
     def connected(self) -> bool:
-        raise NotImplementedError()
+        pass
 
-    async def connect(self) -> bool:
-        raise NotImplementedError()
+    @abstractmethod
+    def connect(self) -> bool:
+        pass
 
+    @abstractmethod
     def close(self) -> None:
-        raise NotImplementedError()
+        pass
 
-    async def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
-        raise NotImplementedError()
+    @abstractmethod
+    def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
+        pass
 
-    async def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
-        raise NotImplementedError()
+    @abstractmethod
+    def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
+        pass
 
 
 class ModbusTcpClient(ModbusClientBase):
-    """Bare-bones async Modbus TCP client using raw sockets."""
+    """
+    Bare-bones async Modbus TCP client using raw sockets.
+    """
 
     # TODO

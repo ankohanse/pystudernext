@@ -21,7 +21,6 @@ exclude = [
 
 [tool.unasyncd.add_replacements]
     "AsyncNextApi" = "NextApi"
-    "AsyncNextApiBase" = "NextApiBase"
     "AsyncNextFactory" = "NextFactory"
     "AsyncNextDiscover" = "NextDiscover"
     "AsyncModbusClient" = "ModbusClient"
@@ -37,6 +36,7 @@ exclude = [
     "CALL_CONTEXT_ASYNC" = "CALL_CONTEXT_SYNC"
     "pytest_asyncio" = "pytest"
     "AsyncTaskHelper" = "TaskHelper"
-    "AsyncTestApi" = "TestApi"
+    "AsyncNextApiStub" = "NextApiStub"
+    "AsyncModbusClientStub" = "ModbusClientStub"
     "asyncio.as_completed" = "concurrent.futures.as_completed"
 

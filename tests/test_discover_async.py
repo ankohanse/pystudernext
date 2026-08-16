@@ -11,7 +11,7 @@ from pystudernext import NextDeviceFamilies
 from pystudernext import NextFormat
 from pystudernext import NextData
 
-from . import AsyncTestApi, TestApi
+from . import AsyncNextApiStub, NextApiStub
 
 
 @pytest.mark.asyncio
@@ -63,7 +63,7 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
 
     dataset = await AsyncNextFactory.create_dataset()
 
-    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+    async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
@@ -76,7 +76,7 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
             return None
 
     # Perform the discover
-    api = AsyncTestApi(on_read_handler=on_read)
+    api = AsyncNextApiStub(on_read_handler=on_read)
     await api.start()
 
     discover = AsyncNextDiscover(api, dataset)   
@@ -132,7 +132,7 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
 
     dataset = await AsyncNextFactory.create_dataset()
 
-    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+    async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
@@ -145,7 +145,7 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
             return None
 
     # Perform the discover
-    api = AsyncTestApi(on_read_handler=on_read)
+    api = AsyncNextApiStub(on_read_handler=on_read)
     await api.start()
 
     discover = AsyncNextDiscover(api, dataset)   
@@ -181,7 +181,7 @@ async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, requ
 
     dataset = await AsyncNextFactory.create_dataset()
 
-    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+    async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""
             if slave in rsp_slaves and str(address) in rsp_dict:
                 family = NextDeviceFamilies.get_by_slave(slave)
@@ -193,7 +193,7 @@ async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, requ
             else:
                 return None
     
-    api = AsyncTestApi(on_read_handler=on_read)
+    api = AsyncNextApiStub(on_read_handler=on_read)
     await api.start()
     
     discover = AsyncNextDiscover(api, dataset) 

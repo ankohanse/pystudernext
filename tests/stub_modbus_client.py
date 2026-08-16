@@ -6,7 +6,7 @@ from pystudernext import AsyncModbusClientBase, ModbusClientBase
 _LOGGER = logging.getLogger(__name__)
 
 
-class AsyncFakeModbusClient(AsyncModbusClientBase):
+class AsyncModbusClientStub(AsyncModbusClientBase):
 
     def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
         self._host = host
@@ -41,7 +41,7 @@ class AsyncFakeModbusClient(AsyncModbusClientBase):
 
 
 
-class FakeModbusClient(ModbusClientBase):
+class ModbusClientStub(ModbusClientBase):
 
     def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
         self._host = host

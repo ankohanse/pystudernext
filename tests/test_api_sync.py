@@ -9,7 +9,7 @@ import pytest_asyncio
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextData, NextFormat
 
-from . import AsyncTestApi, TestApi
+from . import AsyncNextApiStub, NextApiStub
 
 
 @pytest.mark.asyncio
@@ -31,7 +31,7 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
     read_count = None
     read_slave = None
 
-    def on_read(api: TestApi, address: int, count: int, slave: int):
+    def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         nonlocal read_called
         nonlocal read_address
@@ -48,10 +48,10 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
     dataset = NextFactory.create_dataset()
     param = dataset.get_by_address(test_addr, test_fam)
 
-    api = TestApi(on_read_handler=on_read)
+    api = NextApiStub(on_read_handler=on_read)
 
     if exp_except == None:
-        rsp_value = api.request_value(param, slave=test_slave)
+        rsp_value = api.request_value(param, test_slave)
 
         assert read_called
         assert read_slave == test_slave
@@ -84,7 +84,7 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
     write_regs = None
     write_slave = None
 
-    def on_write(api: TestApi, address: int, regs: list[int], slave: int):
+    def on_write(api: NextApiStub, address: int, regs: list[int], slave: int):
         """Helper to return the registers for a read"""
         nonlocal write_called
         nonlocal write_address
@@ -101,10 +101,10 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
     dataset = NextFactory.create_dataset()
     param = dataset.get_by_address(test_addr, test_fam)
 
-    api = TestApi(on_write_handler=on_write)
+    api = NextApiStub(on_write_handler=on_write)
 
     if exp_except == None:
-        rsp_value = api.update_value(param, test_value, slave=test_slave)
+        rsp_value = api.update_value(param, test_value, test_slave)
 
         assert write_called
         assert write_slave == test_slave
@@ -116,5 +116,5 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
 
     else:
         with pytest.raises(exp_except):
-            rsp_value = api.update_value(param, test_value, slave=test_slave)
+            rsp_value = api.update_value(param, test_value, test_slave)
  
