@@ -63,7 +63,7 @@ class NextDeviceFamilies:
     )
     AC_SOURCE = NextDeviceFamily(
         "acs",              # id
-        "AcSource",         # model 
+        "AC Source",        # model 
         7, 8,               # modbus device slaves,  start to end
         0,                  # address for discovery
         None,               # address for Serial number
@@ -72,7 +72,7 @@ class NextDeviceFamilies:
     )
     AC_FLEX_LOAD = NextDeviceFamily(
         "acf",              # id
-        "AcFlexLoad",       # model 
+        "AC FlexLoad",      # model 
         9, 13,              # modbus device slaves,  start to end
         0,                  # address for discovery
         None,               # address for Serial number
@@ -99,7 +99,7 @@ class NextDeviceFamilies:
     )
     NEXT_GATEWAY = NextDeviceFamily(
         "nxg",              # id
-        "NextGateway",      # model 
+        "Next Gateway",     # model 
         59, 60,             # modbus device slaves,  start to end
         4,                  # address for discovery
         4,                  # address for Serial number

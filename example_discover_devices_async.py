@@ -15,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    api = AsyncNextApi(server="192.186.1.50", port=502)    # port number configured in Next-LAN/Moxa NPort
+    api = AsyncNextApi(host="192.186.1.50", port=502)    # port number configured in Next-LAN/Moxa NPort
     dataset = await AsyncNextFactory.create_dataset()
 
     try:
         if not await api.start():
-            logger.info(f"Did not connect to Next")
+            logger.info(f"Did not connect to Next Gateway")
             return
         
         helper = AsyncNextDiscover(api, dataset)

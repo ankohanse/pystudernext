@@ -43,8 +43,9 @@
     {   "fam": "acs", "pid": "2.x.1", "addr": 8, "size": 1, "lvl": "ViewOnly", "id": "16",  "lbl": "Total active power", "def": 0, "unit": "W", "min": "", "max": "", "fmt": "float", "rw": "R" },
     {   "fam": "acs", "pid": "2.x.1", "addr": 24, "size": 1, "lvl": "ViewOnly", "id": "29", "lbl": "Total consumed energy", "def": 0, "unit": "Wh", "min": "", "max": "", "fmt": "float64", "rw": "R" },
     {   "fam": "acs", "pid": "2.x.1", "addr": 36, "size": 1, "lvl": "ViewOnly", "id": "33", "lbl": "Total produced energy", "def": 0, "unit": "Wh", "min": "", "max": "", "fmt": "float64", "rw": "R" },
+
     {   "fam": "acs", "pid": "2.x.1", "addr": 1815, "size": 1, "lvl": "Basic", "id": "8",   "lbl": "Grid-feeding allowed", "def": 1, "unit": "", "min": "", "max": "", "fmt": "bool", "rw": "R/W" },
-  
+
     {  "_rem": "###"},
     {  "_rem": "### AcSource xyz  TODO"},
     {  "_rem": "###"},

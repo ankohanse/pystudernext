@@ -57,13 +57,13 @@ class NextApi:
     The actual Api for requesting and updating parameters via an async modbus tcp client.
     """
 
-    def __init__(self, remote_host:str=DEFAULT_HOST, remote_port:int=DEFAULT_PORT):
+    def __init__(self, host:str=DEFAULT_HOST, port:int=DEFAULT_PORT):
         """
         We connect to the MX Gateway.
         Once it is connected we can send Modbus requests.
         """
-        self._remote_host = remote_host
-        self._remote_port = remote_port
+        self._host = host
+        self._port = port
 
         self._client: AsyncModbusTcpClient | None = None
         self._lock = threading.Lock()
@@ -109,12 +109,12 @@ class NextApi:
     @property
     def remote_host(self) -> str|None:
         """Returns the Host or IP address of the Next Gateway we connect to, otherwise None"""
-        return self._remote_host
+        return self._host
     
     @property
     def remote_port(self) -> str|None:
         """Returns the port of the Next Gateway we connect to, otherwise None"""
-        return self._remote_port
+        return self._port
     
 
     def request_value(self, parameter: NextDatapoint, device: NextDiscoveredDevice=None, slave: int=None, code:str=None, retries = None, timeout = None, verbose=False):
@@ -230,7 +230,7 @@ class NextApi:
         Return a connected client, reconnecting if needed.
         """
         if not self.connected:
-            self._client = self._create_client(self._remote_host, self._remote_port, timeout=CONNECT_TIMEOUT)
+            self._client = self._create_client(self._host, self._port, timeout=CONNECT_TIMEOUT)
 
             if not self._client.connect():
                 self._client = None
