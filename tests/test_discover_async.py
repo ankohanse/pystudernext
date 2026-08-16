@@ -7,94 +7,80 @@ import pytest_asyncio
 from pystudernext import AsyncNextDiscover, NextDiscover
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset
-from pystudernext import NextApiTimeoutException
+from pystudernext import NextDeviceFamilies
 from pystudernext import NextFormat
 from pystudernext import NextData
+
 from . import AsyncTestApi, TestApi
 
 
-async def on_receive(api: AsyncTestApi):
-    """Helper to turn a request into a response"""
-    # req: NextPackage = api.request_package
-    # if req:
-    #     if req.header.dst_addr not in api.rsp_dest:
-    #         flags = 0x03
-    #         data = NextData.pack(ScomErrorCode.DEVICE_NOT_FOUND, NextFormat.ERROR)
-
-    #     elif str(req.frame_data.service_data.object_id) not in api.rsp_dict:
-    #         flags = 0x03
-    #         data = NextData.pack(ScomErrorCode.READ_PROPERTY_FAILED, NextFormat.ERROR)
-
-    #     else:
-    #         flags = 0x02
-    #         data = api.rsp_dict[str(req.frame_data.service_data.object_id)]
-
-    #     api.response_package = copy.deepcopy(api.request_package)
-    #     api.response_package.frame_data.service_flags = flags
-    #     api.response_package.frame_data.service_data.property_data = data
-    #     api.response_package.header.data_length = len(api.response_package.frame_data)
-
-    pass
-
-
-class TestContext():
-
-    def __init__(self):
-        self.dataset = None
-        self.api = None
-        self.discover = None
-
-    async def start_discover(self, rsp_slaves, rsp_dict):
-        self.dataset = await AsyncNextFactory.create_dataset()
-        self.api = AsyncTestApi(on_receive_handler=on_receive, rsp_slaves=rsp_slaves, rsp_dict=rsp_dict)
-    
-        self.discover = AsyncNextDiscover(self.api, self.dataset)    
-
-    async def stop_discover(self):
-        self.api = None
-        self.dataset = None
-        self.discover = None
-
-
-@pytest_asyncio.fixture
-async def context():
-    # Prepare
-    ctx = TestContext()
-
-    # pass objects to tests
-    yield ctx
-
-    # cleanup
-    await ctx.stop_discover()
-
-
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("context")
 @pytest.mark.parametrize(
     "name, rsp_slaves, rsp_dict, exp_devices",
     [
-        ("SYS",               [1],         { "1200": 1234.0 },  ["SYS"]),
-        ("BAT_1",             [2],         { "318": 1234.0 },   ["BAT_1"]),
-        ("BAT_1,BAT_2,BAT_3", [2,3,4],     { "318": 1234.0 },   ["BAT_1", "BAT_2", "BAT3"]),
-        ("ACS_1",             [7],         { "2": 1234.0 },     ["ACS_1"]),
-        ("ACS_1,ACS_2",       [7,8],       { "2": 1234.0 },     ["ACS_1", "ACS_2"]),
-        ("ACF_1",             [9],         { "0": 1234.0 },     ["ACF_1"]),
-        ("ACF_1,ACF_2,ACF_3", [9,10,11],   { "0": 1234.0 },     ["ACF_1", "ACF_2","ACF_3"]),
-        ("NX3_1",             [14],        { "5100": 1234.0 },  ["NX3_1"]),
-        ("NX3_1,NX3_2,NX3_3", [14,15,16],  { "5100": 1234.0 },  ["NX3_1", "NX3_2", "NX3_3"]),
-        ("NX1_1",             [29],        { "2700": 1234.0 },  ["NX1_1"]),
-        ("NX1_1,NX1_2,NX1_3", [29,30,31],  { "2700": 1234.0 },  ["NX1_1", "NX1_2", "NX1_3"]),
-        ("NXG_1",             [59],        { "0": 1234.0 },     ["NXG_1"]),
-        ("NXG_1,NXG_2",       [59,60],     { "0": 1234.0 },     ["NXG_1", "NXG_2"]),
+        ("SYS",               [1],          { 
+                                                "2103": "00112233-4455-6677-8899-aabbccddeeff" 
+                                            },  ["SYS"]),
+        ("BAT_1",             [2],          { 
+                                                "318": 1234.0 
+                                            },  ["BAT_1"]),
+        ("BAT_1,BAT_2,BAT_3", [2,3,4],      { 
+                                                "318": 1234.0 
+                                            },  ["BAT_1", "BAT_2", "BAT_3"]),
+        ("ACS_1",             [7],          { 
+                                                "0": 1234.0 
+                                            },  ["ACS_1"]),
+        ("ACS_1,ACS_2",       [7,8],        { 
+                                                "0": 1234.0 
+                                            },  ["ACS_1", "ACS_2"]),
+        ("ACF_1",             [9],          { 
+                                                "0": 1234.0 
+                                            },  ["ACF_1"]),
+        ("ACF_1,ACF_2,ACF_3", [9,10,11],    { 
+                                                "0": 1234.0 
+                                            },  ["ACF_1", "ACF_2","ACF_3"]),
+        ("NX3_1",             [14],         { 
+                                                "4": "1122334455667788" 
+                                            },  ["NX3_1"]),
+        ("NX3_1,NX3_2,NX3_3", [14,15,16],   { 
+                                                "4": "1122334455667788" 
+                                            },  ["NX3_1", "NX3_2", "NX3_3"]),
+        ("NX1_1",             [29],         { 
+                                                "4": "1122334455667788" 
+                                            },  ["NX1_1"]),
+        ("NX1_1,NX1_2,NX1_3", [29,30,31],   { 
+                                                "4": "1122334455667788" 
+                                            },  ["NX1_1", "NX1_2", "NX1_3"]),
+        ("NXG_1",             [59],         { 
+                                                "4": "1122334455667788" 
+                                            },  ["NXG_1"]),
+        ("NXG_1,NXG_2",       [59,60],      { 
+                                                "4": "1122334455667788" 
+                                            },  ["NXG_1", "NXG_2"]),
     ]
 )
 async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
-    # Create discover instance
-    context = request.getfixturevalue("context")
-    await context.start_discover(rsp_slaves, rsp_dict)
+
+    dataset = await AsyncNextFactory.create_dataset()
+
+    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+        """Helper to return the registers for a read"""
+        if slave in rsp_slaves and str(address) in rsp_dict:
+            family = NextDeviceFamilies.get_by_slave(slave)
+            param = dataset.get_by_address(address, family.id)
+            rsp_val = rsp_dict[str(address)]
+            rsp_format = param.format
+
+            return NextData.pack(rsp_val, rsp_format)
+        else:
+            return None
 
     # Perform the discover
-    devices = await context.discover.discover_devices(getExtendedInfo=False)
+    api = AsyncTestApi(on_read_handler=on_read)
+    await api.start()
+
+    discover = AsyncNextDiscover(api, dataset)   
+    devices = await discover.discover_devices(getExtendedInfo=False)
 
     # Check discovered devices
     assert len(devices) == len(exp_devices)
@@ -103,80 +89,119 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
         assert device.slave in rsp_slaves
         assert device.family_id is not None
         assert device.family_model is not None
-        
-        assert device.device_model is None
-        assert device.hw_version is None
+      
+        assert device.serial is None
         assert device.sw_version is None
+        assert device.om_version is None
 
 
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("context")
 @pytest.mark.parametrize(
-    "name, rsp_slaves, rsp_dict, exp_code, exp_model, exp_hw_version, exp_sw_version",
+    "name, rsp_slaves, rsp_dict, exp_devices, exp_serial, exp_sw_version, exp_om_version",
     [
-        ("NX3 none",    [14], {
-                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
-                        }, "NX3_1", None, None, None),
-        ("NX3 ext",     [14], {
-                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
-                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
-                        }, "NX3_1", "123456789ABCDEF", None, "1.2.3.4"),
-        ("NX1 none",    [29], {
-                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
-                        }, "NX1_1", None, None, None),
-        ("NX1 ext",     [29], {
-                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
-                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
-                        }, "NX1_1", "123456789ABCDEF", None, "1.2.3.4"),
-        ("NXG none",    [59], {
-                           "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect
-                        }, "NX1_1", None, None, None),
-        ("NXG ext",     [59], {
-                            "4":  NextData.pack("123456789ABCDEF", NextFormat.STRING), # detect + serial number
-                            "14": NextData.pack(0x01020304,        NextFormat.UINT),   # sw_version
-                        }, "NX1_1", "123456789ABCDEF", None, "1.2.3.4"),
+        ("SYS none",    [1],    { 
+                                    "2103": "00112233-4455-6677-8899-aabbccddeeff" 
+                                },  ["SYS"], None, None, None),
+        ("BAT none",    [2],    { 
+                                    "318": 1234.0 
+                                },  ["BAT_1"], None, None, None),
+        ("ACS none",    [7],    { 
+                                    "0": 1234.0 
+                                },  ["ACS_1"], None, None, None),
+        ("ACF none",    [9],    { 
+                                    "0": 1234.0 
+                                },  ["ACF_1"], None, None, None),
+        ("NX3 ext",     [14],   { 
+                                    "4": "1122334455667788",
+                                    "14": 0x01020304,
+                                    "30": 0x00010002
+                                }, ["NX3_1"], "1122334455667788", "1.2.3.4", "1.2"),
+        ("NX1 ext",     [29],   { 
+                                    "4": "1122334455667788",
+                                    "14": 0x01020304,
+                                    "30": 0x00010002
+                                }, ["NX1_1"], "1122334455667788", "1.2.3.4", "1.2"),
+        ("NXG ext",     [59],   { 
+                                    "4": "1122334455667788",
+                                    "14": 0x01020304,
+                                    "30": 0x00010002
+                                }, ["NXG_1"], "1122334455667788", "1.2.3.4", "1.2"),
     ]
 )
-async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_code, exp_serial, exp_hw_version, exp_sw_version, request):
-    # Create discover instance
-    context = request.getfixturevalue("context")
-    await context.start_discover(rsp_slaves, rsp_dict)
+async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_serial, exp_sw_version, exp_om_version, request):
+
+    dataset = await AsyncNextFactory.create_dataset()
+
+    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+        """Helper to return the registers for a read"""
+        if slave in rsp_slaves and str(address) in rsp_dict:
+            family = NextDeviceFamilies.get_by_slave(slave)
+            param = dataset.get_by_address(address, family.id)
+            rsp_val = rsp_dict[str(address)]
+            rsp_format = param.format
+
+            return NextData.pack(rsp_val, rsp_format)
+        else:
+            return None
 
     # Perform the discover
-    devices = await context.discover.discover_devices(getExtendedInfo=True)
+    api = AsyncTestApi(on_read_handler=on_read)
+    await api.start()
+
+    discover = AsyncNextDiscover(api, dataset)   
+    devices = await discover.discover_devices(getExtendedInfo=True)
 
     # Check discovered devices
-    assert len(devices) == 1
-    device = devices[0]
-
-    assert device.code in exp_code
-    assert device.serial == exp_serial
-    assert device.hw_version == exp_hw_version
-    assert device.sw_version == exp_sw_version
+    assert len(devices) == len(exp_devices)
+    for device in devices:
+        assert device.code in exp_devices
+        assert device.slave in rsp_slaves
+        assert device.family_id is not None
+        assert device.family_model is not None
+      
+        assert device.serial == exp_serial
+        assert device.sw_version == exp_sw_version
+        assert device.om_version == exp_om_version
 
 
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("context", "unused_tcp_port")
+@pytest.mark.usefixtures("unused_tcp_port")
 @pytest.mark.parametrize(
-    "name, rsp_slaves, rsp_dict, exp_ip, exp_guid",
+    "name, rsp_slaves, rsp_dict, exp_host, exp_guid",
     [
-        ("guid none",   [1], {
-                            "0": NextData.pack("137aef81-08b7-4e70-ad89-0dad0563d627", NextFormat.STRING),    
-                    }, "127.0.0.1", None),
-        ("guid ok",     [1], {
-                            "2103": NextData.pack("137aef81-08b7-4e70-ad89-0dad0563d627", NextFormat.STRING),      
-                    }, "127.0.0.1", "137aef81-08b7-4e70-ad89-0dad0563d627"),
+        ("guid none",   [1],    {
+                                    "0": "00112233-4455-6677-8899-aabbccddeeff",      
+                                }, "127.0.0.1", None),
+        ("guid ok",     [1],    {
+                                    "2103": "00112233-4455-6677-8899-aabbccddeeff",      
+                                }, "127.0.0.1", "00112233-4455-6677-8899-aabbccddeeff"),
     ]        
 )
-async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_ip, exp_guid, request):
-    # Create discover instance
-    context = request.getfixturevalue("context")
-    await context.start_discover(rsp_slaves, rsp_dict)
+async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
+
+    dataset = await AsyncNextFactory.create_dataset()
+
+    async def on_read(api: AsyncTestApi, address: int, count: int, slave: int):
+            """Helper to return the registers for a read"""
+            if slave in rsp_slaves and str(address) in rsp_dict:
+                family = NextDeviceFamilies.get_by_slave(slave)
+                param = dataset.get_by_address(address, family.id)
+                rsp_val = rsp_dict[str(address)]
+                rsp_format = param.format
+    
+                return NextData.pack(rsp_val, rsp_format)
+            else:
+                return None
+    
+    api = AsyncTestApi(on_read_handler=on_read)
+    await api.start()
+    
+    discover = AsyncNextDiscover(api, dataset) 
 
     # Perform the discover
-    gateway_info = await context.discover.discover_gateway_info()
+    gateway_info = await discover.discover_gateway_info()
 
     # Check discovered info
     assert gateway_info is not None
-    assert gateway_info.ip == exp_ip
+    assert gateway_info.host == exp_host
     assert gateway_info.guid == exp_guid

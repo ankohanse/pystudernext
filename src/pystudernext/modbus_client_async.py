@@ -16,7 +16,28 @@ class ModbusTcpError(Exception):
     """Raised when the device returns a Modbus exception response."""
 
 
-class AsyncModbusTcpClient:
+class AsyncModbusClientBase:
+    def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
+        raise NotImplementedError()
+
+    @property
+    def connected(self) -> bool:
+        raise NotImplementedError()
+
+    async def connect(self) -> bool:
+        raise NotImplementedError()
+
+    def close(self) -> None:
+        raise NotImplementedError()
+
+    async def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
+        raise NotImplementedError()
+
+    async def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
+        raise NotImplementedError()
+
+
+class AsyncModbusTcpClient(AsyncModbusClientBase):
     """Bare-bones async Modbus TCP client using raw asyncio sockets."""
 
     def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:

@@ -9,8 +9,10 @@ exclude = [
 ]
 
 [tool.unasyncd.files]
+    "src/pystudernext/api_async.py" = "src/pystudernext/api_sync.py"
     "src/pystudernext/discover_async.py" = "src/pystudernext/discover_sync.py"
     "src/pystudernext/factory_async.py" = "src/pystudernext/factory_sync.py"
+    "tests/test_api_async.py" = "tests/test_api_sync.py"
     "tests/test_datapoints_async.py" = "tests/test_datapoints_sync.py"
     "tests/test_discover_async.py" = "tests/test_discover_sync.py"
     "example_discover_devices_async.py" = "example_discover_devices.py"
@@ -19,8 +21,11 @@ exclude = [
 
 [tool.unasyncd.add_replacements]
     "AsyncNextApi" = "NextApi"
+    "AsyncNextApiBase" = "NextApiBase"
     "AsyncNextFactory" = "NextFactory"
     "AsyncNextDiscover" = "NextDiscover"
+    "AsyncModbusClient" = "ModbusClient"
+    "AsyncModbusClientBase" = "ModbusClientBase"
     "aiofiles_open" = "open"
     "asyncio.StreamReader" = "io.BufferedReader"
     "asyncio.StreamWriter" = "io.BufferedWriter"

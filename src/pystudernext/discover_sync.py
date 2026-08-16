@@ -11,12 +11,12 @@ import struct
 
 from dataclasses import dataclass
 
-# from .api_async import (
-#     AsyncNextApi,
-# )
-# from .api_sync import (
-#     NextApi,
-# )
+from .api_async import (
+    AsyncNextApi,
+)
+from .api_sync import (
+    NextApi,
+)
 from .const import (
     NextDiscoverNotConnected,
 )
@@ -37,11 +37,6 @@ import concurrent.futures
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
-
-
-#AJH temp
-class NextApi:
-    pass
 
 
 class NextDiscover:
@@ -95,7 +90,7 @@ class NextDiscover:
 
                     _LOGGER.info(f"Trying device {device_code} (slave {device_slave}) for address {address_discover}")
 
-                    value = self._api.request_value(param_discover, device_slave, verbose=verbose)
+                    value = self._api.request_value(param_discover, slave=device_slave, verbose=verbose)
                     if value is not None:
                         _LOGGER.info(f"  Found device {device_code}")
 
@@ -107,12 +102,11 @@ class NextDiscover:
 
                     else:
                         _LOGGER.info(f"  No device {device_code}; no value returned from NX Gateway")
+                        break # Do not test further device addresses in this family
 
                 except Exception as e:
                     _LOGGER.info(f"  No device {device_code}; no value returned from NX Gateway: {e}")
-
-                    # Do not test further device addresses in this family
-                    break
+                    break # Do not test further device addresses in this family
 
         return devices
 
@@ -131,13 +125,13 @@ class NextDiscover:
             _LOGGER.info(f"Trying to get extended device info for device {device.code})")
             family = NextDeviceFamilies.get_by_id(device.family_id)
 
-            param_serial     = self._dataset.get_by_address(family.address_serial,     family.id)
-            param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id)
-            param_om_version = self._dataset.get_by_address(family.address_om_version, family.id)
+            param_serial     = self._dataset.get_by_address(family.address_serial,     family.id) if family.address_serial is not None else None
+            param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id) if family.address_sw_version is not None else None
+            param_om_version = self._dataset.get_by_address(family.address_om_version, family.id) if family.address_om_version is not None else None
 
-            value_serial     = self._request_value(param_serial,     device.slave, verbose=verbose)
-            value_sw_version = self._request_value(param_sw_version, device.slave, verbose=verbose)
-            value_om_version = self._request_value(param_om_version, device.slave, verbose=verbose)
+            value_serial     = self._api.request_value(param_serial,     slave=device.slave, verbose=verbose)
+            value_sw_version = self._api.request_value(param_sw_version, slave=device.slave, verbose=verbose)
+            value_om_version = self._api.request_value(param_om_version, slave=device.slave, verbose=verbose)
 
             device.serial       = value_serial # String
             device.sw_version   = self._decode_sw_version(value_sw_version) # Major.Middle.Minor.Patch
@@ -152,18 +146,24 @@ class NextDiscover:
 
 
     def _decode_sw_version(self, val):
+        """
+        Decode a 4 byte uint into a major.middle.minor.patch version number
+        """
         if val is None:
             return None
-        
-        bytes = struct.pack(">H", int(val))
+
+        bytes = struct.pack(">I", int(val))
         return f"{int(bytes[0])}.{int(bytes[1])}.{int(bytes[2])}.{int(bytes[3])}"
 
 
     def _decode_om_version(self, val):
+        """
+        Decode a 4 byte uint into a major.minor version number
+        """
         if val is None:
             return None
         
-        bytes = struct.pack(">H", int(val))
+        bytes = struct.pack(">I", int(val))
         return f"{int.from_bytes(bytes[0:2], byteorder='big')}.{int.from_bytes(bytes[2:4], byteorder='big')}"
 
 
@@ -176,26 +176,26 @@ class NextDiscover:
         if not self._api.connected:
             raise NextDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
 
-        if not self._api.remote_ip:
+        if not self._api.remote_host:
             raise NextDiscoverNotConnected("No IP address was detected for the remote NX Gateway")
 
         _LOGGER.info(f"Trying to get gateway info")
-        gateway_ip = None
+        gateway_host = None
         gateway_port = None
         gateway_guid = None
 
         try:
-            gateway_ip = str(ipaddress.ip_address(self._api.remote_ip))
+            gateway_host = self._api.remote_host
             gateway_port = self._api.remote_port
 
-            _LOGGER.info(f"  Found ip: {gateway_ip}, port: {gateway_port}")
+            _LOGGER.info(f"  Found host: {gateway_host}, port: {gateway_port}")
 
         except Exception as e:
             _LOGGER.warning(f"  Exception in discoverClientInfo: {e}")
 
         try:
-            param = self._dataset.get_by_address(NextDataset.ID_INSTALLATION_GUID)
-            gateway_guid = self._api.request_value(param, NextDeviceFamilies.SYSTEM.slaves_start, verbose)
+            param = self._dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
+            gateway_guid = self._api.request_value(param, slave=NextDeviceFamilies.SYSTEM.slaves_start, verbose=verbose)
 
             _LOGGER.info(f"  Found guid: {gateway_guid}")
 
@@ -203,7 +203,7 @@ class NextDiscover:
             _LOGGER.warning(f"  Exception in discover_gateway_info: {e}")
 
         return NextDiscoveredGateway(
-            ip = gateway_ip,
+            host = gateway_host,
             port = gateway_port,
             guid = gateway_guid,
         )

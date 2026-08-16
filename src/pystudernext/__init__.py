@@ -1,4 +1,5 @@
 from .api_async import AsyncNextApi
+from .api_sync import NextApi
 from .factory_async import AsyncNextFactory
 from .factory_sync import NextFactory
 from .discover_async import AsyncNextDiscover, AsyncNextApi
@@ -12,5 +13,8 @@ from .datapoints import NextDataset, NextDatapoint, NextDatapointUnknownExceptio
 from .families import NextDeviceFamily, NextDeviceFamilies, NextDeviceFamilyUnknownException, NextDeviceCodeUnknownException, NextDeviceSlaveUnknownException
 
 # For unit testing
-from .modbus_client_async import AsyncModbusTcpClient
+from .api_async import AsyncNextApiBase
+from .api_sync import NextApiBase
+from .modbus_client_async import AsyncModbusClientBase, AsyncModbusTcpClient
+from .modbus_client_sync import ModbusClientBase, ModbusTcpClient
 

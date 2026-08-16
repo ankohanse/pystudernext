@@ -74,7 +74,7 @@ class NextDeviceFamilies:
         "acf",              # id
         "AcFlexLoad",       # model 
         9, 13,              # modbus device slaves,  start to end
-        0,                  # address for discovery (yet)
+        0,                  # address for discovery
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version
@@ -152,7 +152,17 @@ class NextDeviceFamilies:
         """
         NextDeviceFamilies._build_static_maps()
 
-        return  NextDeviceFamilies._code_to_family_map.get(code, None)
+        return NextDeviceFamilies._code_to_family_map.get(code, None)
+    
+
+    @staticmethod
+    def get_by_slave(slave: int) -> NextDeviceFamily:
+        """
+        Lookup the code to find the device family
+        """
+        NextDeviceFamilies._build_static_maps()
+        code = NextDeviceFamilies._slave_to_code_map.get(slave, None)
+        return NextDeviceFamilies._code_to_family_map.get(code, None)
     
 
     @staticmethod

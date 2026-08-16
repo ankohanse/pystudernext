@@ -29,7 +29,7 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class NextDiscoveredGateway:
-    ip: str = None
+    host: str = None
     port: int = None
     guid: str = None
 
