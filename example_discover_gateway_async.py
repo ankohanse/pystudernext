@@ -1,3 +1,10 @@
+
+# Notes:
+# 1 Before running the example, install the 'pystudernext' library locally:
+#   - Open a command prompt at the root of this project
+#   - run: pip install -e .    (or python -m pip install -e .)
+#
+
 import asyncio
 import logging
 import sys

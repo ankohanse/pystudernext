@@ -1,3 +1,12 @@
+
+# Notes:
+# 1 Before running the example, install the 'pystudernext' library locally:
+#   - Open a command prompt at the root of this project
+#   - run: pip install -e .    (or python -m pip install -e .)
+#
+# 2. Set the correct values for GATEWAY_HOST and GATEWAY_PORT below
+#
+
 import asyncio
 import logging
 import sys
@@ -14,6 +23,11 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
+# Set these values before running this example
+# Host/ip address and port number of the Next Gateway
+GATEWAY_HOST = "192.168.1.123"
+GATEWAY_PORT = 502
+
 async def main():
     dataset = await AsyncNextFactory.create_dataset()
     param_2103 = dataset.get_by_address(2103, "sys")  # System, the "sys" part is optional but usefull for detecting mistakes
@@ -23,7 +37,7 @@ async def main():
     param_6900 = dataset.get_by_address(6900, "nx3")
     param_6902 = dataset.get_by_address(6902, "nx3")
 
-    api = AsyncNextApi("192.168.1.123", DEFAULT_PORT)    # host and port number of the Next Gateway
+    api = AsyncNextApi(GATEWAY_HOST, GATEWAY_PORT)    
     try:
         if not await api.start():
             logger.info(f"Did not connect to Next Gateway")

@@ -1,3 +1,12 @@
+
+# Notes:
+# 1 Before running the example, install the 'pystudernext' library locally:
+#   - Open a command prompt at the root of this project
+#   - run: pip install -e .    (or python -m pip install -e .)
+#
+# 2. Set the correct values for GATEWAY_HOST and GATEWAY_PORT below
+#
+
 import asyncio
 from dataclasses import asdict
 import logging
@@ -14,8 +23,13 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
+# Set these values before running this example
+# Host/ip address and port number of the Next Gateway
+GATEWAY_HOST = "192.168.1.123"
+GATEWAY_PORT = 502
+
 async def main():
-    api = AsyncNextApi(host="192.186.1.50", port=502)    # port number configured in Next-LAN/Moxa NPort
+    api = AsyncNextApi(GATEWAY_HOST, GATEWAY_PORT)    # port number configured in Next-LAN/Moxa NPort
     dataset = await AsyncNextFactory.create_dataset()
 
     try:
