@@ -10,7 +10,6 @@ from pystudernext import NextData, NextFormat
 from . import AsyncNextApiStub, NextApiStub
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
     [
@@ -63,7 +62,6 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_value, 
             rsp_value = await api.request_value(param, test_slave)
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
     [

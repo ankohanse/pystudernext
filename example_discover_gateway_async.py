@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    # Discover IP address of Next-LAN / Moxa
-    # Can be usefull to open the Moxa NPort Web Config
+    # Discover IP address of Next Gateway
+    # Can be usefull to provide a link to the Next Gateway Web Config
     url = await AsyncNextDiscover.discover_gateway_webconfig()
     if url:
-        logger.info(f"NX Gateway Web Config found at: {url}")
+        logger.info(f"Next-Gateway Web Config found at: {url}")
     else:
-        logger.info(f"NX Gateway Web Config not found")
+        logger.info(f"Next-Gateway Web Config not found")
 
 
 RunHelper.run(main)  # main loop

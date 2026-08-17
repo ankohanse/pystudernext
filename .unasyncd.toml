@@ -36,6 +36,7 @@ exclude = [
     "aclose" = "close"
     "CALL_CONTEXT_ASYNC" = "CALL_CONTEXT_SYNC"
     "pytest_asyncio" = "pytest"
+    "mark.asyncio" = "mark.syncio"
     "AsyncTaskHelper" = "TaskHelper"
     "AsyncNextApiStub" = "NextApiStub"
     "AsyncModbusClientStub" = "ModbusClientStub"

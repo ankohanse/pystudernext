@@ -16,7 +16,6 @@ from pystudernext import NextData
 from . import AsyncNextApiStub, NextApiStub
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name, rsp_slaves, rsp_dict, exp_devices",
     [
@@ -97,7 +96,6 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
         assert device.om_version is None
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name, rsp_slaves, rsp_dict, exp_devices, exp_serial, exp_sw_version, exp_om_version",
     [
@@ -166,8 +164,6 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_seri
         assert device.om_version == exp_om_version
 
 
-@pytest.mark.asyncio
-@pytest.mark.usefixtures("unused_tcp_port")
 @pytest.mark.parametrize(
     "name, rsp_slaves, rsp_dict, exp_host, exp_guid",
     [

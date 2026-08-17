@@ -29,7 +29,7 @@ GATEWAY_HOST = "192.168.1.123"
 GATEWAY_PORT = 502
 
 async def main():
-    api = AsyncNextApi(GATEWAY_HOST, GATEWAY_PORT)    # port number configured in Next-LAN/Moxa NPort
+    api = AsyncNextApi(GATEWAY_HOST, GATEWAY_PORT)
     dataset = await AsyncNextFactory.create_dataset()
 
     try:

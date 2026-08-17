@@ -10,7 +10,6 @@ from pystudernext import (
 )
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "exp_len",
     [
@@ -23,7 +22,6 @@ async def test_create(exp_len):
     assert len(dataset._datapoints) == exp_len
 
 
-@pytest.mark.asyncio
 async def test_address():
     dataset = await AsyncNextFactory.create_dataset()
 
@@ -59,7 +57,6 @@ async def test_address():
         param = dataset.get_by_address(5100, "bat")
 
 
-@pytest.mark.asyncio
 async def test_id():
     dataset = await AsyncNextFactory.create_dataset()
 
@@ -81,7 +78,6 @@ async def test_id():
         param = dataset.get_by_id("dummy")
 
 
-@pytest.mark.asyncio
 async def test_enum():
     dataset = await AsyncNextFactory.create_dataset()
 
@@ -101,7 +97,6 @@ async def test_enum():
     assert param.enum_key("9") == None
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "family_id, exp_len",
     [

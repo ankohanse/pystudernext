@@ -233,11 +233,18 @@ class AsyncNextDiscover:
             except:
                 pass
 
-        # Define helper function to check for Moxa Web Config page
+        # Define helper function to check for Next Gateway Config page
         async def check_url(client:httpx.AsyncClient, url:str) -> str|None:
             _LOGGER.info(f"Trying {url}")
             try:
                 rsp = await client.get(url)
+
+                # TODO: The check below is probably not correct yet.
+                # Possible alternatives: 
+                #  - user-agent header
+                #  - x-headers
+                #  - Body of the response
+                #
                 if rsp and rsp.is_success and rsp.headers.get("Server", "").startswith("Studer"):
                     return url
                 else:
