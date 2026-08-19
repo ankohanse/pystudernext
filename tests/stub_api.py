@@ -6,7 +6,6 @@ from pystudernext import (
     DEFAULT_PORT,
     AsyncNextApi,
     NextApi,
-    NextData,
 )
 from . import (
     AsyncModbusClientStub,
@@ -27,8 +26,8 @@ class AsyncNextApiStub(AsyncNextApi):
         self._on_read = on_read_handler
         self._on_write = on_write_handler
 
-    def _create_client(self, host, port, timeout):
-        client = AsyncModbusClientStub(host, port, timeout)
+    def _create_client(self):
+        client = AsyncModbusClientStub(self._host, self._port)
         client._on_read = self._on_read
         client._on_write = self._on_write
         return client
@@ -44,8 +43,8 @@ class NextApiStub(NextApi):
         self._on_read = on_read_handler
         self._on_write = on_write_handler
 
-    def _create_client(self, host, port, timeout):
-        client = ModbusClientStub(host, port, timeout)
+    def _create_client(self):
+        client = ModbusClientStub(self._host, self._port)
         client._on_read = self._on_read
         client._on_write = self._on_write
         return client

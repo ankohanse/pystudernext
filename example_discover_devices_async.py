@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # Set these values before running this example
 # Host/ip address and port number of the Next Gateway
-GATEWAY_HOST = "192.168.1.123"
+GATEWAY_HOST = "192.168.88.254"
 GATEWAY_PORT = 502
 
 async def main():

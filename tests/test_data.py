@@ -1,46 +1,65 @@
-from datetime import datetime
-import math
+from typing import Literal
 import pytest
 import pytest_asyncio
-from pystudernext import NextData
-from pystudernext import NextFormat
+
+from pystudernext import NextUserLevel, NextFormat
 
 
 @pytest.mark.parametrize(
-    "name, value, format, expected_length",
+    "description, inp_str, inp_default, exp_val, exp_except",
     [
-        ("bool",       True,  NextFormat.BOOL, 1),
-        ("signal",     True,  NextFormat.SIGNAL, 1),
-        ("int",        1234,  NextFormat.INT, 2),
-        ("uint",       1234,  NextFormat.UINT, 2),
-        ("float",      123.4, NextFormat.FLOAT, 2),
-        ("int64",      1234,  NextFormat.INT64, 4),
-        ("uint64",     1234,  NextFormat.UINT64, 4),
-        ("float64",    123.4, NextFormat.FLOAT64, 4),
-        ('bytes',      b'123456789ABCDEF', NextFormat.BYTES, 8),   
-        ("string",     "123456789ABCDEF", NextFormat.STRING, 8),
+        ("ViewOnly", "ViewOnly", None, NextUserLevel.VIEWONLY, None),
+        ("Basic",    "Basic",    None, NextUserLevel.BASIC,    None),
+        ("Expert",   "Expert",   None, NextUserLevel.EXPERT,   None),
+        ("Inst",     "Inst",     None, NextUserLevel.INST,     None),
+        ("QSP",      "QSP",      None, NextUserLevel.QSP,      None),
+
+        ("value",    "Expert",   NextUserLevel.BASIC, NextUserLevel.EXPERT, None),
+        ("default",  "xxxxxx",   NextUserLevel.BASIC, NextUserLevel.BASIC,  None),
+        ("except",   "xxxxxx",   None,                None,                 Exception),
     ]
 )
-def test_data(name, value, format, expected_length):
-    # test pack
-    registers = NextData.pack(value, format)
+def test_level(description:str, inp_str:str, inp_default: NextUserLevel|None, exp_val: NextUserLevel|None, exp_except: type[Exception]|None):
 
-    assert registers is not None
-    assert len(registers) == expected_length
+    if exp_except is None:
+        val = NextUserLevel.from_str(inp_str, inp_default)
+        assert val == exp_val
+        assert type(val) is NextUserLevel
+    else:
+        with pytest.raises(exp_except):
+            val = NextUserLevel.from_str(inp_str, inp_default)
 
-    # test unpack
-    clone = NextData.unpack(registers, format)
 
-    assert type(clone) == type(value)
-    match format:
-        case NextFormat.FLOAT | NextFormat.FLOAT64:
-            # carefull with comparing floats
-            assert clone == pytest.approx(value, abs=0.01)
+@pytest.mark.parametrize(
+    "description, inp_str, inp_default, exp_val, exp_except",
+    [
+        ("bool",          "bool",          None, NextFormat.BOOL,     None),
+        ("signal",        "signal",        None, NextFormat.SIGNAL,   None),
+        ("int",           "int",           None, NextFormat.INT,      None),
+        ("uint",          "uint",          None, NextFormat.UINT,     None),
+        ("float",         "float",         None, NextFormat.FLOAT,    None),
+        ("enum",          "enum",          None, NextFormat.ENUM,     None),
+        ("bitfield",      "bitfield",      None, NextFormat.BITFIELD, None),
+        ("int64",         "int64",         None, NextFormat.INT64,    None),
+        ("uint64",        "uint64",        None, NextFormat.UINT64,   None),
+        ("float64",       "float64",       None, NextFormat.FLOAT64,  None),
+        ("string",        "string",        None, NextFormat.STRING,   None),
+        ("bytes",         "bytes",         None, NextFormat.BYTES,    None),
+        ("BYTES",         "BYTES",         None, NextFormat.BYTES,    None),
+        ("MENU",          "MENU",          None, NextFormat.MENU,     None),
+        ("NOT SUPPORTED", "NOT SUPPORTED", None, NextFormat.INVALID,  None),
 
-        case NextFormat.BYTES:
-            # Could contain additional b'/x00' after unpack
-            clone = clone.rstrip(b"\x00")
-            assert clone == value
+        ("value",         "int",   NextFormat.FLOAT, NextFormat.INT,   None),
+        ("default",       "xxxxx", NextFormat.FLOAT, NextFormat.FLOAT, None),
+        ("except",        "xxxxx", None,             None,             Exception),
+    ]
+)
+def test_format(description:str, inp_str:str, inp_default: NextFormat|None, exp_val: NextFormat|None, exp_except: type[Exception]|None):
 
-        case _:
-            assert clone == value
+    if exp_except is None:
+        val = NextFormat.from_str(inp_str, inp_default)
+        assert val == exp_val
+        assert type(val) is NextFormat
+    else:
+        with pytest.raises(exp_except):
+            val = NextFormat.from_str(inp_str, inp_default)

@@ -1,4 +1,6 @@
-"""xcom_api.py: communication api to Studer Next via LAN."""
+"""
+Discover Next Gateway and Next Devices
+"""
 
 import asyncio
 import httpx
@@ -15,17 +17,14 @@ from .api_async import (
 from .api_sync import (
     NextApi,
 )
-from .const import (
-    NextDiscoverNotConnected,
-)
 from .data import (
     NextDiscoveredDevice,
     NextDiscoveredGateway,
+    NextDiscoverNotConnected,
 )
 from .datapoints import (
     NextDatapoint,
     NextDataset,
-    NextDatapointUnknownException,
 )
 from .families import (
     NextDeviceFamilies
@@ -98,11 +97,11 @@ class AsyncNextDiscover:
                         devices.append(device)
 
                     else:
-                        _LOGGER.info(f"  No device {device_code}; no value returned from NX Gateway")
+                        _LOGGER.info(f"  No device {device_code}; no value returned from Next Gateway")
                         break # Do not test further device addresses in this family
 
                 except Exception as e:
-                    _LOGGER.info(f"  No device {device_code}; no value returned from NX Gateway: {e}")
+                    _LOGGER.info(f"  No device {device_code}; no value returned from Next Gateway: {e}")
                     break # Do not test further device addresses in this family
 
         return devices

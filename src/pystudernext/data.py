@@ -7,24 +7,39 @@
 ##   -> Downloads -> software + updates -> communication protocol next modbus
 ##
 
-
-import asyncio
-from dataclasses import dataclass
-import io
 import logging
-import math
-import struct
-import uuid
 
-from io import BufferedWriter, BufferedReader, BytesIO
-from typing import Any, Iterable
+from dataclasses import dataclass
+from enum import IntEnum, StrEnum
+from pymodbus.client import ModbusTcpClient
 
-from .const import (
-    NextFormat,
-    NextParamException,
-)
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class NextApiConnectException(Exception):
+    """Exception to indicate failure while connecting to the Next Gateway"""
+
+class NextApiTimeoutException(Exception):
+    """Exception to indicate a timeout while reading from the Next gateway"""
+
+class NextApiReadException(Exception):
+    """Exception to indicate failure to read data from the Next gateway"""
+
+class NextApiUpdateException(Exception):
+    """Exception to indicate failure to update data via the Next gateway"""
+
+class NextUnpackException(Exception):
+    """Exception to indicate faulure to unpack a response value"""
+
+class NextPackException(Exception):
+    """Exception to indicate faulure to pack a update value"""
+
+class NextDiscoverNotConnected(Exception):
+    """Exception to indicate that remote next gateway is not connected"""
+
+class NextParamException(Exception):
+    """Exeption to indicaye that something is wrong with the parameters passed to a call"""
 
 
 @dataclass
@@ -48,59 +63,119 @@ class NextDiscoveredDevice:
     om_version: str = None  # ObjectModel version
 
 
-class NextData:
-    NONE = b''
+class NextUserLevel(IntEnum):
+    VIEWONLY = 0x0000
+    BASIC    = 0x0010
+    EXPERT   = 0x0020
+    INST     = 0x0030 # Installer
+    QSP      = 0x0040 # Qualified Service Person
+    DENIED   = 0xFFFF # Used to indicate that a read or write action is not allowed
 
     @staticmethod
-    def unpack(registers: list[int], format: NextFormat) -> Any:
-        """
-        Unpack registers (list of uint16) into a value of specified type
-        """
-        # Convert from list[uint16] into bytes
-        bytes = struct.pack(f">{len(registers)}H", *registers)
-
-        match format:
-            case NextFormat.BOOL: return struct.unpack(">?", bytes[:1])[0]      # 1 byte,  big endian, bool
-            case NextFormat.SIGNAL: return struct.unpack(">?", bytes[:1])[0]    # 1 byte,  big endian, bool
-            case NextFormat.INT:  return struct.unpack(">i", bytes)[0]          # 4 bytes, big endian, signed short/int32
-            case NextFormat.UINT: return struct.unpack(">I", bytes)[0]          # 4 bytes, big endian, unsigned short/int32
-            case NextFormat.FLOAT: return struct.unpack(">f", bytes)[0]         # 4 bytes, big endian, float
-            case NextFormat.INT64: return struct.unpack(">q", bytes)[0]         # 8 bytes, big endian, signed long/int64
-            case NextFormat.UINT64: return struct.unpack(">Q", bytes)[0]        # 8 bytes, big endian, unsigned long/int64
-            case NextFormat.FLOAT64: return struct.unpack(">d", bytes)[0]       # 8 bytes, big endian, float64
-            case NextFormat.BYTES: return bytes                                 # n bytes, big endian, array of bytes
-            case NextFormat.STRING:                                             # n bytes, string of 8 bit characters                           
-                str = bytes.decode('utf-8')
-                return str.rstrip("\x00")                                   
+    def from_str(s: str, default: int|None = None):
+        match s.upper():
+            case 'VIEWONLY': return NextUserLevel.VIEWONLY
+            case 'BASIC': return NextUserLevel.BASIC
+            case 'EXPERT': return NextUserLevel.EXPERT
+            case 'INST': return NextUserLevel.INST
+            case 'QSP': return NextUserLevel.QSP
             case _: 
-                msg = "Unknown data format '{format}'"
-                raise NextParamException(msg)
+                if default is not None:
+                    return default
+                else:
+                    msg = f"Unknown level: '{s}'"
+                    raise Exception(msg)
 
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return self.name
+
+
+class NextFormat(StrEnum):
+    BOOL       = "bool"         # 1 register  / 2 bytes
+    SIGNAL     = "signal"       # 1 register  / 2 bytes
+    INT        = "int"          # 2 registers / 4 bytes
+    UINT       = "uint"         # 2 registers / 4 bytes
+    FLOAT      = "float"        # 2 registers / 4 bytes
+    ENUM       = "enum"         # 2 registers / 4 bytes
+    BITFIELD   = "bitfield"     # 2 registers / 4 bytes
+    INT64      = "int64"        # 4 registers / 8 bytes
+    UINT64     = "uint64"       # 4 registers / 8 bytes
+    FLOAT64    = "float64"      # 4 registers / 8 bytes
+    STRING     = "string"       # n registers / 2n bytes
+    BYTES      = "bytes"        # n registers / 2n bytes
+    MENU       = "menu"         # n.a.
+    INVALID    = "invalid"      # n.a.
 
     @staticmethod
-    def pack(value: Any, format: NextFormat) -> list[int]:
-        """
-        Pack a value of specified type into registers (list of uint16)
-        """
-        match format:
-            case NextFormat.BOOL: bytes = struct.pack(">?", int(value))          # 1 byte, big endian, bool
-            case NextFormat.SIGNAL: bytes = struct.pack(">?", int(value))        # 1 byte, big endian, bool
-            case NextFormat.INT: bytes = struct.pack(">i", int(value))           # 4 bytes, big endian, unsigned short/int32
-            case NextFormat.UINT: bytes = struct.pack(">I", int(value))          # 4 bytes, big endian, unsigned short/int32
-            case NextFormat.FLOAT: bytes = struct.pack(">f", float(value))       # 4 bytes, big endian, float
-            case NextFormat.INT64: bytes = struct.pack(">q", int(value))         # 8 bytes, big endian, signed long/int64
-            case NextFormat.UINT64: bytes = struct.pack(">Q", int(value))        # 8 bytes, big endian, unsigned long/int64
-            case NextFormat.FLOAT64: bytes = struct.pack(">d", float(value))     # 8 bytes, big endian, float64
-            case NextFormat.BYTES: bytes = value                                 # n bytes, big endian, array of bytes
-            case NextFormat.STRING: bytes = value.encode('utf-8', errors="ignore") # n bytes, string of 8 bit characters                           
+    def from_str(s: str, default: str|None = None):
+        match s.lower():
+            case 'bool': return NextFormat.BOOL
+            case 'signal': return NextFormat.SIGNAL
+            case 'int': return NextFormat.INT
+            case 'uint': return NextFormat.UINT
+            case 'float': return NextFormat.FLOAT
+            case 'enum': return NextFormat.ENUM
+            case 'bitfield': return NextFormat.BITFIELD
+            case 'int64': return NextFormat.INT64
+            case 'uint64': return NextFormat.UINT64
+            case 'float64': return NextFormat.FLOAT64
+            case 'string': return NextFormat.STRING
+            case 'bytes': return NextFormat.BYTES
+            case 'menu': return NextFormat.MENU
+            case 'not supported': return NextFormat.INVALID
             case _: 
-                msg = "Unknown data format '{format}"
-                raise NextParamException(msg)
+                if default is not None:
+                    return default
+                else:
+                    raise Exception(f"Unknown format: '{s}'")
 
-        # Make sure the byte array length is a multiple of 2
-        len16   = math.ceil(len(bytes)/2)
-        bytes16 = bytes.ljust(len16*2, b"\x00")                     
+    @staticmethod
+    def to_datatype(format: 'NextFormat') -> ModbusTcpClient.DATATYPE:
+        match format:
+            case NextFormat.BOOL:       return ModbusTcpClient.DATATYPE.UINT16 
+            case NextFormat.SIGNAL:     return ModbusTcpClient.DATATYPE.UINT16 
+            case NextFormat.INT:        return ModbusTcpClient.DATATYPE.INT32  
+            case NextFormat.UINT:       return ModbusTcpClient.DATATYPE.UINT32 
+            case NextFormat.FLOAT:      return ModbusTcpClient.DATATYPE.FLOAT32
+            case NextFormat.ENUM:       return ModbusTcpClient.DATATYPE.UINT32 
+            case NextFormat.BITFIELD:   return ModbusTcpClient.DATATYPE.BITS   
+            case NextFormat.INT64:      return ModbusTcpClient.DATATYPE.INT64  
+            case NextFormat.UINT64:     return ModbusTcpClient.DATATYPE.UINT64 
+            case NextFormat.FLOAT64:    return ModbusTcpClient.DATATYPE.FLOAT64
+            case NextFormat.STRING:     return ModbusTcpClient.DATATYPE.STRING 
+            case _:
+                raise NextParamException(f"Cannot convert format {format} into a DATATYPE")
 
-        # Convert into array of uint16
-        return list(struct.unpack(f">{len16}H", bytes16))
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return self.name
+       
 
+class NextRW(StrEnum):
+    READ       = "R"
+    WRITE      = "W"
+    READ_WRITE = "R/W"
+
+    @staticmethod
+    def from_str(s: str, default: str|None = None):
+        match s.upper():
+            case 'R': return NextRW.READ
+            case 'W': return NextRW.WRITE
+            case 'R/W': return NextRW.READ_WRITE
+            case _: 
+                if default is not None:
+                    return default
+                else:
+                    msg = f"Unknown read-write flag: '{s}'"
+                    raise Exception(msg)
+
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return self.name

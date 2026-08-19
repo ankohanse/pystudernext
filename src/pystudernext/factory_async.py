@@ -1,19 +1,11 @@
-#! /usr/bin/env python3
+"""
+Helpers to create various objects and tables in either async or sync environment
+"""
 
-##
-# Definition of all parameters / constants used in the Next protocol
-##
-
-import asyncio
-import binascii
-from datetime import datetime, timedelta
-import decimal
 import logging
-import math
 import orjson
 
 from aiofiles import open as aiofiles_open
-from io import BufferedReader
 
 from .datapoints import (
     NextDatapoint,

@@ -2,12 +2,15 @@
 # tests\test_api_async.py
 import asyncio
 import copy
-from datetime import datetime
 import pytest
 import pytest_asyncio
 
+from datetime import datetime
+from pymodbus.pdu import ModbusPDU
+from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
+
 from pystudernext import AsyncNextFactory, NextFactory
-from pystudernext import NextData, NextFormat
+from pystudernext import NextFormat
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -30,7 +33,7 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
     read_count = None
     read_slave = None
 
-    def on_read(api: NextApiStub, address: int, count: int, slave: int):
+    def on_read(api: NextApiStub, address: int, count: int, slave: int) -> ModbusPDU:
         """Helper to return the registers for a read"""
         nonlocal read_called
         nonlocal read_address
@@ -42,7 +45,10 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
         read_count = count
         read_slave = slave
 
-        return NextData.pack(test_value, test_format)
+        data_type = NextFormat.to_datatype(test_format)
+        registers = ModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
+
+        return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
 
     dataset = NextFactory.create_dataset()
     param = dataset.get_by_address(test_addr, test_fam)
@@ -94,7 +100,7 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
         write_regs = regs
         write_slave = slave
 
-        return None
+        return ModbusPDU(dev_id=slave, transaction_id=9876, address=address)
 
     dataset = NextFactory.create_dataset()
     param = dataset.get_by_address(test_addr, test_fam)
@@ -109,8 +115,10 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
         assert write_address == param.address
         assert write_regs is not None
 
-        write_value = NextData.unpack(write_regs, test_format)
-        assert write_value == test_value
+        data_type = NextFormat.to_datatype(test_format)
+        registers = ModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
+
+        assert write_regs == registers
 
     else:
         with pytest.raises(exp_except):

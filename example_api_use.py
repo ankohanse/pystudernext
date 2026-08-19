@@ -15,7 +15,7 @@ import sys
 
 from pystudernext import AsyncNextApi, NextApi
 from pystudernext import AsyncNextFactory, NextFactory
-from pystudernext import NextDataset, NextDatapoint, NextData
+from pystudernext import NextDataset, NextDatapoint
 from pystudernext import NextFormat
 from pystudernext import DEFAULT_PORT
 from helper import RunHelper

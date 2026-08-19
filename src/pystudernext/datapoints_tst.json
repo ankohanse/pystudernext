@@ -1,0 +1,42 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+
+    {  "_rem": "Column descriptions:"},
+    {  "_rem": "  fam  = Device Family"},
+    {  "_rem": "  pid  = Parent id in menu structure"},
+    {  "_rem": "  addr = Address of the param"},
+    {  "_rem": "  size = Size of the param data"},
+    {  "_rem": "  lvl  = User level required to read the param"},
+    {  "_rem": "  id   = Id of the param"},
+    {  "_rem": "  name = Friendly name of the param or info"},
+    {  "_rem": "  def  = Default value"},
+    {  "_rem": "  unit = Data unit of measurement"},
+    {  "_rem": "  min  = Minimum value"},
+    {  "_rem": "  max  = Maximum value"},
+    {  "_rem": "  fmt  = Data format"},
+    {  "_rem": "  rw   = Read/Write allowed"},
+    {  "_rem": "  opt  = Options for selection in Enums"},
+    {  "_rem": "  rem  = Remarks"},
+    
+
+    {  "_rem": "###"},
+    {  "_rem": "### Test Root Menu"},
+    {  "_rem": "###"},
+    {   "fam": "tst", "pid": "", "addr": -1, "size": 0, "lvl": "Basic", "id": "99.1.1",   "lbl": "General",   "fmt": "menu" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Test - General (Victron)"},
+    {  "_rem": "###"},
+    {   "fam": "tst", "pid": "99.1.1", "addr": 800, "size": 6, "lvl": "ViewOnly", "id": "0",   "lbl": "Serial", "def": "", "unit": "", "min": "", "max": "", "fmt": "string", "rw": "R" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 868, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Inverter/Charger current", "def": "", "unit": "A", "min": "", "max": "", "fmt": "int", "rw": "R" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 870, "size": 2, "lvl": "ViewOnly", "id": "2",   "lbl": "Inverter/Charger power", "def": "", "unit": "W", "min": "", "max": "", "fmt": "int", "rw": "R" },
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

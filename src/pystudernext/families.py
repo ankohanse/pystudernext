@@ -1,6 +1,7 @@
-##
-# Definition of all known device families used in the Next protocol
-##
+
+"""
+Definition of all known device families used in the Next protocol
+"""
 
 import logging
 
@@ -18,7 +19,8 @@ class NextDeviceCodeUnknownException(Exception):
 
 class NextDeviceSlaveUnknownException(Exception):
     pass
-    
+
+
 @dataclass
 class NextDeviceFamily:
     id: str                 # Short id
@@ -43,6 +45,17 @@ class NextDeviceFamily:
 
 
 class NextDeviceFamilies:
+
+    TEST = NextDeviceFamily(            # Fake device to be able to test against Victron Cerbo GX
+        "tst",              # id
+        "Test",             # model 
+        100, 100,           # modbus device slaves,  start to end
+        800,                # address for discovery
+        800,                # address for Serial number
+        None,               # address for Software version
+        None,               # address for ObjectModel version
+    )
+
     SYSTEM = NextDeviceFamily(
         "sys",              # id
         "System",           # model 

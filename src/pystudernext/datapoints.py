@@ -1,13 +1,12 @@
-##
-# Definition of all parameters / constants used in the Next protocol
-##
+"""
+Definition of all parameters / constants used in the Next protocol
+"""
 
 import logging
 
 from dataclasses import dataclass
 
-from .const import (
-    NextCategory,
+from .data import (
     NextFormat,
     NextRW,
     NextUserLevel,
@@ -167,7 +166,9 @@ class NextDataset:
         __file__.replace('.py', '_acf.json'),
         __file__.replace('.py', '_nx3.json'),
         __file__.replace('.py', '_nx1.json'),
-        __file__.replace('.py', '_nxg.json')
+        __file__.replace('.py', '_nxg.json'),
+        
+        __file__.replace('.py', '_tst.json'),       # To be able to develop this library without access to a Studer Next device...
     ]
 
     # Some known datapoint ID's

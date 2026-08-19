@@ -4,12 +4,14 @@ import threading
 import pytest
 import pytest_asyncio
 
+from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
+from pymodbus.pdu import ModbusPDU
+
 from pystudernext import AsyncNextDiscover, NextDiscover
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset
 from pystudernext import NextDeviceFamilies
 from pystudernext import NextFormat
-from pystudernext import NextData
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -67,10 +69,13 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
-            rsp_val = rsp_dict[str(address)]
-            rsp_format = param.format
+            value = rsp_dict[str(address)]
 
-            return NextData.pack(rsp_val, rsp_format)
+            data_type = NextFormat.to_datatype(param.format)
+            registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
+
+            return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
+
         else:
             return None
 
@@ -135,10 +140,12 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
         if slave in rsp_slaves and str(address) in rsp_dict:
             family = NextDeviceFamilies.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
-            rsp_val = rsp_dict[str(address)]
-            rsp_format = param.format
+            value = rsp_dict[str(address)]
 
-            return NextData.pack(rsp_val, rsp_format)
+            data_type = NextFormat.to_datatype(param.format)
+            registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
+            
+            return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
         else:
             return None
 
@@ -182,10 +189,12 @@ async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, requ
             if slave in rsp_slaves and str(address) in rsp_dict:
                 family = NextDeviceFamilies.get_by_slave(slave)
                 param = dataset.get_by_address(address, family.id)
-                rsp_val = rsp_dict[str(address)]
-                rsp_format = param.format
+                value = rsp_dict[str(address)]
+
+                data_type = NextFormat.to_datatype(param.format)
+                registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
     
-                return NextData.pack(rsp_val, rsp_format)
+                return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
             else:
                 return None
     

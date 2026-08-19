@@ -1,28 +1,26 @@
-"""xcom_api.py: communication api to Studer Next via LAN."""
+"""
+api.py: communication api to Studer Next via Modbus over TCP.
+"""
 
-import asyncio
-import binascii
 import logging
 
 from datetime import datetime, timedelta
-import struct
+from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
 
 from .const import (
-    CONNECT_TIMEOUT,
     DEFAULT_HOST,
     DEFAULT_PORT,
-    REQ_TIMEOUT,
-    REQ_RETRIES,
-    REQ_BURST_PERIOD,
+)
+from .data import (
     NextApiConnectException,
+    NextApiReadException,
+    NextApiUpdateException,
+    NextFormat,
     NextPackException,
     NextParamException,
     NextUnpackException,
-)
-from .data import (
-    NextData,
     NextDiscoveredDevice,
 )
 from .datapoints import (
@@ -31,22 +29,10 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
-from .modbus_client_async import (
-    AsyncModbusClientBase,
-    AsyncModbusTcpClient,
-    ModbusTcpError
-)
-from .modbus_client_sync import (
-    ModbusClientBase,
-    ModbusTcpClient,
-)
 
 
 _LOGGER = logging.getLogger(__name__)
-
-_MODBUS_PROTOCOL_ID = 0x0000
-_FC_READ_HOLDING = 0x03
-_FC_WRITE_MULTIPLE = 0x10
+logging.getLogger("pymodbus").setLevel(logging.WARNING)
 
 
 class AsyncNextApi:
@@ -63,7 +49,6 @@ class AsyncNextApi:
         self._port = port
 
         self._client: AsyncModbusTcpClient | None = None
-        self._lock = asyncio.Lock()
 
         # Diagnostics gathering
         self._diag_retries = {}
@@ -88,7 +73,7 @@ class AsyncNextApi:
         """
         try:
             if self._client:
-                self._client.close()
+                await self._client.close()
 
         except Exception:
             pass
@@ -114,7 +99,7 @@ class AsyncNextApi:
         return self._port
     
 
-    async def request_value(self, parameter: NextDatapoint, device: NextDiscoveredDevice=None, slave: int=None, code:str=None, retries = None, timeout = None, verbose=False):
+    async def request_value(self, parameter: NextDatapoint, device: NextDiscoveredDevice=None, retries = None, timeout = None, verbose=False):
         """
         Request a parameter.
         One of device, slave or code needs to be passed.
@@ -142,33 +127,24 @@ class AsyncNextApi:
 
         # Send the request
         try:
+            if verbose:
+                _LOGGER.debug(f"Modbus read registers for '{parameter.name}' ({parameter.address} via {slave})")
+            
             client = await self._get_connected_client()
-            regs = await client.read_holding_registers(parameter.address, parameter.size, slave)
+            result = await client.read_holding_registers(address=parameter.address, count=parameter.size, device_id=slave)
 
-        except ModbusTcpError as err:
-            _LOGGER.warning(f"Modbus error reading '{parameter.name}' ({parameter.address} via {slave}): {err}")
-            return None
+        except Exception as err:
+            raise NextApiReadException(f"Modbus exception while requesting value for slave {slave}, address {parameter.address}, count {parameter.size}, error: {err}")
 
-        except (OSError, asyncio.TimeoutError) as err:
-            _LOGGER.warning(f"Network error reading '{parameter.name}' ({parameter.address} via {slave}): {err}")
-            self._client = None
-            return None
+        if result.isError():
+            raise NextApiReadException(f"Modbus error while requesting value for slave {slave}, address {parameter.address}, count {parameter.size}, error: {result.exception_code}")
 
-        if regs is None:
-            _LOGGER.warning(f"No data in response for '{parameter.name}' ({parameter.address} via {slave})")
-            return None
-        
-        if len(regs) < parameter.size:
-            _LOGGER.warning(f"Insufficient data in response for '{parameter.name}' ({parameter.address} via {slave}): expected {parameter.size} got {len(regs)}")
-            return None
-
-        # Unpack the data
+        # Unpack the response value
         try:
-            return NextData.unpack(regs, parameter.format)
-        
+            return AsyncModbusTcpClient.convert_from_registers(result.registers, data_type=NextFormat.to_datatype(parameter.format))
+
         except Exception as e:
-            _LOGGER.warning(f"Failed to unpack response registers for '{parameter.name}' ({parameter.address} via {slave}): registers={regs.hex()}, format={parameter.format}, size={parameter.size}")
-            raise NextUnpackException() from None
+            raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.format}, size={parameter.size}") from None
 
 
     async def update_value(self, parameter: NextDatapoint, value: Any, device: NextDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):
@@ -199,49 +175,50 @@ class AsyncNextApi:
 
         # Pack the data
         try:
-            regs = NextData.pack(value, parameter.format)
+            client = await self._get_connected_client()
+            regs = AsyncModbusTcpClient.convert_to_registers(value, data_type=NextFormat.to_datatype(parameter.format))
 
         except Exception as e:
-            _LOGGER.warning(f"Failed to pack request registers for '{parameter.name}' ({parameter.address} via {slave}): value={value}, format={parameter.format}, size={parameter.size}")
-            raise NextPackException() from None
+            raise NextPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.format}, size={parameter.size}") from None
         
         # Send the request
         try:
-            client = await self._get_connected_client()
-            await client.write_holding_registers(parameter.address, regs, slave)
-        
-        except ModbusTcpError as err:
-            _LOGGER.warning(f"Modbus error writing '{parameter.name}' ({parameter.address} via {slave}): {err}")
-            return None
+            if verbose:
+                _LOGGER.debug(f"Modbus update registers for '{parameter.name}' ({parameter.address} via {slave})")
+            
+            result = await client.write_registers(address=parameter.address, values=regs, device_id=slave)
 
-        except (OSError, asyncio.TimeoutError) as err:
-            _LOGGER.warning(f"Network error writing '{parameter.name}' ({parameter.address} via {slave}): {err}")
-            self._client = None
-            return None
-        
+        except Exception as err:
+            raise NextApiUpdateException(f"Modbus exception while updating value for slave {slave}, address {parameter.address}, error: {err}")
+
+        if result.isError():
+            raise NextApiReadException(f"Modbus error while updating value for slave {slave}, address {parameter.address}, count {parameter.size}, error: {result.exception_code}")    
+
         return None
 
 
-    async def _get_connected_client(self):
+    async def _get_connected_client(self) -> AsyncModbusTcpClient:
         """
         Return a connected client, reconnecting if needed.
         """
         if not self.connected:
-            self._client = self._create_client(self._host, self._port, timeout=CONNECT_TIMEOUT)
+            client = self._create_client()
 
-            if not await self._client.connect():
+            if await client.connect():
+                self._client = client
+            else:
                 self._client = None
                 raise NextApiConnectException(f"Cannot connect to Studer Gateway at {self._host}:{self._port}")
             
         return self._client            
 
 
-    def _create_client(self, host, port, timeout):
+    def _create_client(self):
         """
         Helper to create the Modbus Client.
         In a separate function to make it easier to replace the client with a stub for unit-tests.
         """
-        return ModbusTcpClient(host, port, timeout)
+        return AsyncModbusTcpClient(host=self._host, port=self._port)
 
 
     async def _add_diagnostics(self, retries: int = None, duration: timedelta = None):

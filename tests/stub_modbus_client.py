@@ -1,14 +1,14 @@
 import logging
 
-from pystudernext import AsyncModbusClientBase, ModbusClientBase
+from pymodbus.pdu import ModbusPDU
 
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class AsyncModbusClientStub(AsyncModbusClientBase):
+class AsyncModbusClientStub():
 
-    def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
+    def __init__(self, host: str, port: int) -> None:
         self._host = host
         self._port = port
         self._connected = False
@@ -27,23 +27,23 @@ class AsyncModbusClientStub(AsyncModbusClientBase):
     def close(self) -> None:
         self._connected = False
 
-    async def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
+    async def read_holding_registers(self, address: int, count: int, device_id: int) -> ModbusPDU:
         if self._on_read:
-            return await self._on_read(self, address, count, slave)
+            return await self._on_read(self, address, count, device_id)
         else:
             return None
 
-    async def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
+    async def write_registers(self, address: int, values: list[int], device_id: int) -> None:
         if self._on_write:
-            return await self._on_write(self, address, registers, slave)
+            return await self._on_write(self, address, values, device_id)
         else:
             return None
 
 
 
-class ModbusClientStub(ModbusClientBase):
+class ModbusClientStub():
 
-    def __init__(self, host: str, port: int, timeout: float = 10.0) -> None:
+    def __init__(self, host: str, port: int) -> None:
         self._host = host
         self._port = port
         self._connected = False
@@ -62,15 +62,15 @@ class ModbusClientStub(ModbusClientBase):
     def close(self) -> None:
         self._connected = False
 
-    def read_holding_registers(self, address: int, count: int, slave: int) -> list[int]:
+    def read_holding_registers(self, address: int, count: int, device_id: int) -> list[int]:
         if self._on_read:
-            return self._on_read(self, address, count, slave)
+            return self._on_read(self, address, count, device_id)
         else:
             return None
 
-    def write_holding_registers(self, address: int, registers: list[int], slave: int) -> None:
+    def write_registers(self, address: int, values: list[int], device_id: int) -> None:
         if self._on_write:
-            return self._on_write(self, address, registers, slave)
+            return self._on_write(self, address, values, device_id)
         else:
             return None
 
