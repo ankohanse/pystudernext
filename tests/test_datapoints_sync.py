@@ -15,7 +15,7 @@ from pystudernext import (
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (194),
+        (549),
     ]
 )
 def test_create(exp_len):
@@ -27,23 +27,18 @@ def test_create(exp_len):
 def test_address():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(6900)
+    param = dataset.get_by_address(6900, 'nx3')
     assert param.family_id == "nx3"
     assert param.address == 6900
     assert param.format == NextFormat.FLOAT
 
-    param = dataset.get_by_address(5100)
+    param = dataset.get_by_address(5100, 'nx3')
     assert param.family_id == "nx3"
     assert param.address == 5100
     assert param.format == NextFormat.ENUM
     assert param.options != None
     assert type(param.options) is dict
     assert len(param.options) == 4
-
-    param = dataset.get_by_address(6900, "nx3")
-    assert param.family_id == "nx3"
-    assert param.address == 6900
-    assert param.format == NextFormat.FLOAT
 
     param = dataset.get_by_address(1200, "sys")
     assert param.family_id == "sys"
@@ -83,10 +78,10 @@ def test_id():
 def test_enum():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(5100)
+    param = dataset.get_by_address(8130, 'sys')
     assert param.options != None
     assert type(param.options) is dict
-    assert len(param.options) == 4
+    assert len(param.options) == 5
 
     assert param.enum_value(0) == "No warning(s) or error(s)"
     assert param.enum_value("0") == "No warning(s) or error(s)"
