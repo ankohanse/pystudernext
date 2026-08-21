@@ -15,7 +15,7 @@ from pystudernext import (
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (549),
+        (697),
     ]
 )
 def test_create(exp_len):

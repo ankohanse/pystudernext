@@ -67,8 +67,7 @@ class NextUserLevel(IntEnum):
     VIEWONLY = 0x0000
     BASIC    = 0x0010
     EXPERT   = 0x0020
-    INST     = 0x0030 # Installer
-    QSP      = 0x0040 # Qualified Service Person
+    STUDER   = 0x0040 # Studer Qualified Service Person
     DENIED   = 0xFFFF # Used to indicate that a read or write action is not allowed
 
     @staticmethod
@@ -77,8 +76,7 @@ class NextUserLevel(IntEnum):
             case 'VIEWONLY': return NextUserLevel.VIEWONLY
             case 'BASIC': return NextUserLevel.BASIC
             case 'EXPERT': return NextUserLevel.EXPERT
-            case 'INST': return NextUserLevel.INST
-            case 'QSP': return NextUserLevel.QSP
+            case 'STUDER': return NextUserLevel.STUDER
             case _: 
                 if default is not None:
                     return default
@@ -130,7 +128,7 @@ class NextDataType(StrEnum):
                 if default is not None:
                     return default
                 else:
-                    raise Exception(f"Unknown format: '{s}'")
+                    raise Exception(f"Unknown data-type: '{s}'")
 
     @staticmethod
     def to_datatype(format: 'NextDataType') -> ModbusTcpClient.DATATYPE:
