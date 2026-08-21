@@ -2,7 +2,7 @@ from typing import Literal
 import pytest
 import pytest_asyncio
 
-from pystudernext import NextUserLevel, NextFormat
+from pystudernext import NextUserLevel, NextDataType
 
 
 @pytest.mark.parametrize(
@@ -33,33 +33,33 @@ def test_level(description:str, inp_str:str, inp_default: NextUserLevel|None, ex
 @pytest.mark.parametrize(
     "description, inp_str, inp_default, exp_val, exp_except",
     [
-        ("bool",          "bool",          None, NextFormat.BOOL,     None),
-        ("signal",        "signal",        None, NextFormat.SIGNAL,   None),
-        ("int",           "int",           None, NextFormat.INT,      None),
-        ("uint",          "uint",          None, NextFormat.UINT,     None),
-        ("float",         "float",         None, NextFormat.FLOAT,    None),
-        ("enum",          "enum",          None, NextFormat.ENUM,     None),
-        ("bitfield",      "bitfield",      None, NextFormat.BITFIELD, None),
-        ("int64",         "int64",         None, NextFormat.INT64,    None),
-        ("uint64",        "uint64",        None, NextFormat.UINT64,   None),
-        ("float64",       "float64",       None, NextFormat.FLOAT64,  None),
-        ("string",        "string",        None, NextFormat.STRING,   None),
-        ("bytes",         "bytes",         None, NextFormat.BYTES,    None),
-        ("BYTES",         "BYTES",         None, NextFormat.BYTES,    None),
-        ("MENU",          "MENU",          None, NextFormat.MENU,     None),
-        ("NOT SUPPORTED", "NOT SUPPORTED", None, NextFormat.INVALID,  None),
+        ("bool",          "bool",          None, NextDataType.BOOL,     None),
+        ("signal",        "signal",        None, NextDataType.SIGNAL,   None),
+        ("int",           "int",           None, NextDataType.INT,      None),
+        ("uint",          "uint",          None, NextDataType.UINT,     None),
+        ("float",         "float",         None, NextDataType.FLOAT,    None),
+        ("enum",          "enum",          None, NextDataType.ENUM,     None),
+        ("bitfield",      "bitfield",      None, NextDataType.BITFIELD, None),
+        ("int64",         "int64",         None, NextDataType.INT64,    None),
+        ("uint64",        "uint64",        None, NextDataType.UINT64,   None),
+        ("float64",       "float64",       None, NextDataType.FLOAT64,  None),
+        ("string",        "string",        None, NextDataType.STRING,   None),
+        ("bytes",         "bytes",         None, NextDataType.BYTES,    None),
+        ("BYTES",         "BYTES",         None, NextDataType.BYTES,    None),
+        ("MENU",          "MENU",          None, NextDataType.MENU,     None),
+        ("NOT SUPPORTED", "NOT SUPPORTED", None, NextDataType.INVALID,  None),
 
-        ("value",         "int",   NextFormat.FLOAT, NextFormat.INT,   None),
-        ("default",       "xxxxx", NextFormat.FLOAT, NextFormat.FLOAT, None),
+        ("value",         "int",   NextDataType.FLOAT, NextDataType.INT,   None),
+        ("default",       "xxxxx", NextDataType.FLOAT, NextDataType.FLOAT, None),
         ("except",        "xxxxx", None,             None,             Exception),
     ]
 )
-def test_format(description:str, inp_str:str, inp_default: NextFormat|None, exp_val: NextFormat|None, exp_except: type[Exception]|None):
+def test_format(description:str, inp_str:str, inp_default: NextDataType|None, exp_val: NextDataType|None, exp_except: type[Exception]|None):
 
     if exp_except is None:
-        val = NextFormat.from_str(inp_str, inp_default)
+        val = NextDataType.from_str(inp_str, inp_default)
         assert val == exp_val
-        assert type(val) is NextFormat
+        assert type(val) is NextDataType
     else:
         with pytest.raises(exp_except):
-            val = NextFormat.from_str(inp_str, inp_default)
+            val = NextDataType.from_str(inp_str, inp_default)

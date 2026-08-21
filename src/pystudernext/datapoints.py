@@ -7,7 +7,7 @@ import logging
 from dataclasses import dataclass
 
 from .data import (
-    NextFormat,
+    NextDataType,
     NextRW,
     NextUserLevel,
 )
@@ -38,7 +38,7 @@ class NextDatapoint:
     unit: str = None
     min: float = None
     max: float = None
-    format: NextFormat = None
+    data_type: NextDataType = None
     read_write: str = None
     options: dict = None
 
@@ -53,20 +53,25 @@ class NextDatapoint:
         lbl = d.get('lbl', None)
         dft = d.get('def', None)
         unit = d.get('unit', None)
-        min = d.get('min', None)
-        max = d.get('max', None)
-        fmt = d.get('fmt', None)
+        rng = d.get('rng', None)
+        dt = d.get('type', None)
         rw = d.get('rw', None)
         opt = d.get('opt', None)
 
         # Check and convert properties
-        if fam is None or pid is None or addr is None or lvl is None or id is None or lbl is None or fmt is None:
+        if "_rem" in d and len(d)==1:
+            return None # Line only contains a comment
+        
+        if fam is None or pid is None or addr is None or lvl is None or id is None or lbl is None or dt is None:
+            _LOGGER.warning(f"Missing required field in dataset; fam={fam}, pid={pid}, addr={addr}")
             return None
         
-        if type(fam) is not str or type(pid) is not str or type(lvl) is not str or type(id) is not str or type(lbl) is not str or type(fmt) is not str:
+        if not isinstance(fam, str) or not isinstance(pid, str) or not isinstance(lvl, str) or not isinstance(id, str) or not isinstance(lbl, str) or not isinstance(dt, str):
+            _LOGGER.warning(f"Unexpected field type in dataset, expected str; fam={fam}, pid={pid}, addr={addr}")
             return None
 
-        if type(addr) is not int or type(size) is not int:
+        if not isinstance(addr, int) or not isinstance(size, int):
+            _LOGGER.warning(f"Unexpected field type in dataset, expected int; fam={fam}, pid={pid}, addr={addr}")
             return None
 
         # lvl might be split into a read and write part
@@ -81,13 +86,13 @@ class NextDatapoint:
         level_w = NextUserLevel.from_str(lvl_parts[1])
         id = '.'.join(filter(None, [pid,id]))
         label = lbl.strip()
-        default = float(dft) if (type(dft) is int or type(dft) is float) else None
-        unit = unit if type(unit) is str else None
-        min = float(min) if (type(min) is int or type(min) is float) else None
-        max = float(max) if (type(max) is int or type(max) is float) else None
-        format = NextFormat.from_str(fmt) if type(fmt) is str else None
-        read_write = NextRW.from_str(rw) if type(rw) is str else None
-        options = opt if type(opt) is dict else None
+        default = float(dft) if isinstance(dft, (int,float)) else None
+        unit = unit if isinstance(unit, str) else None
+        min = float(rng[0]) if isinstance(rng, dict) else None
+        max = float(rng[1]) if isinstance(rng, dict) else None
+        data_type = NextDataType.from_str(dt) if isinstance(dt, str) else None
+        read_write = NextRW.from_str(rw) if isinstance(rw, str) else None
+        options = opt if isinstance(opt, dict) else None
             
         return NextDatapoint(
             family_id = family_id, 
@@ -103,7 +108,7 @@ class NextDatapoint:
             unit = unit, 
             min = min, 
             max = max, 
-            format = format,
+            data_type = data_type,
             read_write = read_write, 
             options = options
         )
@@ -135,7 +140,7 @@ class NextDatapoint:
 
             
     def enum_value(self, key):
-        if self.format not in [NextFormat.ENUM]:
+        if self.data_type not in [NextDataType.ENUM]:
             return None
         
         key = str(key)
@@ -145,7 +150,7 @@ class NextDatapoint:
             return self.options[key]
     
     def enum_key(self, value):
-        if self.format not in [NextFormat.ENUM]:
+        if self.data_type not in [NextDataType.ENUM]:
             return None
         
         if not isinstance(self.options, dict) or value not in self.options.values():

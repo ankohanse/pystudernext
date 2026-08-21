@@ -19,7 +19,7 @@ from .data import (
     NextApiConnectException,
     NextApiReadException,
     NextApiUpdateException,
-    NextFormat,
+    NextDataType,
     NextPackException,
     NextParamException,
     NextUnpackException,
@@ -143,10 +143,10 @@ class NextApi:
 
         # Unpack the response value
         try:
-            return ModbusTcpClient.convert_from_registers(result.registers, data_type=NextFormat.to_datatype(parameter.format))
+            return ModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
 
         except Exception as e:
-            raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.format}, size={parameter.size}") from None
+            raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
 
 
     def update_value(self, parameter: NextDatapoint, value: Any, device: NextDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):
@@ -178,10 +178,10 @@ class NextApi:
         # Pack the data
         try:
             client = self._get_connected_client()
-            regs = ModbusTcpClient.convert_to_registers(value, data_type=NextFormat.to_datatype(parameter.format))
+            regs = ModbusTcpClient.convert_to_registers(value, data_type=NextDataType.to_datatype(parameter.data_type))
 
         except Exception as e:
-            raise NextPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.format}, size={parameter.size}") from None
+            raise NextPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.data_type}, size={parameter.size}") from None
         
         # Send the request
         try:

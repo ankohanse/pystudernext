@@ -11,7 +11,7 @@ from pystudernext import AsyncNextDiscover, NextDiscover
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset
 from pystudernext import NextDeviceFamilies
-from pystudernext import NextFormat
+from pystudernext import NextDataType
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -71,7 +71,7 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
-            data_type = NextFormat.to_datatype(param.format)
+            data_type = NextDataType.to_datatype(param.data_type)
             registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
 
             return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
@@ -142,7 +142,7 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
-            data_type = NextFormat.to_datatype(param.format)
+            data_type = NextDataType.to_datatype(param.data_type)
             registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
             
             return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
@@ -191,7 +191,7 @@ async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, requ
                 param = dataset.get_by_address(address, family.id)
                 value = rsp_dict[str(address)]
 
-                data_type = NextFormat.to_datatype(param.format)
+                data_type = NextDataType.to_datatype(param.data_type)
                 registers = AsyncModbusTcpClient.convert_to_registers(value=value, data_type=data_type)
     
                 return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)

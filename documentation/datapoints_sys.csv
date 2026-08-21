@@ -1,0 +1,385 @@
+﻿fam,pid,addr,size,lvl,id,lbl,def,unit,min_max,descr,fmt,rw,opt
+sys,0.1.7,2403,1,Basic,2,Buzzers enabled,TRUE,,-,"Indicates all buzzers state. If disabled, buzzers don't beep when the led panel central red light is blinking.",bool,R/W,-
+sys,0.1.7,2404,1,Basic,3,Front panel buttons enabled,TRUE,,-,"Indicates all front panel buttons state. If disabled, pressing on the front panel buttons has no effect.",bool,R/W,-
+sys,0.1.7,2405,2,ViewOnly,4,Number of cmd inputs,-1,,-,Total number of command inputs in the system.,int,R,-
+sys,0.1.7,2407,2,ViewOnly,5,Number of devices,0,,-,Number of power electronics devices.,uint,R,-
+sys,0.1.7,2409,2,ViewOnly,6,Number of next3,0,,-,Number of next3 devices.,uint,R,-
+sys,0.1.7,2411,2,ViewOnly,7,Next3 status,NoWarningsOrErrors,,-,Bitfield containing the Next3 status.,bitfield,R,0.1.7.enum0
+sys,0.1.7,2413,2,ViewOnly,8,Number of next1,0,,-,Number of next1 devices.,uint,R,-
+sys,0.1.7,2415,2,ViewOnly,9,Next1 status,NoWarningsOrErrors,,-,Bitfield containing the Next1 status.,bitfield,R,0.1.7.enum0
+,,,,,,,,,,,,,
+sys,0.1.8,2703,1,Basic,2,Turn on all phases,-,,-,Turn on all phases.,signal,W,-
+sys,0.1.8,2704,1,Basic,3,Turn off all phases,-,,-,Turn off all phases.,signal,W,-
+sys,0.1.8,2705,1,ViewOnly,4,ON/OFF state all phases,FALSE,,-,Indicates all phases ON/OFF state.,bool,R,-
+sys,0.1.8,2706,1,Basic,5,Turn on L1,-,,-,"Turn on phase L1. Note that ""Allow individual phase operation"" (id 56) must be true to enable L1 individually.",signal,W,-
+sys,0.1.8,2707,1,Basic,6,Turn off L1,-,,-,Turn off phase L1.,signal,W,-
+sys,0.1.8,2708,1,Basic,7,ON/OFF state L1,FALSE,,-,Indicates phase L1 ON/OFF state.,bool,R,-
+sys,0.1.8,2709,1,Basic,8,Turn on L2,-,,-,"Turn on phase L2. Note that ""Allow individual phase operation"" (id 56) must be true to enable L2 individually.",signal,W,-
+sys,0.1.8,2710,1,Basic,9,Turn off L2,-,,-,Turn off phase L2.,signal,W,-
+sys,0.1.8,2711,1,Basic,10,ON/OFF state L2,FALSE,,-,Indicates phase L2 ON/OFF state.,bool,R,-
+sys,0.1.8,2712,1,Basic,11,Turn on L3,-,,-,"Turn on phase L3. Note that ""Allow individual phase operation"" (id 56) must be true to enable L3 individually.",signal,W,-
+sys,0.1.8,2713,1,Basic,12,Turn off L3,-,,-,Turn off phase L3.,signal,W,-
+sys,0.1.8,2714,1,Basic,13,ON/OFF state L3,FALSE,,-,Indicates phase L3 ON/OFF state.,bool,R,-
+sys,0.1.8,2717,2,Basic,15,3-phase system configuration,Symetric,,-,3-phase system configuration.,enum,R/W,0.1.8.enum0
+sys,0.1.8,2719,2,Basic,16,Nominal line voltage,398.371686,V,"[10,478]",Nominal line voltage.,float,R/W,
+sys,0.1.8,2721,2,Basic,17,L1 nominal phase voltage,230,V,"[0,275]",L1 nominal phase voltage (also used for AC input ports nominal voltage).,float,R/W,-
+sys,0.1.8,2723,2,Basic,18,L2 nominal phase voltage,230,V,"[0,275]",L2 nominal phase voltage (also used for AC input ports nominal voltage).,float,R/W,-
+sys,0.1.8,2725,2,Basic,19,L3 nominal phase voltage,230,V,"[0,275]",L3 nominal phase voltage (also used for AC input ports nominal voltage).,float,R/W,-
+sys,0.1.8,2727,2,Basic,20,Relative angle for L2,-120,°,[-,L2 voltage phase angle relative to L1.,float,R/W,-
+sys,0.1.8,2729,2,Basic,21,Relative angle for L3,120,°,"180,180]",L3 voltage phase angle relative to L1.,float,R/W,-
+sys,0.1.8,2731,2,Basic,22,Nominal frequency,50,Hz,"[45,65]",Nominal frequency.,float,R/W,-
+sys,0.1.8,2733,2,Expert,23,Maximum RoCoF,10,Hz/s,"[0.5,50]",Maximal rate of change of frequency.,float,R/W,-
+sys,0.1.8,2784,2,Basic,49,Alternate frequency,50,Hz,"[35,65]","Alternate frequency. See property ""Cmd entry idx for alternate frequency"" (id 50) for more details.",float,R/W,-
+sys,0.1.8,2786,2,Expert,50,Cmd entry idx for alternate frequency,0,,"[0,10]",Index of the command input used to switch to the alternate frequency,int,R/W,-
+sys,0.1.8,2788,1,R:ViewOnly W:Expert,51,Allow power prod. on,FALSE,,-,"Allows power production on ACLoad or FlexLoad ports (e.g. when solar inverter is connected on ACLoad/FlexLoad). If false, a backfeed power dectection causes an error.",bool,R/W,-
+sys,0.1.8,2789,2,R:ViewOnly W:Expert,52,Freq. incr. to reduce produced power,0,Hz,"[0,15]","When power is produced on ACLoad or FlexLoad port (e.g. when solar inverter is connected on on ACLoad/FlexLoad) and this power can't be absorbed by the system, the frequency must be increased to limit this power.",float,R/W,-
+sys,0.1.8,2793,2,Basic,54,Standby sensitivity,None,,-,Standby sensitivity.,enum,R/W,0.1.8.enum2
+sys,0.1.8,2795,2,Expert,55,Standby detection,1,%,"[-1,10]",Standby detection expressed in % of nominal power. A negative value disables the standby.,float,R/W,-
+sys,0.1.8,2797,1,Basic,56,Allow individual phase operation,TRUE,,-,Allow individual phase operation even if another phase is halted or in error state.,bool,R/W,-
+sys,0.1.8,2798,2,Expert,57,Overload threshold stage1,50,%,"[20,90]",Voltage threshold stage 1 for overload detection.,float,R/W,-
+sys,0.1.8,2800,2,Expert,58,Overload operate time stage1,0.5,s,"[0.05,3]",Overload operate time stage 1.,float,R/W,-
+sys,0.1.8,2802,2,Expert,59,Overload threshold stage2,80,%,"[40,95]",Voltage threshold stage 2 for overload detection.,float,R/W,-
+sys,0.1.8,2804,2,Expert,60,Overload operate time stage2,3,s,"[0.5,5]",Overload operate time stage 2.,float,R/W,-
+sys,0.1.8,2806,2,Expert,61,Overload restart delay,1,s,"[1,10]",Delay before automatic restarting after an overload occurs.,float,R/W,-
+sys,0.1.8,2808,2,Expert,62,Max overloads during obs. Period,3,,"[0,30]",Maximum number of overloads allowed during the defined observation period before stopping.,int,R/W,-
+sys,0.1.8,2810,2,Expert,63,Observation period for overloads detection,30,s,"[5,600]",Observation period for overloads detection.,int,R/W,-
+sys,0.1.8,2812,2,Expert,64,Error restart delay,3,s,"[1,10]",Delay before automatic restarting after an error.,float,R/W,-
+sys,0.1.8,2814,2,Expert,65,Max errors during obs. period,5,,"[0,30]",Maximum number of errors allowed during the defined observation period before stopping.,int,R/W,-
+sys,0.1.8,2816,2,Expert,66,Observation period for errors detection,60,s,"[5,600]",Observation period for errors detection.,int,R/W,-
+sys,0.1.8,2832,2,Expert,74,Inertial smoothing strength,2,,"[0.1,20]","Strength of inertial smoothing feature (smoothing of transient current of genset, used to improve stability of genset during transients).",float,R/W,-
+sys,0.1.8,2834,2,ViewOnly,75,Status,AtLeastOnePhaseDisabled,,-,Contains the current status of the 3phase inverter. Several values are possible simultaneously.,bitfield,R,0.1.8.enum3
+sys,0.1.8,2834,2,ViewOnly,76,Phase existance,0x07,,,Indicates which phase(s) is(are) used for inverters / AC-Loads,bitfield,R,0.1.8.enum4
+,,,,,,,,,,,,,
+sys,0.1.9,3000,2,ViewOnly,0,Status,0,,,,enum,R,0.1.9.enum0
+sys,0.1.9,3002,2,ViewOnly,0,Warnings,0,,,,bitfield,R,0.1.9.enum1
+sys,0.1.9,3004,2,ViewOnly,0,Cause of error,0,,,,bitfield,R,0.1.9.enum2
+,,,,,,,,,,,,,
+sys,0.1.10,3300,2,ViewOnly,0,Status,0,,,,enum,R,0.1.10.enum0
+sys,0.1.10,3302,2,ViewOnly,0,Warnings,0,,,,bitfield,R,0.1.10.enum1
+sys,0.1.10,3304,2,ViewOnly,0,Cause of error,0,,,,bitfield,R,0.1.10.enum2
+,,,,,,,,,,,,,
+sys,0.1.11,3300,2,ViewOnly,0,Status,0,,,,enum,R,0.1.11.enum0
+sys,0.1.11,3302,2,ViewOnly,0,Warnings,0,,,,bitfield,R,0.1.11.enum1
+sys,0.1.11,3304,2,ViewOnly,0,Cause of error,0,,,,bitfield,R,0.1.11.enum2
+,,,,,,,,,,,,,
+sys,0.1.12,3900,2,ViewOnly,0,Frequency,0,Hz,-,Frequency measured.,float,R,-
+sys,0.1.12,3902,2,ViewOnly,4,Line voltage L1-L2,0,V,-,Line voltage L1-L2 measured.,float,R,-
+sys,0.1.12,3904,2,ViewOnly,8,Line voltage L2-L3,0,V,-,Line voltage L2-L3 measured.,float,R,-
+sys,0.1.12,3906,2,ViewOnly,12,Line voltage L3-L1,0,V,-,Line voltage L3-L1 measured.,float,R,-
+sys,0.1.12,3908,2,ViewOnly,16,Total active power,0,W,-,Total active power measured.,float,R,-
+sys,0.1.12,3910,2,ViewOnly,20,Total apparent power,0,VA,-,Total apparent power measured.,float,R,-
+sys,0.1.12,3912,2,ViewOnly,24,Angle L2 relative to L1,0,degree,-,Angle L2 relative to L1 measured.,float,R,-
+sys,0.1.12,3914,2,ViewOnly,25,Angle L3 relative to L1,0,degree,-,Angle L3 relative to L1 measured.,float,R,-
+sys,0.1.12,3916,2,ViewOnly,26,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.12,3918,2,ViewOnly,27,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.12,3920,4,ViewOnly,28,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.12,3924,4,ViewOnly,29,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.12,3928,2,ViewOnly,30,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.12,3930,2,ViewOnly,31,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.12,3932,4,ViewOnly,32,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.12,3936,4,ViewOnly,33,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+sys,0.1.12,3940,2,ViewOnly,34,Day runtime,0,h,-,Day runtime measured.,float,R,-
+sys,0.1.12,3942,2,ViewOnly,35,Total runtime,0,h,-,Total runtime measured.,float,R,-
+sys,0.1.12,3944,2,ViewOnly,36,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.12,3946,2,ViewOnly,37,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.12,3948,2,ViewOnly,38,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.12,3950,2,ViewOnly,39,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.12,3952,2,ViewOnly,40,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.12,3954,2,ViewOnly,41,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.12,3956,2,ViewOnly,42,Produced active power,0,W,-,Produced active power measured.,float,R,-
+sys,0.1.12,3958,2,ViewOnly,44,Consumed active power,0,W,-,Consumed active power measured.,float,R,-
+,,,,,,,,,,,,,
+sys,0.1.13,4200,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.13,4202,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.13,4204,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.13,4206,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.13,4208,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.13,4210,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.13,4212,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.13,4214,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.13,4216,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.13,4218,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.13,4220,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.13,4222,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.13,4228,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.13,4230,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.13,4232,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.13,4236,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.13,4240,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.13,4242,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.13,4244,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.13,4248,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.14,4500,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.14,4502,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.14,4504,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.14,4506,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.14,4508,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.14,4510,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.14,4512,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.14,4514,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.14,4516,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.14,4518,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.14,4520,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.14,4522,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.14,4528,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.14,4530,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.14,4532,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.14,4536,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.14,4540,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.14,4542,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.14,4544,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.14,4548,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.15,4800,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.15,4802,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.15,4804,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.15,4806,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.15,4808,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.15,4810,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.15,4812,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.15,4814,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.15,4816,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.15,4818,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.15,4820,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.15,4822,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.15,4828,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.15,4830,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.15,4832,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.15,4836,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.15,4840,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.15,4842,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.15,4844,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.15,4848,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.16,5100,2,ViewOnly,0,Frequency,0,Hz,-,Frequency measured.,float,R,-
+sys,0.1.16,5102,2,ViewOnly,4,Line voltage L1-L2,0,V,-,Line voltage L1-L2 measured.,float,R,-
+sys,0.1.16,5104,2,ViewOnly,8,Line voltage L2-L3,0,V,-,Line voltage L2-L3 measured.,float,R,-
+sys,0.1.16,5106,2,ViewOnly,12,Line voltage L3-L1,0,V,-,Line voltage L3-L1 measured.,float,R,-
+sys,0.1.16,5108,2,ViewOnly,16,Total active power,0,W,-,Total active power measured.,float,R,-
+sys,0.1.16,5110,2,ViewOnly,20,Total apparent power,0,VA,-,Total apparent power measured.,float,R,-
+sys,0.1.16,5112,2,ViewOnly,24,Angle L2 relative to L1,0,degree,-,Angle L2 relative to L1 measured.,float,R,-
+sys,0.1.16,5114,2,ViewOnly,25,Angle L3 relative to L1,0,degree,-,Angle L3 relative to L1 measured.,float,R,-
+sys,0.1.16,5116,2,ViewOnly,26,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.16,5118,2,ViewOnly,27,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.16,5120,4,ViewOnly,28,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.16,5124,4,ViewOnly,29,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.16,5128,2,ViewOnly,30,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.16,5130,2,ViewOnly,31,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.16,5132,4,ViewOnly,32,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.16,5136,4,ViewOnly,33,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+sys,0.1.16,5140,2,ViewOnly,34,Day runtime,0,h,-,Day runtime measured.,float,R,-
+sys,0.1.16,5142,2,ViewOnly,35,Total runtime,0,h,-,Total runtime measured.,float,R,-
+sys,0.1.16,5144,2,ViewOnly,36,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.16,5146,2,ViewOnly,37,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.16,5148,2,ViewOnly,38,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.16,5150,2,ViewOnly,39,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.16,5152,2,ViewOnly,40,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.16,5154,2,ViewOnly,41,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.16,5156,2,ViewOnly,42,Produced active power,0,W,-,Produced active power measured.,float,R,-
+sys,0.1.16,5158,2,ViewOnly,44,Consumed active power,0,W,-,Consumed active power measured.,float,R,-
+,,,,,,,,,,,,,
+sys,0.1.17,5400,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.17,5402,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.17,5404,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.17,5406,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.17,5408,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.17,5410,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.17,5412,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.17,5414,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.17,5416,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.17,5418,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.17,5420,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.17,5422,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.17,5428,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.17,5430,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.17,5432,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.17,5436,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.17,5440,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.17,5442,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.17,5444,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.17,5448,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.18,5700,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.18,5702,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.18,5704,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.18,5706,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.18,5708,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.18,5710,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.18,5712,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.18,5714,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.18,5716,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.18,5718,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.18,5720,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.18,5722,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.18,5728,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.18,5730,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.18,5732,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.18,5736,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.18,5740,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.18,5742,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.18,5744,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.18,5748,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.19,6000,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.19,6002,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.19,6004,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.19,6006,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.19,6008,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.19,6010,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.19,6012,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.19,6014,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.19,6016,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.19,6018,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.19,6020,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.19,6022,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.19,6028,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.19,6030,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.19,6032,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.19,6036,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.19,6040,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.19,6042,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.19,6044,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.19,6048,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.20,6300,2,ViewOnly,0,Frequency,0,Hz,-,Frequency measured.,float,R,-
+sys,0.1.20,6302,2,ViewOnly,4,Line voltage L1-L2,0,V,-,Line voltage L1-L2 measured.,float,R,-
+sys,0.1.20,6304,2,ViewOnly,8,Line voltage L2-L3,0,V,-,Line voltage L2-L3 measured.,float,R,-
+sys,0.1.20,6306,2,ViewOnly,12,Line voltage L3-L1,0,V,-,Line voltage L3-L1 measured.,float,R,-
+sys,0.1.20,6308,2,ViewOnly,16,Total active power,0,W,-,Total active power measured.,float,R,-
+sys,0.1.20,6310,2,ViewOnly,20,Total apparent power,0,VA,-,Total apparent power measured.,float,R,-
+sys,0.1.20,6312,2,ViewOnly,24,Angle L2 relative to L1,0,degree,-,Angle L2 relative to L1 measured.,float,R,-
+sys,0.1.20,6314,2,ViewOnly,25,Angle L3 relative to L1,0,degree,-,Angle L3 relative to L1 measured.,float,R,-
+sys,0.1.20,6316,2,ViewOnly,26,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.20,6318,2,ViewOnly,27,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.20,6320,4,ViewOnly,28,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.20,6324,4,ViewOnly,29,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.20,6328,2,ViewOnly,30,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.20,6330,2,ViewOnly,31,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.20,6332,4,ViewOnly,32,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.20,6336,4,ViewOnly,33,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+sys,0.1.20,6340,2,ViewOnly,34,Day runtime,0,h,-,Day runtime measured.,float,R,-
+sys,0.1.20,6342,2,ViewOnly,35,Total runtime,0,h,-,Total runtime measured.,float,R,-
+sys,0.1.20,6344,2,ViewOnly,36,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.20,6346,2,ViewOnly,37,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.20,6348,2,ViewOnly,38,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.20,6350,2,ViewOnly,39,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.20,6352,2,ViewOnly,40,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.20,6354,2,ViewOnly,41,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.20,6356,2,ViewOnly,42,Produced active power,0,W,-,Produced active power measured.,float,R,-
+sys,0.1.20,6358,2,ViewOnly,44,Consumed active power,0,W,-,Consumed active power measured.,float,R,-
+,,,,,,,,,,,,,
+sys,0.1.21,6600,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.21,6602,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.21,6604,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.21,6606,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.21,6608,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.21,6610,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.21,6612,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.21,6614,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.21,6616,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.21,6618,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.21,6620,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.21,6622,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.21,6628,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.21,6630,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.21,6632,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.21,6636,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.21,6640,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.21,6642,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.21,6644,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.21,6648,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.22,6900,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.22,6902,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.22,6904,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.22,6906,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.22,6908,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.22,6910,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.22,6912,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.22,6914,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.22,6916,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.22,6918,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.22,6920,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.22,6922,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.22,6928,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.22,6930,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.22,6932,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.22,6936,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.22,6940,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.22,6942,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.22,6944,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.22,6948,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.23,7200,2,ViewOnly,0,Phase voltage,0,V,-,Phase voltage RMS measured.,float,R,-
+sys,0.1.23,7202,2,ViewOnly,4,Current,0,A,-,Current RMS measured.,float,R,-
+sys,0.1.23,7204,2,ViewOnly,8,Active power,0,W,-,Active power measured.,float,R,-
+sys,0.1.23,7206,2,ViewOnly,12,Reactive power,0,VAR,-,Reactive power measured.,float,R,-
+sys,0.1.23,7208,2,ViewOnly,16,Apparent power,0,VA,-,Apparent power measured.,float,R,-
+sys,0.1.23,7210,2,ViewOnly,20,Power factor,0,,-,Power factor measured.,float,R,-
+sys,0.1.23,7212,2,ViewOnly,24,Day peak power,0,VA,-,Peak power of the current day.,float,R,-
+sys,0.1.23,7214,2,ViewOnly,25,Previous day peak power,0,VA,-,Peak power of the previous day.,float,R,-
+sys,0.1.23,7216,2,ViewOnly,26,Day minimum active power,0,W,-,Minimum active power of the current day.,float,R,-
+sys,0.1.23,7218,2,ViewOnly,27,Previous day minimum active power,0,W,-,Minimum active power of the previous day.,float,R,-
+sys,0.1.23,7220,2,ViewOnly,28,Day maximum active power,0,W,-,Maximum active power of the current day.,float,R,-
+sys,0.1.23,7222,2,ViewOnly,29,Previous day maximum active power,0,W,-,Maximum active power of the previous day.,float,R,-
+sys,0.1.23,7228,2,ViewOnly,32,Day consumed energy,0,Wh,-,Consumed energy of the current day.,float,R,-
+sys,0.1.23,7230,2,ViewOnly,33,Previous day consumed energy,0,Wh,-,Consumed energy of the previous day.,float,R,-
+sys,0.1.23,7232,4,ViewOnly,34,Resetable consumed energy,0,Wh,-,Resetable consumed energy.,float64,R/W,-
+sys,0.1.23,7236,4,ViewOnly,35,Total consumed energy,0,Wh,-,Total consumed energy.,float64,R,-
+sys,0.1.23,7240,2,ViewOnly,36,Day produced energy,0,Wh,-,Produced energy of the current day.,float,R,-
+sys,0.1.23,7242,2,ViewOnly,37,Previous day produced energy,0,Wh,-,Produced energy of the previous day.,float,R,-
+sys,0.1.23,7244,4,ViewOnly,38,Resetable produced energy,0,Wh,-,Resetable produced energy.,float64,R/W,-
+sys,0.1.23,7248,4,ViewOnly,39,Total produced energy,0,Wh,-,Total produced energy.,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.24,7500,1,Basic,0,Turn on,-,,-,Turns on solar(s).,signal,W,-
+sys,0.1.24,7501,1,Basic,1,Turn off,-,,-,Turns off solar(s).,signal,W,-
+sys,0.1.24,7502,1,ViewOnly,2,On off state,FALSE,,-,Indicates solar(s) on/off state.,bool,R,-
+sys,0.1.24,7503,1,Expert,3,Enable depolarization,-,,-,Enables depolarization.,signal,W,-
+sys,0.1.24,7504,1,Expert,4,Disable depolarization,-,,-,Disables depolarization.,signal,W,-
+sys,0.1.24,7505,2,ViewOnly,5,Power,0,W,-,Power produced.,float,R,-
+sys,0.1.24,7507,2,ViewOnly,8,Previous day energy,0,Wh,-,Energy produced for the previous day.,float,R,-
+sys,0.1.24,7509,2,ViewOnly,9,Power limit,0,W,-,Solar(s) power limit.,uint,R,-
+sys,0.1.24,7511,2,ViewOnly,10,Day energy,0,Wh,-,Energy produced for the current day.,float,R,-
+sys,0.1.24,7515,4,ViewOnly,12,Resetable energy,0,Wh,-,Energy produced (can be reset).,float64,R/W,-
+sys,0.1.24,7519,4,ViewOnly,13,Total energy,0,Wh,-,Total energy produced (whole life).,float64,R,-
+,,,,,,,,,,,,,
+sys,0.1.25,7800,2,ViewOnly,0,Number,0,,,,uint,R,
+sys,0.1.25,7802,2,ViewOnly,1,Status,AtleastOneSolarDisabled,,,,bitfield,R,
+,,,,,,,,,,,,,
+sys,0.1.26,8100,1,Basic,0,Clear errors,-,,-,"Clear all errors for this installation. Note that battery charging recovery mode will be enabled if ""Charging recovery mode"" (id 90) was ""Disabled and activatable"" (value 1) before sending this signal.",signal,W,-
+sys,0.1.26,8101,1,Basic,1,Turn on,-,,-,Turns on all converters.,signal,W,-
+sys,0.1.26,8102,1,Basic,2,Turn off,-,,-,Turns off all converters.,signal,W,-
+sys,0.1.26,8103,1,ViewOnly,3,On off state,FALSE,,-,Indicates all converters on/off state.,bool,R,-
+sys,0.1.26,8104,2,ViewOnly,4,Source power,0,W,-,Power of the currently used AC source (AcSource or AcFlex used as FlexSource).,float,R,-
+sys,0.1.26,8106,2,ViewOnly,6,Loads+FlexLoads total power,0,W,-,AC Loads and FlexLoads total power (consumed - produced).,float,R,-
+sys,0.1.26,8108,2,ViewOnly,8,Loads+FlexLoads appar. power,0,VA,-,AC Loads and FlexLoads apparent power.,float,R,-
+sys,0.1.26,8110,2,ViewOnly,10,Warning(s),None,,-,Bitfield containing the warning(s).,bitfield,R,0
+sys,0.1.26,8112,2,ViewOnly,11,Error(s) restarting,None,,-,Bitfield containing the error(s) restarting.,bitfield,R,0
+sys,0.1.26,8114,2,ViewOnly,12,Source day consumed energy,0,Wh,-,Day consumed energy of all AC sources (AcSource and AcFlex used as FlexSource).,float,R,-
+sys,0.1.26,8116,2,ViewOnly,13,Source day produced energy,0,Wh,-,Day produced energy of all AC sources (AcSource and AcFlex used as FlexSource).,float,R,-
+sys,0.1.26,8118,2,ViewOnly,14,Error(s) halted,None,,-,Bitfield containing the error(s) halted.,bitfield,R,0
+sys,0.1.26,8120,2,ViewOnly,15,Error(s) restarting or halted,None,,-,Bitfield containing the error(s) (restarting or halted).,bitfield,R,0
+sys,0.1.26,8122,2,Expert,16,CEI for emergency stop,0,,"[0,10]",Index of the command entry interface used for emergency stop. (0 value disable remote operation).,int,R/W,-
+sys,0.1.26,8124,2,ViewOnly,17,Number of ACSources,0,,-,"Number of AC sources used in the installation. How much and which used phases is shown in ""Phase existance"" (id 126)",int,R,-
+sys,0.1.26,8126,2,ViewOnly,18,Loads+FlexLoads day total ener.,0,Wh,-,AC Loads and FlexLoads day total energy (consumed produced).,float,R,-
+sys,0.1.26,8128,2,ViewOnly,19,Number of ACFlexLoads,0,,-,"Number of AC FlexLoads used in the installation. How much and which used phases is shown in ""Phase existance"" (id 0)",int,R,-
+sys,0.1.26,8130,2,ViewOnly,20,Status,NoWarningsOrErrors,,-,Enum containing the status.,enum,R,1
+sys,0.1.26,8132,2,ViewOnly,21,Loads+FlexLoads consum. power,0,W,-,AC Loads and FlexLoads consumed power.,float,R,-
+sys,0.1.26,8134,2,ViewOnly,22,Loads+FlexLoads produc. power,0,W,-,AC Loads and FlexLoads produced power.,float,R,-
+sys,0.1.26,8136,2,ViewOnly,25,Loads+FlexLoads day cons. ener.,0,Wh,-,AC Loads and FlexLoads day consumed energy.,float,R,-
+sys,0.1.26,8138,2,ViewOnly,26,Loads+FlexLoads ener. day prod.,0,Wh,,,float,R,
+,,,,,,,,,,,,,
+sys,0.1.27,8400,2,ViewOnly,0,Charging power,0,W,-,Charging power measured.,float,R,-
+sys,0.1.27,8402,2,ViewOnly,4,Day charging energy,0,Wh,-,Day charging energy measured.,float,R,-
+sys,0.1.27,8404,2,ViewOnly,5,Previous day charging energy,0,Wh,-,Previous day charging energy measured.,float,R,-
+sys,0.1.27,8406,4,ViewOnly,6,Resetable charging energy,0,Wh,-,Resetable charging energy measured.,float64,R/W,-
+sys,0.1.27,8410,4,ViewOnly,7,Total charging energy,0,Wh,-,Total charging energy measured.,float64,R,-
+sys,0.1.27,8414,2,ViewOnly,8,Day discharging energy,0,Wh,-,Day discharging energy measured.,float,R,-
+sys,0.1.27,8416,2,ViewOnly,9,Previous day discharging energy,0,Wh,-,Previous day discharging energy measured.,float,R,-
+sys,0.1.27,8418,4,ViewOnly,10,Resetable discharging energy,0,Wh,-,Resetable discharging energy measured.,float64,R/W,-
+sys,0.1.27,8422,4,ViewOnly,11,Total discharging energy,0,Wh,-,Total discharging energy measured.,float64,R,-
+sys,0.1.27,8426,2,ViewOnly,12,State of Charge,0,%,-,State of charge measured.,float,R,-
+,,,,,,,,,,,,,
+sys,0.1.28,8700,2,ViewOnly,0,Number,0,,,,uint,R,
+sys,0.1.28,8702,2,ViewOnly,1,Status,AtleastOneSolarDisabled,,,,bitfield,R,

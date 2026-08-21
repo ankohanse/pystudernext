@@ -5,7 +5,7 @@ import pytest_asyncio
 
 from pystudernext import (
     NextDataset, 
-    NextFormat, 
+    NextDataType, 
     NextDatapointUnknownException,
     AsyncNextFactory,
     NextFactory,
@@ -30,12 +30,12 @@ def test_address():
     param = dataset.get_by_address(6900, 'nx3')
     assert param.family_id == "nx3"
     assert param.address == 6900
-    assert param.format == NextFormat.FLOAT
+    assert param.data_type == NextDataType.FLOAT
 
     param = dataset.get_by_address(5100, 'nx3')
     assert param.family_id == "nx3"
     assert param.address == 5100
-    assert param.format == NextFormat.ENUM
+    assert param.data_type == NextDataType.ENUM
     assert param.options != None
     assert type(param.options) is dict
     assert len(param.options) == 4
@@ -43,7 +43,7 @@ def test_address():
     param = dataset.get_by_address(1200, "sys")
     assert param.family_id == "sys"
     assert param.address == 1200
-    assert param.format == NextFormat.ENUM
+    assert param.data_type == NextDataType.ENUM
     assert param.options != None
     assert type(param.options) is dict
 
@@ -60,7 +60,7 @@ def test_id():
     param = dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
     assert param.family_id == "sys"
     assert param.address == 2103
-    assert param.format == NextFormat.STRING
+    assert param.data_type == NextDataType.STRING
 
     with pytest.raises(NextDatapointUnknownException):
         param = dataset.get_by_id(None)

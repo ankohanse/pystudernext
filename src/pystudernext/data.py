@@ -93,7 +93,7 @@ class NextUserLevel(IntEnum):
         return self.name
 
 
-class NextFormat(StrEnum):
+class NextDataType(StrEnum):
     BOOL       = "bool"         # 1 register  / 2 bytes
     SIGNAL     = "signal"       # 1 register  / 2 bytes
     INT        = "int"          # 2 registers / 4 bytes
@@ -112,20 +112,20 @@ class NextFormat(StrEnum):
     @staticmethod
     def from_str(s: str, default: str|None = None):
         match s.lower():
-            case 'bool': return NextFormat.BOOL
-            case 'signal': return NextFormat.SIGNAL
-            case 'int': return NextFormat.INT
-            case 'uint': return NextFormat.UINT
-            case 'float': return NextFormat.FLOAT
-            case 'enum': return NextFormat.ENUM
-            case 'bitfield': return NextFormat.BITFIELD
-            case 'int64': return NextFormat.INT64
-            case 'uint64': return NextFormat.UINT64
-            case 'float64': return NextFormat.FLOAT64
-            case 'string': return NextFormat.STRING
-            case 'bytes': return NextFormat.BYTES
-            case 'menu': return NextFormat.MENU
-            case 'not supported': return NextFormat.INVALID
+            case 'bool': return NextDataType.BOOL
+            case 'signal': return NextDataType.SIGNAL
+            case 'int': return NextDataType.INT
+            case 'uint': return NextDataType.UINT
+            case 'float': return NextDataType.FLOAT
+            case 'enum': return NextDataType.ENUM
+            case 'bitfield': return NextDataType.BITFIELD
+            case 'int64': return NextDataType.INT64
+            case 'uint64': return NextDataType.UINT64
+            case 'float64': return NextDataType.FLOAT64
+            case 'string': return NextDataType.STRING
+            case 'bytes': return NextDataType.BYTES
+            case 'menu': return NextDataType.MENU
+            case 'not supported': return NextDataType.INVALID
             case _: 
                 if default is not None:
                     return default
@@ -133,19 +133,19 @@ class NextFormat(StrEnum):
                     raise Exception(f"Unknown format: '{s}'")
 
     @staticmethod
-    def to_datatype(format: 'NextFormat') -> ModbusTcpClient.DATATYPE:
+    def to_datatype(format: 'NextDataType') -> ModbusTcpClient.DATATYPE:
         match format:
-            case NextFormat.BOOL:       return ModbusTcpClient.DATATYPE.UINT16 
-            case NextFormat.SIGNAL:     return ModbusTcpClient.DATATYPE.UINT16 
-            case NextFormat.INT:        return ModbusTcpClient.DATATYPE.INT32  
-            case NextFormat.UINT:       return ModbusTcpClient.DATATYPE.UINT32 
-            case NextFormat.FLOAT:      return ModbusTcpClient.DATATYPE.FLOAT32
-            case NextFormat.ENUM:       return ModbusTcpClient.DATATYPE.UINT32 
-            case NextFormat.BITFIELD:   return ModbusTcpClient.DATATYPE.BITS   
-            case NextFormat.INT64:      return ModbusTcpClient.DATATYPE.INT64  
-            case NextFormat.UINT64:     return ModbusTcpClient.DATATYPE.UINT64 
-            case NextFormat.FLOAT64:    return ModbusTcpClient.DATATYPE.FLOAT64
-            case NextFormat.STRING:     return ModbusTcpClient.DATATYPE.STRING 
+            case NextDataType.BOOL:       return ModbusTcpClient.DATATYPE.UINT16 
+            case NextDataType.SIGNAL:     return ModbusTcpClient.DATATYPE.UINT16 
+            case NextDataType.INT:        return ModbusTcpClient.DATATYPE.INT32  
+            case NextDataType.UINT:       return ModbusTcpClient.DATATYPE.UINT32 
+            case NextDataType.FLOAT:      return ModbusTcpClient.DATATYPE.FLOAT32
+            case NextDataType.ENUM:       return ModbusTcpClient.DATATYPE.UINT32 
+            case NextDataType.BITFIELD:   return ModbusTcpClient.DATATYPE.BITS   
+            case NextDataType.INT64:      return ModbusTcpClient.DATATYPE.INT64  
+            case NextDataType.UINT64:     return ModbusTcpClient.DATATYPE.UINT64 
+            case NextDataType.FLOAT64:    return ModbusTcpClient.DATATYPE.FLOAT64
+            case NextDataType.STRING:     return ModbusTcpClient.DATATYPE.STRING 
             case _:
                 raise NextParamException(f"Cannot convert format {format} into a DATATYPE")
 

@@ -10,7 +10,7 @@ from pymodbus.pdu import ModbusPDU
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 
 from pystudernext import AsyncNextFactory, NextFactory
-from pystudernext import NextFormat
+from pystudernext import NextDataType
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -18,12 +18,12 @@ from . import AsyncNextApiStub, NextApiStub
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
     [
-        ("request bool ok",      'sys', 1,  2121, True,   NextFormat.BOOL, None),
-        ("request int ok",       'sys', 1,  2122, 1234,   NextFormat.INT, None),
-        ("request uint ok",      'nx3', 14, 14,   1234,   NextFormat.UINT, None),
-        ("request float ok",     'sys', 1,  3908, 1234.0, NextFormat.FLOAT, None),
-        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextFormat.FLOAT64, None),
-        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextFormat.STRING, None),
+        ("request bool ok",      'sys', 1,  2121, True,   NextDataType.BOOL, None),
+        ("request int ok",       'sys', 1,  2122, 1234,   NextDataType.INT, None),
+        ("request uint ok",      'nx3', 14, 14,   1234,   NextDataType.UINT, None),
+        ("request float ok",     'sys', 1,  3908, 1234.0, NextDataType.FLOAT, None),
+        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextDataType.FLOAT64, None),
+        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextDataType.STRING, None),
     ]
 )
 def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):
@@ -45,7 +45,7 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
         read_count = count
         read_slave = slave
 
-        data_type = NextFormat.to_datatype(test_format)
+        data_type = NextDataType.to_datatype(test_format)
         registers = ModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
 
         return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
@@ -73,12 +73,12 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
     [
-        ("request bool ok",      'sys', 1,  2121, True,   NextFormat.BOOL, None),
-        ("request int ok",       'sys', 1,  2122, 1234,   NextFormat.INT, None),
-        ("request uint ok",      'nx3', 14, 14,   1234,   NextFormat.UINT, None),
-        ("request float ok",     'sys', 1,  3908, 1234.0, NextFormat.FLOAT, None),
-        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextFormat.FLOAT64, None),
-        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextFormat.STRING, None),
+        ("request bool ok",      'sys', 1,  2121, True,   NextDataType.BOOL, None),
+        ("request int ok",       'sys', 1,  2122, 1234,   NextDataType.INT, None),
+        ("request uint ok",      'nx3', 14, 14,   1234,   NextDataType.UINT, None),
+        ("request float ok",     'sys', 1,  3908, 1234.0, NextDataType.FLOAT, None),
+        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextDataType.FLOAT64, None),
+        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextDataType.STRING, None),
     ]
 )
 def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):
@@ -115,7 +115,7 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
         assert write_address == param.address
         assert write_regs is not None
 
-        data_type = NextFormat.to_datatype(test_format)
+        data_type = NextDataType.to_datatype(test_format)
         registers = ModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
 
         assert write_regs == registers
