@@ -7,9 +7,11 @@ from pystudernext import (
     NextDataset, 
     NextDataType, 
     NextDatapointUnknownException,
+    NextParamException,
     AsyncNextFactory,
     NextFactory,
 )
+from pystudernext.families import NextDeviceFamilies
 
 
 @pytest.mark.parametrize(
@@ -27,7 +29,7 @@ def test_create(exp_len):
 def test_address():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(6900, 'nx3')
+    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
     assert param.family_id == "nx3"
     assert param.address == 6900
     assert param.data_type == NextDataType.FLOAT
@@ -40,7 +42,7 @@ def test_address():
     assert type(param.options) is dict
     assert len(param.options) == 4
 
-    param = dataset.get_by_address(1200, "sys")
+    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM)
     assert param.family_id == "sys"
     assert param.address == 1200
     assert param.data_type == NextDataType.ENUM
@@ -48,10 +50,10 @@ def test_address():
     assert type(param.options) is dict
 
     with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_address(9999)
+        param = dataset.get_by_address(9999, 'sys')
 
     with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_address(5100, "bat")
+        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY)
 
 
 def test_id():
@@ -62,7 +64,7 @@ def test_id():
     assert param.address == 2103
     assert param.data_type == NextDataType.STRING
 
-    with pytest.raises(NextDatapointUnknownException):
+    with pytest.raises(NextParamException):
         param = dataset.get_by_id(None)
 
     with pytest.raises(NextDatapointUnknownException):
@@ -78,7 +80,7 @@ def test_id():
 def test_enum():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(8130, 'sys')
+    param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
     assert param.options != None
     assert type(param.options) is dict
     assert len(param.options) == 5
@@ -98,12 +100,19 @@ def test_enum():
     "family_id, exp_len",
     [
         ("sys", 25),
-        ("bat", 5),
-        ("acs", 8),
+        ("bat",  5),
+        ("acs",  8),
         ("acf", 14),
         ("nx3", 26),
         ("nx1", 14),
         ("nxg", 29),
+        (NextDeviceFamilies.SYSTEM,         25),
+        (NextDeviceFamilies.BATTERY,         5),
+        (NextDeviceFamilies.AC_SOURCE,       8),
+        (NextDeviceFamilies.AC_FLEX_LOAD,   14),
+        (NextDeviceFamilies.NEXT3,          26),
+        (NextDeviceFamilies.NEXT1,          14),
+        (NextDeviceFamilies.NEXT_GATEWAY,   29),
     ]
 )
 def test_menu(family_id, exp_len):

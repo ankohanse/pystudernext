@@ -10,9 +10,11 @@ from .data import (
     NextDataType,
     NextRW,
     NextUserLevel,
+    NextParamException,
 )
 from .families import (
     NextDeviceFamilies,
+    NextDeviceFamily,
 )
 
 
@@ -187,15 +189,41 @@ class NextDataset:
         self._datapoints = datapoints
 
 
-    def get_by_address(self, address: int, family_id: str|None = None) -> NextDatapoint:
+    def get_by_address(self, address: int, family: NextDeviceFamily|str) -> NextDatapoint:
+
+        # Sanity check
+        if address is None:
+            raise NextParamException(f"Parameter 'address' must be provided in call to get_by_address")
+            
+        if isinstance(family, NextDeviceFamily):
+            family_id = family.id
+        elif isinstance(family, str):  
+            family_id = family
+        else:
+            raise NextParamException(f"Family parameter must be a NextDeviceFamilies or a family id in call to get_by_address")
+
+        # Now lookup the datapoint
         for point in self._datapoints:
-            if point.address == address and (point.family_id == family_id or family_id is None):
+            if point.address == address and point.family_id == family_id:
                 return point
 
         raise NextDatapointUnknownException(address, family_id)
     
 
-    def get_by_id(self, id: str, family_id: str|None = None) -> NextDatapoint:
+    def get_by_id(self, id: str, family: NextDeviceFamily|str|None = None) -> NextDatapoint:
+
+        # Sanity check
+        if id is None:
+            raise NextParamException(f"Parameter 'id' must be provided in call to get_by_id")
+            
+        if isinstance(family, NextDeviceFamily):
+            family_id = family.id
+        elif isinstance(family, str):  
+            family_id = family
+        else:
+            family_id = None
+
+        # Now lookup the datapoint
         for point in self._datapoints:
             if point.id == id and (point.family_id == family_id or family_id is None):
                 return point
@@ -203,7 +231,17 @@ class NextDataset:
         raise NextDatapointUnknownException(id, family_id)
     
 
-    def get_menu_items(self, family_id:str=None, parent_id:str=""):
+    def get_menu_items(self, family: NextDeviceFamily|str|None=None, parent_id:str=""):
+
+        # Sanity check
+        if isinstance(family, NextDeviceFamily):
+            family_id = family.id
+        elif isinstance(family, str):  
+            family_id = family
+        else:
+            family_id = None
+
+        # Now lookup the datapoints
         datapoints = []
         for point in self._datapoints:
             if point.parent_id == parent_id and (point.family_id == family_id or family_id is None):

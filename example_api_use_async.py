@@ -13,6 +13,7 @@ import sys
 
 from pystudernext import AsyncNextApi, NextApi
 from pystudernext import AsyncNextFactory, NextFactory
+from pystudernext import NextDeviceFamilies
 from pystudernext import NextDataset, NextDatapoint
 from pystudernext import NextDataType
 from pystudernext import DEFAULT_PORT
@@ -30,12 +31,12 @@ GATEWAY_PORT = 502
 
 async def main():
     dataset = await AsyncNextFactory.create_dataset()
-    param_2103 = dataset.get_by_address(2103, "sys")  # System, the "sys" part is optional but usefull for detecting mistakes
-    param_0318 = dataset.get_by_address(318,  "bat")  # Battery
-    param_1815 = dataset.get_by_address(1815, "acs")  # AC Source
-    param_5100 = dataset.get_by_address(5100, "nx3")  # Next 3
-    param_6900 = dataset.get_by_address(6900, "nx3")
-    param_6902 = dataset.get_by_address(6902, "nx3")
+    param_2103 = dataset.get_by_address(2103, NextDeviceFamilies.SYSTEM)
+    param_0318 = dataset.get_by_address(318,  NextDeviceFamilies.BATTERY)
+    param_1815 = dataset.get_by_address(1815, NextDeviceFamilies.AC_SOURCE)
+    param_5100 = dataset.get_by_address(5100, NextDeviceFamilies.NEXT3)
+    param_6900 = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
+    param_6902 = dataset.get_by_address(6902, NextDeviceFamilies.NEXT3)
 
     api = AsyncNextApi(GATEWAY_HOST, GATEWAY_PORT)    
     try:
