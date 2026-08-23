@@ -69,7 +69,7 @@ class NextDeviceFamilies:
         "bat",              # id
         "Battery",          # model 
         2, 6,               # modbus device slaves,  start to end
-        318,                # address for discovery
+        0,                  # address for discovery
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version

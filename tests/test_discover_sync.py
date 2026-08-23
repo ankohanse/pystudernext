@@ -25,10 +25,10 @@ from . import AsyncNextApiStub, NextApiStub
                                                 "2103": "00112233-4455-6677-8899-aabbccddeeff" 
                                             },  ["SYS"]),
         ("BAT_1",             [2],          { 
-                                                "318": 1234.0 
+                                                "0": 1234.0 
                                             },  ["BAT_1"]),
         ("BAT_1,BAT_2,BAT_3", [2,3,4],      { 
-                                                "318": 1234.0 
+                                                "0": 1234.0 
                                             },  ["BAT_1", "BAT_2", "BAT_3"]),
         ("ACS_1",             [7],          { 
                                                 "0": 1234.0 
@@ -108,7 +108,7 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
                                     "2103": "00112233-4455-6677-8899-aabbccddeeff" 
                                 },  ["SYS"], None, None, None),
         ("BAT none",    [2],    { 
-                                    "318": 1234.0 
+                                    "0": 1234.0 
                                 },  ["BAT_1"], None, None, None),
         ("ACS none",    [7],    { 
                                     "0": 1234.0 
