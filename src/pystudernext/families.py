@@ -84,7 +84,7 @@ class NextDeviceFamilies:
         None,               # address for ObjectModel version
     )
     AC_FLEX_LOAD = NextDeviceFamily(
-        "acf",              # id
+        "flx",              # id
         "AC FlexLoad",      # model 
         9, 13,              # modbus device slaves,  start to end
         0,                  # address for discovery

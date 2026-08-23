@@ -17,7 +17,7 @@ from pystudernext.families import NextDeviceFamilies
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (961),
+        (1169),
     ]
 )
 def test_create(exp_len):
@@ -102,7 +102,7 @@ def test_enum():
         ("sys", 25),
         ("bat",  5),
         ("acs",  8),
-        ("acf", 14),
+        ("flx", 14),
         ("nx3", 26),
         ("nx1", 14),
         ("nxg", 29),

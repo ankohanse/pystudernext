@@ -170,7 +170,7 @@ class NextDataset:
         __file__.replace('.py', '_sys.json'),
         __file__.replace('.py', '_bat.json'),
         __file__.replace('.py', '_acs.json'),
-        __file__.replace('.py', '_acf.json'),
+        __file__.replace('.py', '_flx.json'),
         __file__.replace('.py', '_nx3.json'),
         __file__.replace('.py', '_nx1.json'),
         __file__.replace('.py', '_nxg.json'),
