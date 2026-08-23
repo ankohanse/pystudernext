@@ -103,7 +103,7 @@
     {   "fam": "sys", "pid": "0.1.8", "addr": 2713, "size": 1, "lvl": "Basic",    "id": "12",   "lbl": "Turn off L3",   "def": "-",   "unit": "",   "rng": null,   "type": "signal",   "rw": "W" },
     {   "fam": "sys", "pid": "0.1.8", "addr": 2714, "size": 1, "lvl": "Basic",    "id": "13",   "lbl": "ON/OFF state L3",   "def": false,   "unit": "",   "rng": null,   "type": "bool",   "rw": "R" },
     {   "fam": "sys", "pid": "0.1.8", "addr": 2717, "size": 2, "lvl": "Basic",    "id": "15",   "lbl": "3-phase system configuration",   "def": 0,   "unit": "",   "rng": null,   "type": "enum",   "rw": "R/W",   "opt": {"0":"User defined", "1":"Symmetric", "2":"High-leg delta"} },
-    {   "fam": "sys", "pid": "0.1.8", "addr": 2719, "size": 2, "lvl": "Basic",    "id": "16",   "lbl": "Nominal line voltage",   "def": "398.371686",   "unit": "V",   "rng": [10,478],   "type": "float",   "rw": "R/W",   "opt": "" },
+    {   "fam": "sys", "pid": "0.1.8", "addr": 2719, "size": 2, "lvl": "Basic",    "id": "16",   "lbl": "Nominal line voltage",   "def": "398.371686",   "unit": "V",   "rng": [10,478],   "type": "float",   "rw": "R/W" },
     {   "fam": "sys", "pid": "0.1.8", "addr": 2721, "size": 2, "lvl": "Basic",    "id": "17",   "lbl": "L1 nominal phase voltage",   "def": "230",   "unit": "V",   "rng": [0,275],   "type": "float",   "rw": "R/W" },
     {   "fam": "sys", "pid": "0.1.8", "addr": 2723, "size": 2, "lvl": "Basic",    "id": "18",   "lbl": "L2 nominal phase voltage",   "def": "230",   "unit": "V",   "rng": [0,275],   "type": "float",   "rw": "R/W" },
     {   "fam": "sys", "pid": "0.1.8", "addr": 2725, "size": 2, "lvl": "Basic",    "id": "19",   "lbl": "L3 nominal phase voltage",   "def": "230",   "unit": "V",   "rng": [0,275],   "type": "float",   "rw": "R/W" },
@@ -477,7 +477,7 @@
     {  "_rem": "###"},
     {  "_rem": "### System - all solars group"},
     {  "_rem": "###"}, 
-    {   "fam": "sys", "pid": "0.1.25", "addr": 7800, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Number",   "def": 0,   "unit": "",   "rng": null,   "type": "uint",   "rw": "R",   "opt": "" },
+    {   "fam": "sys", "pid": "0.1.25", "addr": 7800, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Number",   "def": 0,   "unit": "",   "rng": null,   "type": "uint",   "rw": "R" },
     {   "fam": "sys", "pid": "0.1.25", "addr": 7802, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Status",   "def": "AtleastOneSolarDisabled",   "unit": "",   "rng": null,   "type": "bitfield",   "rw": "R",   "opt": {"1":"At least one solar disabled", "2":"At least one solar has warning(s)", "4":"At least one solar in error restarting", "8":"At least one solar in error halted", "16":"At least one solar in night", "32":"At least one solar in dawn/dusk", "64":"At least one solar in production", "128":"At least one solar in production limited", "256":"At least one solar in solar excess"} },
  
     {  "_rem": "###"},
@@ -504,7 +504,7 @@
     {   "fam": "sys", "pid": "0.1.26", "addr": 8132, "size": 2, "lvl": "ViewOnly", "id": "21",  "lbl": "Loads+FlexLoads consum. power",   "def": 0,   "unit": "W",   "rng": null,   "type": "float",   "rw": "R" },
     {   "fam": "sys", "pid": "0.1.26", "addr": 8134, "size": 2, "lvl": "ViewOnly", "id": "22",  "lbl": "Loads+FlexLoads produc. power",   "def": 0,   "unit": "W",   "rng": null,   "type": "float",   "rw": "R" },
     {   "fam": "sys", "pid": "0.1.26", "addr": 8136, "size": 2, "lvl": "ViewOnly", "id": "25",  "lbl": "Loads+FlexLoads day cons. ener.",   "def": 0,   "unit": "Wh",   "rng": null,   "type": "float",   "rw": "R" },
-    {   "fam": "sys", "pid": "0.1.26", "addr": 8138, "size": 2, "lvl": "ViewOnly", "id": "26",  "lbl": "Loads+FlexLoads ener. day prod.",   "def": 0,   "unit": "Wh",   "rng": null,   "type": "float",   "rw": "R",   "opt": "" },
+    {   "fam": "sys", "pid": "0.1.26", "addr": 8138, "size": 2, "lvl": "ViewOnly", "id": "26",  "lbl": "Loads+FlexLoads ener. day prod.",   "def": 0,   "unit": "Wh",   "rng": null,   "type": "float",   "rw": "R" },
  
     {  "_rem": "###"},
     {  "_rem": "### System - all batteries common"},
@@ -523,8 +523,8 @@
     {  "_rem": "###"},
     {  "_rem": "### System - all batteries group"},
     {  "_rem": "###"}, 
-    {   "fam": "sys", "pid": "0.1.28", "addr": 8700, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Number",   "def": 0,   "unit": "",   "rng": null,   "type": "uint",   "rw": "R",   "opt": "" },
-    {   "fam": "sys", "pid": "0.1.28", "addr": 8702, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Status",   "def": "AtleastOneSolarDisabled",   "unit": "",   "rng": null,   "type": "bitfield",   "rw": "R",   "opt": "" },
+    {   "fam": "sys", "pid": "0.1.28", "addr": 8700, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Number",   "def": 0,   "unit": "",   "rng": null,   "type": "uint",   "rw": "R" },
+    {   "fam": "sys", "pid": "0.1.28", "addr": 8702, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Status",   "def": "1",   "unit": "",   "rng": null,   "type": "bitfield",   "rw": "R",   "opt": { "1":"No warning(s) or error(s)", "2":"At least one battery in warning", "4":"At least one battery in error restarting", "8":"At least one battery in error halted", "16":"At least one battery has charging recovery mode activatable" } },
 
     { "_rem": "###"},
     { "_rem": "### End of file"},

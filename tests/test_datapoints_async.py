@@ -15,7 +15,7 @@ from pystudernext.families import NextDeviceFamilies
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (1169),
+        (1351),
     ]
 )
 async def test_create(exp_len):

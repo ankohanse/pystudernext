@@ -21,6 +21,9 @@ from .families import (
 _LOGGER = logging.getLogger(__name__)
 
 
+class NextDatapointSyntaxException(Exception):
+    pass
+
 class NextDatapointUnknownException(Exception):
     pass
 
@@ -65,16 +68,16 @@ class NextDatapoint:
             return None # Line only contains a comment
         
         if fam is None or pid is None or addr is None or lvl is None or id is None or lbl is None or dt is None:
-            _LOGGER.warning(f"Missing required field in dataset; fam={fam}, pid={pid}, addr={addr}")
-            return None
+            raise NextDatapointSyntaxException(f"Missing required field in dataset; fam={fam}, pid={pid}, addr={addr}")
         
         if not isinstance(fam, str) or not isinstance(pid, str) or not isinstance(lvl, str) or not isinstance(id, str) or not isinstance(lbl, str) or not isinstance(dt, str):
-            _LOGGER.warning(f"Unexpected field type in dataset, expected str; fam={fam}, pid={pid}, addr={addr}")
-            return None
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected str; fam={fam}, pid={pid}, addr={addr}")
 
         if not isinstance(addr, int) or not isinstance(size, int):
-            _LOGGER.warning(f"Unexpected field type in dataset, expected int; fam={fam}, pid={pid}, addr={addr}")
-            return None
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected int; fam={fam}, pid={pid}, addr={addr}")
+
+        if opt is not None and not isinstance(opt, dict):
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected dict; fam={fam}, pid={pid}, addr={addr}")
 
         # lvl might be split into a read and write part
         lvl_parts = lvl.split('/', maxsplit=1) if '/' in lvl else [lvl, lvl]

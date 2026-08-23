@@ -287,7 +287,7 @@
     {  "_rem": "### AC FlexLoads - 3-phase FlexLoads"},
     {  "_rem": "###"},
     {   "fam": "flx", "pid": "3.x.11", "addr": 3000, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Phase existance",   "def": "",   "unit": "",   "rng": null,   "type": "bitfield",   "rw": "R",   "opt": { "1":"Phase L1 exists", "2":"Phase L2 exists", "4":"Phase L3 exists" } },
-    {   "fam": "flx", "pid": "3.x.11", "addr": 3002, "size": 1, "lvl": "Basic",    "id": "1",   "lbl": "Allow individual phase operation",   "def": "FALSE",   "unit": "",   "rng": null,   "type": "bool",   "rw": "R/W",   "opt": "" },
+    {   "fam": "flx", "pid": "3.x.11", "addr": 3002, "size": 1, "lvl": "Basic",    "id": "1",   "lbl": "Allow individual phase operation",   "def": "FALSE",   "unit": "",   "rng": null,   "type": "bool",   "rw": "R/W" },
 
     {  "_rem": "###"},
     {  "_rem": "### AC FlexLoads - L1 FlexLoads"},

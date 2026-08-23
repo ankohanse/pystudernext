@@ -34,12 +34,12 @@ from . import AsyncNextApiStub, NextApiStub
         ("ACS_1,ACS_2",       [7,8],        { 
                                                 "0": 1234.0 
                                             },  ["ACS_1", "ACS_2"]),
-        ("ACF_1",             [9],          { 
+        ("FLX_1",             [9],          { 
                                                 "0": 1234.0 
-                                            },  ["ACF_1"]),
-        ("ACF_1,ACF_2,ACF_3", [9,10,11],    { 
+                                            },  ["FLX_1"]),
+        ("FLX_1,FLX_2,FLX_3", [9,10,11],    { 
                                                 "0": 1234.0 
-                                            },  ["ACF_1", "ACF_2","ACF_3"]),
+                                            },  ["FLX_1", "FLX_2","FLX_3"]),
         ("NX3_1",             [14],         { 
                                                 "4": "1122334455667788" 
                                             },  ["NX3_1"]),
@@ -111,9 +111,9 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
         ("ACS none",    [7],    { 
                                     "0": 1234.0 
                                 },  ["ACS_1"], None, None, None),
-        ("ACF none",    [9],    { 
+        ("FLX none",    [9],    { 
                                     "0": 1234.0 
-                                },  ["ACF_1"], None, None, None),
+                                },  ["FLX_1"], None, None, None),
         ("NX3 ext",     [14],   { 
                                     "4": "1122334455667788",
                                     "14": 0x01020304,
