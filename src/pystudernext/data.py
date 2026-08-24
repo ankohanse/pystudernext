@@ -103,7 +103,6 @@ class NextDataType(StrEnum):
     UINT64     = "uint64"       # 4 registers / 8 bytes
     FLOAT64    = "float64"      # 4 registers / 8 bytes
     STRING     = "string"       # n registers / 2n bytes
-    BYTES      = "bytes"        # n registers / 2n bytes
     MENU       = "menu"         # n.a.
     INVALID    = "invalid"      # n.a.
 
@@ -121,7 +120,6 @@ class NextDataType(StrEnum):
             case 'uint64': return NextDataType.UINT64
             case 'float64': return NextDataType.FLOAT64
             case 'string': return NextDataType.STRING
-            case 'bytes': return NextDataType.BYTES
             case 'menu': return NextDataType.MENU
             case 'not supported': return NextDataType.INVALID
             case _: 
