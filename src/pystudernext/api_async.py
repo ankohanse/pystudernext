@@ -20,6 +20,7 @@ from .data import (
     NextDataType,
     NextPackException,
     NextParamException,
+    NextRW,
     NextUnpackException,
     NextDiscoveredDevice,
 )
@@ -116,6 +117,9 @@ class AsyncNextApi:
         if parameter is None:
             return None
             
+        if parameter.read_write not in [NextRW.READ, NextRW.READ_WRITE]:
+            raise NextParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not readable")
+            
         if isinstance(device, NextDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
@@ -161,6 +165,9 @@ class AsyncNextApi:
         # Sanity check
         if parameter is None or value is None:
             return None
+
+        if parameter.read_write not in [NextRW.WRITE, NextRW.READ_WRITE]:
+            raise NextParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not writable")
             
         if isinstance(device, NextDiscoveredDevice):
             slave = device.slave

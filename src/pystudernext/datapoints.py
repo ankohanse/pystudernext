@@ -44,7 +44,7 @@ class NextDatapoint:
     min: float = None
     max: float = None
     data_type: NextDataType = None
-    read_write: str = None
+    read_write: NextRW = None
     options: dict = None
 
     @staticmethod
@@ -93,8 +93,8 @@ class NextDatapoint:
         label = lbl.strip()
         default = float(dft) if isinstance(dft, (int,float)) else None
         unit = unit if isinstance(unit, str) else None
-        min = float(rng[0]) if isinstance(rng, dict) else None
-        max = float(rng[1]) if isinstance(rng, dict) else None
+        min = float(rng[0]) if isinstance(rng, list) else None
+        max = float(rng[1]) if isinstance(rng, list) else None
         data_type = NextDataType.from_str(dt) if isinstance(dt, str) else None
         read_write = NextRW.from_str(rw) if isinstance(rw, str) else None
         options = opt if isinstance(opt, dict) else None

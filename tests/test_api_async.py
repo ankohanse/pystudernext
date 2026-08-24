@@ -9,6 +9,7 @@ from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataType
+from pystudernext import NextParamException
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -22,6 +23,7 @@ from . import AsyncNextApiStub, NextApiStub
         ("request float ok",     'sys', 1,  3908, 1234.0, NextDataType.FLOAT, None),
         ("request float64 ok",   'sys', 1,  3924, 1234.0, NextDataType.FLOAT64, None),
         ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextDataType.STRING, None),
+        ("request signal fail",  "bat", 2,  435,  None,   NextDataType.SIGNAL, NextParamException)      # Not readable
     ]
 )
 async def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):
@@ -71,12 +73,13 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_value, 
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
     [
-        ("request bool ok",      'sys', 1,  2121, True,   NextDataType.BOOL, None),
-        ("request int ok",       'sys', 1,  2122, 1234,   NextDataType.INT, None),
-        ("request uint ok",      'nx3', 14, 14,   1234,   NextDataType.UINT, None),
-        ("request float ok",     'sys', 1,  3908, 1234.0, NextDataType.FLOAT, None),
-        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextDataType.FLOAT64, None),
-        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextDataType.STRING, None),
+        ("request bool ok",      'sys', 1,  1202, True,   NextDataType.BOOL, None),
+        ("request int ok",       'nx3', 14, 8710, 1234,   NextDataType.INT, None),
+        ("request uint ok",      'nx3', 14, 7505, 1234,   NextDataType.UINT, None),
+        ("request float ok",     'sys', 1,  2719, 1234.0, NextDataType.FLOAT, None),
+        ("request float64 ok",   'sys', 1,  3920, 1234.0, NextDataType.FLOAT64, None),
+        ("request string ok",    'nxg', 59, 4800, "1234", NextDataType.STRING, None),
+        ("request bool fail",    'sys', 1,  1203, True,   NextDataType.BOOL, NextParamException),   # Readonly
     ]
 )
 async def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):

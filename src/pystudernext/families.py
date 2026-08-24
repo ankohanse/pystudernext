@@ -43,6 +43,12 @@ class NextDeviceFamily:
         msg = f"Slave {slave} is not in range for family {self.id} ({self.slaves_start}-{self.slaves_end})"
         raise NextDeviceSlaveUnknownException(msg)
 
+    def __str__(self):
+        return self.id
+    
+    def __repr__(self):
+        return self.id
+    
 
 class NextDeviceFamilies:
 
