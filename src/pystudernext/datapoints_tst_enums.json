@@ -1,0 +1,19 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### 99.1.1 - Test - General (Victron)"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

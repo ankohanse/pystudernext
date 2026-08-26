@@ -1,0 +1,302 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.153"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### Battery - Root Menu"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Battery - battery common"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### Battery - battery"},
+    {  "_rem": "###"}, 
+    {   
+        "enum_id": "1.x.2.enum0", 
+        "options": {
+            "0":"No warning(s) or error(s)", 
+            "1":"In warning", 
+            "2":"In error restarting", 
+            "3":"In error halted"
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum1", 
+        "options": { 
+            "0":"End of error", 
+            "1":"Overvoltage", 
+            "2":"Undervoltage", 
+            "4":"Charging overcurrent", 
+            "8":"Discharging overcurrent", 
+            "16":"Charging overtemperature", 
+            "32":"Discharging overtemperature", 
+            "64":"Charging undertemperature", 
+            "128":"Discharging undertemperature", 
+            "256":"Contactor", 
+            "512":"Short circuit", 
+            "1024":"BMS internal", 
+            "2048":"Cell imbalance", 
+            "4096":"SMA general", 
+            "8192":"Battery damaged", 
+            "16384":"Communication lost", 
+            "32768":"Emergency stop", 
+            "65536":"Charging not allowed", 
+            "131072":"Discharging not allowed", 
+            "262144":"SOC < SOC for end of discharge", 
+            "524288":"Abnormal measured voltage" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum2", 
+        "options": { 
+            "0":"End of warning", 
+            "1":"Overvoltage", 
+            "2":"Undervoltage", 
+            "4":"Charging overcurrent", 
+            "8":"Discharging overcurrent", 
+            "16":"Charging overtemperature", 
+            "32":"Discharging overtemperature", 
+            "64":"Charging undertemperature", 
+            "128":"Discharging undertemperature", 
+            "256":"Contactor", 
+            "512":"Short circuit", 
+            "1024":"BMS internal", 
+            "2048":"Cell imbalance", 
+            "4096":"SMA general", 
+            "8192":"Charging recommended", 
+            "16384":"Discharging recommended", 
+            "32768":"Full charging recommended", 
+            "65536":"Abnormal measured temperature", 
+            "131072":"Soon disconnected" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum3", 
+        "options": { 
+            "0":"Not communicating", 
+            "1":"CAN", 
+            "2":"RS-485" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum4", 
+        "options": { 
+            "0":"Studer", 
+            "1":"SMA" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum5", 
+        "options": { 
+            "0":"To implement" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum6", 
+        "options": { 
+            "26":"Aliant Battery", 
+            "16":"Archimede Energia", 
+            "0":"AutarcTech", 
+            "1":"BlueNova", 
+            "2":"BMZ", 
+            "3":"BYD", 
+            "4":"Cegasa", 
+            "5":"Cosun", 
+            "6":"Discover", 
+            "17":"DLG", 
+            "7":"FreedomWon", 
+            "18":"GS HUB", 
+            "30":"Hanchu ESS", 
+            "8":"IPS", 
+            "19":"Midac", 
+            "24":"Modual AG", 
+            "9":"Pallas", 
+            "10":"PowerTech", 
+            "11":"Pylontech", 
+            "31":"Ritar", 
+            "20":"SolarMD", 
+            "12":"Soltaro", 
+            "21":"Sunlight", 
+            "13":"SuperB (with BCI)", 
+            "14":"TesVolt", 
+            "29":"UFLEX", 
+            "25":"UZ Energy", 
+            "23":"Vision mechatronics", 
+            "15":"Weco", 
+            "27":"Zetara Battery", 
+            "22":"Zruipower", 
+            "28":"ZYC Energy", 
+            "1000":"Orion BMS", 
+            "1001":"REC BMS (model Q BMS 16S)", 
+            "800":"Studer protocol 250kbps", 
+            "801":"Studer protocol 500kbps" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum7", 
+        "options": { 
+            "0":"Flooded Lead Acid", 
+            "1":"Absorbent Glass Mat (AGM)", 
+            "2":"Gel"
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum8", 
+        "options": { 
+            "0":"All conditions", 
+            "1":"SOC for end of charge", 
+            "2":"SOC for grid feeding", 
+            "4":"SOC for backup", 
+            "32":"SOC for end of discharge", 
+            "8":"Voltage for grid feeding", 
+            "16":"Voltage for backup" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum9", 
+        "options":{ 
+            "0":"Disabled", 
+            "1":"Disabled and activatable", 
+            "2":"Enabled" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum10", 
+        "options": { 
+            "0":"No", 
+            "1":"When entering periodical charge", 
+            "2":"When leaving periodical charge", 
+            "4":"When entering periodical discharge", 
+            "8":"When leaving periodical discharge" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.2.enum11", 
+        "options": { 
+            "0":"Reduce charging current limit", 
+            "1":"Reduce discharging current limit", 
+            "2":"SOC for end of charge", 
+            "3":"SOC for grid feeding", 
+            "4":"SOC for backup", 
+            "5":"SOC for end of discharge", 
+            "6":"Voltage for grid feeding", 
+            "7":"Voltage for backup", 
+            "8":"Prohibit discharge" 
+        } 
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 1.x.3 - Battery - battery cycle"},
+    {  "_rem": "###"}, 
+    {   
+        "enum_id": "1.x.3.enum0", 
+        "options": { 
+            "0":"Bulk phase", 
+            "1":"Reduced floating phase", 
+            "2":"Floating phase", 
+            "3":"Periodical absorption phase", 
+            "4":"Absorption phase", 
+            "5":"Equalization phase" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.3.enum1", 
+        "options": { 
+            "0":"No transition", 
+            "1":"Bulk to reduced floating", 
+            "2":"Bulk to floating", 
+            "4":"Bulk to absorption", 
+            "5":"Bulk to equalization", 
+            "8":"Reduced floating to bulk", 
+            "10":"Reduced floating to floating", 
+            "11":"Reduced floating to periodical absorption", 
+            "16":"Floating to bulk", 
+            "17":"Floating to reduced floating", 
+            "24":"Periodical absorption to bulk", 
+            "25":"Periodical absorption to reduced floating", 
+            "26":"Periodical absorption to floating", 
+            "33":"Absorption to reduced floating", 
+            "34":"Absorption to floating", 
+            "37":"Absorption to equalization", 
+            "41":"Equalization to reduced floating", 
+            "42":"Equalization to floating", 
+            "44":"Equalization to absorption" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.3.enum2", 
+        "options": { 
+            "0":"No transition reasons", 
+            "1":"Floating requested", 
+            "2":"Reduced floating requested", 
+            "4":"Absorption requested", 
+            "8":"Equalization requested", 
+            "16":"Reduced floating disabled", 
+            "32":"Periodical absorption disabled", 
+            "64":"Period for periodical absorption reached", 
+            "128":"Waiting duration in floating reached", 
+            "256":"First absorption after reset", 
+            "512":"Absorption Ahs discharged reached", 
+            "1024":"Absorption low SOC reached", 
+            "2048":"Absorption disabled", 
+            "4096":"Absorption max. duration reached", 
+            "8192":"Periodical absorption max. duration reached", 
+            "16384":"Absorption terminated by current", 
+            "32768":"Current lower than equalization current", 
+            "65536":"Equalization time period reached", 
+            "131072":"Equalization Ahs discharged reached", 
+            "262144":"Equalization low SOC reached", 
+            "524288":"Equalization disabled", 
+            "1048576":"Equalization duration reached", 
+            "2097152":"Absorption and Equalization not desired anymore", 
+            "4194304":"Absorption low voltage duration reached" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.3.enum3", 
+        "options": { 
+            "0":"Absorption triggered by all conditions", 
+            "1":"Absorption triggered by Ahs", 
+            "2":"Absorption triggered by SOC", 
+            "4":"Absorption triggered by voltage" 
+        } 
+    },
+    {   
+        "enum_id": "1.x.3.enum4", 
+        "options": { 
+            "0":"Equalization triggered by all conditions", 
+            "1":"Equalization triggered by period", 
+            "2":"Equalization triggered by Ahs", 
+            "4":"Equalization triggered by SOC" 
+        } 
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 1.x.4 - Battery - battery protection"},
+    {  "_rem": "###"}, 
+    {   
+        "enum_id": "1.x.4.enum0", 
+        "options": {
+            "0":"Emhanced", 
+            "1":"Basic"
+        } 
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 1.x.5 - Battery - SOC estimator"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

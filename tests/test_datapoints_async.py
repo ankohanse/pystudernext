@@ -15,7 +15,7 @@ from pystudernext.families import NextDeviceFamilies
 @pytest.mark.parametrize(
     "exp_len",
     [
-        (1559),
+        (2038),
     ]
 )
 async def test_create(exp_len):
@@ -36,16 +36,16 @@ async def test_address():
     assert param.family_id == "nx3"
     assert param.address == 5100
     assert param.data_type == NextDataType.ENUM
-    assert param.options != None
-    assert type(param.options) is dict
-    assert len(param.options) == 4
+    assert param.enum_options != None
+    assert type(param.enum_options) is dict
+    assert len(param.enum_options) == 4
 
     param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM)
     assert param.family_id == "sys"
     assert param.address == 1200
     assert param.data_type == NextDataType.ENUM
-    assert param.options != None
-    assert type(param.options) is dict
+    assert param.enum_options != None
+    assert type(param.enum_options) is dict
 
     with pytest.raises(NextDatapointUnknownException):
         param = dataset.get_by_address(9999, 'sys')
@@ -79,9 +79,9 @@ async def test_enum():
     dataset = await AsyncNextFactory.create_dataset()
 
     param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
-    assert param.options != None
-    assert type(param.options) is dict
-    assert len(param.options) == 5
+    assert param.enum_options != None
+    assert type(param.enum_options) is dict
+    assert len(param.enum_options) == 5
 
     assert param.enum_value(0) == "No warning(s) or error(s)"
     assert param.enum_value("0") == "No warning(s) or error(s)"
@@ -101,16 +101,18 @@ async def test_enum():
         ("bat",  5),
         ("acs",  8),
         ("flx", 14),
-        ("nx3", 26),
-        ("nx1", 14),
-        ("nxg", 29),
-        (NextDeviceFamilies.SYSTEM,         25),
-        (NextDeviceFamilies.BATTERY,         5),
-        (NextDeviceFamilies.AC_SOURCE,       8),
-        (NextDeviceFamilies.AC_FLEX_LOAD,   14),
-        (NextDeviceFamilies.NEXT3,          26),
-        (NextDeviceFamilies.NEXT1,          14),
-        (NextDeviceFamilies.NEXT_GATEWAY,   29),
+        ("nx3", 33),
+        ("nx1", 23),
+        ("nxg", 33),
+        ("pwr",  0),
+        (NextDeviceFamilies.SYSTEM,          25),
+        (NextDeviceFamilies.BATTERY,          5),
+        (NextDeviceFamilies.AC_SOURCE,        8),
+        (NextDeviceFamilies.AC_FLEX_LOAD,    14),
+        (NextDeviceFamilies.NEXT3,           33),
+        (NextDeviceFamilies.NEXT1,           23),
+        (NextDeviceFamilies.NEXT_GATEWAY,    33),
+        (NextDeviceFamilies.NEXT_POWERMETER,  0),
     ]
 )
 async def test_menu(family_id, exp_len):

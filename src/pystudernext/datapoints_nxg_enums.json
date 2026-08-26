@@ -1,0 +1,603 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.1 - NextGateway - ID Card"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.2 - NextGateway - Application"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.2.enum0",
+        "options": {
+            "0": "End of warning",
+            "1": "Warning MCU not secure",
+            "2": "Warning FPGA not configured",
+            "4": "Communication error on studer bus",
+            "8": "Warning end of day logs take too long"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.3 - NextGateway - CAN node"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.3.enum0",
+        "options": {
+            "0": "Error active",
+            "1": "Error passive",
+            "2": "Bus off"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.4 - NextGateway - Device"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.5 - NextGateway - Gateway module"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.5.enum0",
+        "options": {
+            "0": "End of error"
+        }
+    },
+    {
+        "enum_id": "20.x.5.enum1",
+        "options": {
+            "0": "No warning",
+            "1": "eMMC end-of-life warning",
+            "2": "eMMC end-of-life urgence",
+            "4": "eMMC lifetime warning",
+            "8": "eMMC lifetime urgence",
+            "16": "CPU over-temperature",
+            "32": "High eMMC write rate",
+            "64": "High USB write rate",
+            "128": "Low eMMC lifetime estimate",
+            "256": "No USB drive",
+            "512": "Low USB drive space"
+        }
+    },
+    {
+        "enum_id": "20.x.5.enum4",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "No connectivity",
+            "3": "No DNS server",
+            "4": "Local only",
+            "5": "No route"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.6 - NextGateway - HMI display"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.6.enum0",
+        "options": {
+            "0": "Numeric code",
+            "1": "Slider"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.7 - NextGateway - RS 485i bus"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.7.enum1",
+        "options": {
+            "9600": "9600bps",
+            "19200": "19200bps",
+            "38400": "38400bps",
+            "115200": "115200bps",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.7.enum2",
+        "options": {
+            "0": "None",
+            "2": "Even",
+            "3": "Odd",
+            "4": "Space",
+            "5": "Mark",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.7.enum3",
+        "options": {
+            "1": "One",
+            "2": "Two",
+            "3": "One and a half",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.7.enum4",
+        "options": {
+            "5": "Five",
+            "6": "Six",
+            "7": "Seven",
+            "8": "Eight",
+            "4294967295": "Not configurable"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.8 - NextGateway - CANi bus"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.8.enum1",
+        "options": {
+            "9600": "9600bps",
+            "19200": "19200bps",
+            "38400": "38400bps",
+            "115200": "115200bps",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.8.enum2",
+        "options": {
+            "0": "None",
+            "2": "Even",
+            "3": "Odd",
+            "4": "Space",
+            "5": "Mark",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.8.enum3",
+        "options": {
+            "1": "One",
+            "2": "Two",
+            "3": "One and a half",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "20.x.8.enum4",
+        "options": {
+            "5": "Five",
+            "6": "Six",
+            "7": "Seven",
+            "8": "Eight",
+            "4294967295": "Not configurable"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.9 - NextGateway - Internal rootfs partition"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.9.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.9.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.10 - NextGateway - Internal config partition"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.10.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.10.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.11 - NextGateway - Internal data partition"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.11.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.11.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.12 - NextGateway - USB partition 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.12.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.12.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.13 - NextGateway - USB partition 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.13.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.13.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.14 - NextGateway - USB partition 3"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.14.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Internal memory",
+            "2": "USB memory"
+        }
+    },
+    {
+        "enum_id": "20.x.14.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "FAT32",
+            "2": "ext4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.15 - NextGateway - Modbus server"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.15.enum0",
+        "options": {
+            "0": "Unknown",
+            "1": "Bad interface",
+            "2": "Connecting",
+            "3": "Ready and listening",
+            "4": "Closing",
+            "5": "Client connected"
+        }
+    },
+    {
+        "enum_id": "20.x.15.enum1",
+        "options": {
+            "0": "Off",
+            "1": "RTU",
+            "2": "TCP"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.16 - NextGateway - Modbus user level"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.17 - NextGateway - Terms and conditions"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.17.enum0",
+        "options": {
+            "0": "Not accepted",
+            "1": "Fully accepted"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.18 - NextGateway - Ethernet network interface"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.18.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Down",
+            "2": "Up",
+            "3": "Up and running"
+        }
+    },
+    {
+        "enum_id": "20.x.18.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "Wireless client",
+            "2": "Access point"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.19 - NextGateway - Wifi network interface"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.19.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Down",
+            "2": "Up",
+            "3": "Up and running"
+        }
+    },
+    {
+        "enum_id": "20.x.19.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "Wireless client",
+            "2": "Access point"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.20 - NextGateway - External network interface"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.20.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Down",
+            "2": "Up",
+            "3": "Up and running"
+        }
+    },
+    {
+        "enum_id": "20.x.20.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "Wireless client",
+            "2": "Access point"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.21 - NextGateway - Gateway user level"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.22 - NextGateway - Gateway webportal"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.22.enum0",
+        "options": {
+            "0": "Unknown",
+            "1": "Connecting",
+            "2": "Connected",
+            "3": "Connected but not paired",
+            "4": "Error at initialization",
+            "5": "Host not found",
+            "6": "Connection refused",
+            "7": "Timeout",
+            "8": "Communication failed",
+            "9": "Device disabled",
+            "10": "Assignation error",
+            "11": "Bad firmware",
+            "12": "Bad date/time",
+            "13": "Error unknown",
+            "14": "Connection lost",
+            "15": "Connected (read-only)"
+        }
+    },
+    {
+        "enum_id": "20.x.22.enum1",
+        "options": {
+            "0": "Unknown",
+            "1": "Synchronized",
+            "2": "Synchronizing...",
+            "3": "Unreachable server",
+            "4": "No USB drive",
+            "5": "Synchronization failed",
+            "6": "Partially synchronized",
+            "7": "No datalog file",
+            "8": "No Terms and Conditions acceptation"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.23 - NextGateway - USB interface 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.23.enum0",
+        "options": {
+            "0": "No device",
+            "1": "Unknown",
+            "2": "Memory drive",
+            "3": "Mounted memory drive",
+            "4": "Audio",
+            "5": "HID",
+            "6": "Image drive",
+            "7": "USB Hub",
+            "8": "Bluetooth",
+            "9": "Wifi",
+            "10": "Modem"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.24 - NextGateway - USB interface 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.24.enum0",
+        "options": {
+            "0": "No device",
+            "1": "Unknown",
+            "2": "Memory drive",
+            "3": "Mounted memory drive",
+            "4": "Audio",
+            "5": "HID",
+            "6": "Image drive",
+            "7": "USB Hub",
+            "8": "Bluetooth",
+            "9": "Wifi",
+            "10": "Modem"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.25 - NextGateway - USB interface 3"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.25.enum0",
+        "options": {
+            "0": "No device",
+            "1": "Unknown",
+            "2": "Memory drive",
+            "3": "Mounted memory drive",
+            "4": "Audio",
+            "5": "HID",
+            "6": "Image drive",
+            "7": "USB Hub",
+            "8": "Bluetooth",
+            "9": "Wifi",
+            "10": "Modem"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.26 - NextGateway - USB interface 4"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.26.enum0",
+        "options": {
+            "0": "No device",
+            "1": "Unknown",
+            "2": "Memory drive",
+            "3": "Mounted memory drive",
+            "4": "Audio",
+            "5": "HID",
+            "6": "Image drive",
+            "7": "USB Hub",
+            "8": "Bluetooth",
+            "9": "Wifi",
+            "10": "Modem"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.27 - NextGateway - HMI settings"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.27.enum0",
+        "options": {
+            "31": "English",
+            "37": "Français",
+            "42": "Deutsch",
+            "58": "Italiano",
+            "111": "Español"
+        }
+    },
+    {
+        "enum_id": "20.x.27.enum1",
+        "options": {
+            "0": "Dashboard",
+            "1": "Synoptic"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.28 - NextGateway - System view"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.28.enum0",
+        "options": {
+            "0": "Monitor running",
+            "1": "Reading topology",
+            "2": "Writing topology",
+            "3": "Writing configuration",
+            "4": "Started",
+            "5": "Reading configuration",
+            "6": "Configuration R/W/ error"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.29 - NextGateway - Gateway webcommand"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.29.enum0",
+        "options": {
+            "0": "Disconnected",
+            "1": "Ready and listening",
+            "2": "Connected"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 20.x.30 - NextGateway - Wifi access point network interface"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "20.x.30.enum0",
+        "options": {
+            "0": "Invalid",
+            "1": "Down",
+            "2": "Up",
+            "3": "Up and running"
+        }
+    },
+    {
+        "enum_id": "20.x.30.enum1",
+        "options": {
+            "0": "Invalid",
+            "1": "Wireless client",
+            "2": "Access point"
+        }
+    },
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

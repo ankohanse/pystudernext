@@ -9,6 +9,8 @@ from aiofiles import open as aiofiles_open
 
 from .datapoints import (
     NextDatapoint,
+    NextDatapointEnum,
+    NextDatapointEnumNotFoundException,
     NextDataset,
 )
 
@@ -26,12 +28,18 @@ class AsyncNextFactory:
         """
         datapoints = list()
 
-        for item_path in NextDataset.PATHS:
+        for (item_path, enum_path) in NextDataset.PATHS:
             async with aiofiles_open(item_path, "r", encoding="UTF-8") as item_file:
                 item_text = await item_file.read()
 
+            async with aiofiles_open(enum_path, "r", encoding="UTF-8") as enum_file:
+                enum_text = await enum_file.read()
+
             item_values = orjson.loads(item_text)
+            enum_values = orjson.loads(enum_text)
+
             item_datapoints = list(filter(None, [NextDatapoint.from_dict(val) for val in item_values]))
+            item_enums = list(filter(None, [NextDatapointEnum.from_dict(val) for val in enum_values]))
 
             # Resolve Name for each datapoint. It is composed of the parent label and the datapoint label.
             # Datapoints are clustered with ones sharing the same parent next to each other.
@@ -43,6 +51,15 @@ class AsyncNextFactory:
                     dp_parent = next( (d for d in item_datapoints if d.id==dp.parent_id), None)
 
                 dp.name = dp_parent.name + ' - ' + dp.label if dp_parent is not None else dp.label
+
+                # Resolve enum options for each datapoint (if needed).
+                if dp.enum_id is not None:
+                    enum_id = f"{dp.parent_id}.enum{dp.enum_id}"
+                    enum_def = next( (e for e in item_enums if e.enum_id==enum_id), None)
+                    if enum_def is None:
+                        raise NextDatapointEnumNotFoundException(f"Missing definition for enum {dp.enum_id}; fam={dp.family_id}, pid={dp.parent_id}, addr={dp.address}")
+
+                    dp.enum_options = enum_def.options
 
             # Merge the datapoints from this file
             datapoints = datapoints + item_datapoints

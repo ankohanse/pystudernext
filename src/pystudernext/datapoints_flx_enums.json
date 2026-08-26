@@ -1,0 +1,609 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.153"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.1 - AC FlexLoads - 3-Phase measure"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.2 - AC FlexLoads - Measure L1"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.3 - AC FlexLoads - Measure L2"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.4 - AC FlexLoads - Measure L3"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### AC FlexLoads - L1 controlled relay"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.5.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC Coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "3.x.5.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.6 - AC FlexLoads - L2 controlled relay"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.6.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC Coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "3.x.6.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.7 - AC FlexLoads - L3 controlled relay"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.7.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC Coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "3.x.7.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.8 - AC FlexLoads - L1 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.8.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "3.x.8.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+    {
+        "enum_id": "3.x.8.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.9 - AC FlexLoads - L2 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.9.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "3.x.9.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+    {
+        "enum_id": "3.x.9.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.10 - AC FlexLoads - L3 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.10.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "3.x.10.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+    {
+        "enum_id": "3.x.10.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.11 - AC FlexLoads - 3-phase FlexLoads"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.11.enum0",
+        "options": {
+            "1": "Phase L1 exists",
+            "2": "Phase L2 exists",
+            "4": "Phase L3 exists"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.12 - AC FlexLoads - L1 FlexLoads"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.12.enum0",
+        "options": {
+            "0": "No warning(s) or error(s)",
+            "1": "In warning",
+            "2": "In error restarting",
+            "3": "In error halted"
+        }
+    },
+    {
+        "enum_id": "3.x.12.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "Overcurrent",
+            "2": "Overtemperature",
+            "4": "Abnormal voltage detected",
+            "8": "Error relay failure",
+            "16": "Error too large current at rel. open."
+        }
+    },
+    {
+        "enum_id": "3.x.12.enum2",
+        "options": {
+            "0": "End of warning",
+            "1": "Overtemperature",
+            "2": "Overcurrent"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.13 - AC FlexLoads - L2 FlexLoads"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.13.enum0",
+        "options": {
+            "0": "No warning(s) or error(s)",
+            "1": "In warning",
+            "2": "In error restarting",
+            "3": "In error halted"
+        }
+    },
+    {
+        "enum_id": "3.x.13.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "Overcurrent",
+            "2": "Overtemperature",
+            "4": "Abnormal voltage detected",
+            "8": "Error relay failure",
+            "16": "Error too large current at rel. open."
+        }
+    },
+    {
+        "enum_id": "3.x.13.enum2",
+        "options": {
+            "0": "End of warning",
+            "1": "Overtemperature",
+            "2": "Overcurrent"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 3.x.14 - AC FlexLoads - L3 FlexLoads"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "3.x.14.enum0",
+        "options": {
+            "0": "No warning(s) or error(s)",
+            "1": "In warning",
+            "2": "In error restarting",
+            "3": "In error halted"
+        }
+    },
+    {
+        "enum_id": "3.x.14.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "Overcurrent",
+            "2": "Overtemperature",
+            "4": "Abnormal voltage detected",
+            "8": "Error relay failure",
+            "16": "Error too large current at rel. open."
+        }
+    },
+    {
+        "enum_id": "3.x.14.enum2",
+        "options": {
+            "0": "End of warning",
+            "1": "Overtemperature",
+            "2": "Overcurrent"
+        }
+    },
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

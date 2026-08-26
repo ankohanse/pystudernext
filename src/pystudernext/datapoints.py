@@ -27,6 +27,9 @@ class NextDatapointSyntaxException(Exception):
 class NextDatapointUnknownException(Exception):
     pass
 
+class NextDatapointEnumNotFoundException(Exception):
+    pass
+
 
 @dataclass
 class NextDatapoint:
@@ -45,7 +48,8 @@ class NextDatapoint:
     max: float = None
     data_type: NextDataType = None
     read_write: NextRW = None
-    options: dict = None
+    enum_id: str = None
+    enum_options: dict[str,str] = None
 
     @staticmethod
     def from_dict(d):
@@ -61,6 +65,7 @@ class NextDatapoint:
         rng = d.get('rng', None)
         dt = d.get('type', None)
         rw = d.get('rw', None)
+        eid = d.get('enum_id', None)
         opt = d.get('opt', None)
 
         # Check and convert properties
@@ -76,6 +81,15 @@ class NextDatapoint:
         if not isinstance(addr, int) or not isinstance(size, int):
             raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected int; fam={fam}, pid={pid}, addr={addr}")
 
+        if rng is not None and not isinstance(rng, list) and len(rng)!=2:
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected list[min,max]; fam={fam}, pid={pid}, addr={addr}")
+        
+        if eid is not None and not isinstance(eid, str):
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected str; fam={fam}, pid={pid}, addr={addr}")
+
+        if dt in ['bitfield','enum'] and eid is None:
+            raise NextDatapointSyntaxException(f"Missing required field 'enum_id' in dataset; fam={fam}, pid={pid}, addr={addr}")
+        
         if opt is not None and not isinstance(opt, dict):
             raise NextDatapointSyntaxException(f"Unexpected field type in dataset, expected dict; fam={fam}, pid={pid}, addr={addr}")
 
@@ -97,7 +111,7 @@ class NextDatapoint:
         max = float(rng[1]) if isinstance(rng, list) else None
         data_type = NextDataType.from_str(dt) if isinstance(dt, str) else None
         read_write = NextRW.from_str(rw) if isinstance(rw, str) else None
-        options = opt if isinstance(opt, dict) else None
+        enum_id = eid if isinstance(eid, str) else None
             
         return NextDatapoint(
             family_id = family_id, 
@@ -115,7 +129,8 @@ class NextDatapoint:
             max = max, 
             data_type = data_type,
             read_write = read_write, 
-            options = options
+            enum_id = enum_id,
+            enum_options = None,  # will be resolved later from associated json file
         )
 
 
@@ -145,40 +160,68 @@ class NextDatapoint:
 
             
     def enum_value(self, key):
-        if self.data_type not in [NextDataType.ENUM]:
+        if self.data_type not in [NextDataType.ENUM, NextDataType.BITFIELD]:
             return None
         
         key = str(key)
-        if not isinstance(self.options, dict) or key not in self.options:
+        if not isinstance(self.enum_options, dict) or key not in self.enum_options:
             return key
         else:
-            return self.options[key]
+            return self.enum_options[key]
     
     def enum_key(self, value):
-        if self.data_type not in [NextDataType.ENUM]:
+        if self.data_type not in [NextDataType.ENUM, NextDataType.BITFIELD]:
             return None
         
-        if not isinstance(self.options, dict) or value not in self.options.values():
+        if not isinstance(self.enum_options, dict) or value not in self.enum_options.values():
             return None
         else:
-            key = next((key for key,val in self.options.items() if val==value), None)
+            key = next((key for key,val in self.enum_options.items() if val==value), None)
             return int(key)
 
+
+@dataclass
+class NextDatapointEnum:
+    enum_id: str
+    options: dict = None
+
+    @staticmethod
+    def from_dict(d):
+        enum_id = d.get('enum_id', None)
+        options = d.get('options', None)
+
+        # Check and convert properties
+        if "_rem" in d and len(d)==1:
+            return None # Line only contains a comment
+        
+        if enum_id is None or options is None:
+            raise NextDatapointSyntaxException(f"Missing required field in dataset; enum_id={enum_id}")
+        
+        if not isinstance(enum_id, str) or not isinstance(options, dict):
+            raise NextDatapointSyntaxException(f"Unexpected field type in dataset; enum_id={enum_id}")
+
+        # Compose the DatapointEnum
+        return NextDatapointEnum(
+            enum_id = enum_id, 
+            options = options
+        )
 
 
 class NextDataset:
 
     # Paths to all files definining the datapoints
     PATHS = [
-        __file__.replace('.py', '_sys.json'),
-        __file__.replace('.py', '_bat.json'),
-        __file__.replace('.py', '_acs.json'),
-        __file__.replace('.py', '_flx.json'),
-        __file__.replace('.py', '_nx3.json'),
-        __file__.replace('.py', '_nx1.json'),
-        __file__.replace('.py', '_nxg.json'),
-        
-        __file__.replace('.py', '_tst.json'),       # To be able to develop this library without access to a Studer Next device...
+        (__file__.replace('.py', '_sys.json'), __file__.replace('.py', '_sys_enums.json') ), 
+        (__file__.replace('.py', '_bat.json'), __file__.replace('.py', '_bat_enums.json') ), 
+        (__file__.replace('.py', '_acs.json'), __file__.replace('.py', '_acs_enums.json') ), 
+        (__file__.replace('.py', '_flx.json'), __file__.replace('.py', '_flx_enums.json') ), 
+        (__file__.replace('.py', '_nx3.json'), __file__.replace('.py', '_nx3_enums.json') ), 
+        (__file__.replace('.py', '_nx1.json'), __file__.replace('.py', '_nx1_enums.json') ), 
+        (__file__.replace('.py', '_nxg.json'), __file__.replace('.py', '_nxg_enums.json') ), 
+        (__file__.replace('.py', '_pwr.json'), __file__.replace('.py', '_pwr_enums.json') ), 
+
+        # To be able to develop this library without access to a Studer Next device...
+        (__file__.replace('.py', '_tst.json'), __file__.replace('.py', '_tst_enums.json') ),       
     ]
 
     # Some known datapoint ID's

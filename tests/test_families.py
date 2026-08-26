@@ -6,7 +6,7 @@ from pystudernext import NextDeviceFamilyUnknownException, NextDeviceCodeUnknown
 
 def test_list():
     families = NextDeviceFamilies.get_list()
-    assert len(families) == 8
+    assert len(families) == 9
 
 
 def test_id():
@@ -34,6 +34,8 @@ def test_id():
         ("nx1", "NX1_30", 58),
         ("nxg", "NXG_1", 59),
         ("nxg", "NXG_2", 60),
+        ("pwr", "PWR_1", 89),
+        ("pwr", "PWR_6", 94),
     ]
 )
 def test_code(family_id, code, slave):

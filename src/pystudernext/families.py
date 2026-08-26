@@ -125,6 +125,15 @@ class NextDeviceFamilies:
         14,                 # address for Software version
         30,                 # address for ObjectModel version
     )
+    NEXT_POWERMETER = NextDeviceFamily(
+        "pwr",             # id
+        "Powermeter",      # model 
+        89, 94,            # modbus device slaves,  start to end
+        None,              # address for discovery
+        None,              # address for Serial number
+        None,              # address for Software version
+        None,              # address for ObjectModel version
+    )
 
 
     @staticmethod

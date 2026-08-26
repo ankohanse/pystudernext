@@ -1,0 +1,1169 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.153"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.1 - Next3 - Converter ID card"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.2 - Next3 - Transfer ID card"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.3 - Next3 - Converter application"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.3.enum0",
+        "options": {
+            "0": "End of warning",
+            "1": "Warning MCU not secure",
+            "2": "Warning FPGA not configured",
+            "4": "Communication error on studer bus",
+            "8": "Warning end of day logs take too long"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.4 - Next3 - Transfer application"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.4.enum0",
+        "options": {
+            "0": "End of warning",
+            "1": "Warning MCU not secure",
+            "2": "Warning FPGA not configured",
+            "4": "Communication error on studer bus",
+            "8": "Warning end of day logs take too long"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.7 - Next3 - Converter CAN node"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.7.enum0",
+        "options": {
+            "0": "Error active.",
+            "1": "Error passive",
+            "2": "Bus off"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.8 - Next3 - Transfer CAN node"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.8.enum0",
+        "options": {
+            "0": "Error active.",
+            "1": "Error passive",
+            "2": "Bus off"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.14 - Next3 - Device"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.17 - Next3 - Next3 converter"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.17.enum0",
+        "options": {
+            "0": "End of error",
+            "1": "Fans failure",
+            "2": "Internal temperature sensor failure",
+            "4": "Abnormal voltage detected on acLoad port",
+            "8": "AcLoad port broken connexion",
+            "16": "Battery port broken connexion",
+            "32": "Battery contactor failure",
+            "64": "Inverter1 overcurrent",
+            "128": "Inverter2 overcurrent",
+            "512": "Inverter1 failure",
+            "1024": "Inverter2 failure",
+            "2048": "Inverter3 failure",
+            "4096": "Inverters disconnected by residual current",
+            "8192": "Solars disconnected by residual current",
+            "16384": "Residual current critical failure",
+            "32768": "Internal power supply failure",
+            "65536": "Internal power supply overvoltage",
+            "131072": "Internal power supply undervoltage",
+            "262144": "Battery capacitors preload failed",
+            "524288": "Battery overvoltage",
+            "1048576": "Battery undervoltage",
+            "2097152": "Internal dclink overvoltage",
+            "4194304": "Internal dclink undervoltage",
+            "8388608": "Internal dclink voltage unbalanced",
+            "16777216": "Internal dcdc converter failure",
+            "33554432": "Communication error",
+            "67108864": "Battery temperature sensor in short circuit",
+            "134217728": "Battery fault",
+            "268435456": "Inverters disconnected by solar",
+            "536870912 ": "Internal ADC noised",
+            "1073741824": "AC Load overvoltage"
+        }
+    },
+    {
+        "enum_id": "10.x.17.enum1",
+        "options": {
+            "0": "No warning(s) or error(s)",
+            "1": "In warning",
+            "2": "In error restarting",
+            "3": "In error halted"
+        }
+    },
+    {
+        "enum_id": "10.x.17.enum2",
+        "options": {
+            "0": "No noisy ADC channel",
+            "1": "uInv1 sampled at 40kHz",
+            "2": "uInv2 sampled at 40kHz",
+            "4": "uInv3 sampled at 40kHz",
+            "8": "iInv1 sampled at 40kHz",
+            "16": "iInv2 sampled at 40kHz",
+            "32": "iInv3 sampled at 40kHz",
+            "32768": "uBat sampled at 20kHz",
+            "16384": "uDcLinkH sampled at 20kHz",
+            "8192": "uDcLinkL sampled at 20kHz",
+            "512": "uAcOut1 sampled at 20kHz",
+            "1024": "uAcOut2 sampled at 20kHz",
+            "2048": "uAcOut3 sampled at 20kHz",
+            "4096": "uPv1 sampled at 20kHz",
+            "524288": "uPv2 sampled at 20kHz",
+            "1048576": "iLPv1 sampled at 20kHz",
+            "64": "iLPv2 sampled at 20kHz",
+            "128": "uMainPowerSupply sampled at 20kHz",
+            "65536": "uCapBat sampled at 20kHz",
+            "256": "uIsoPS sampled at 20kHz",
+            "131072": "iExtPSCurrent sampled at 20kHz",
+            "262144": "iEarth sampled at 20kHz",
+            "2097152": "uBatNegEarth sampled at 1kHz",
+            "4194304": "uPv1PosEarth sampled at 1kHzv",
+            "8388608": "uPv2PosEarth sampled at 1kHz",
+            "16777216": "temperatureTransfoH sampled at 1kHz",
+            "33554432": "temperatureBattery sampled at 1kHz",
+            "67108864": "temperatureSelfSolar1 sampled at 1/8kHz",
+            "134217728": "temperatureSelfSolar2 sampled at 1/8kHz",
+            "268435456": "temperatureCoolerPlate1 sampled at 200Hz",
+            "536870912": "temperatureCoolerPlate2 sampled at 200Hz",
+            "1073741824": "temperatureBatPwr sampled at 200Hz"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.19 - Next3 - Device solar common"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.20 - Next3 - Solar common 1"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.21 - Next3 - Solar common 2"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.22 - Next3 - Device solar group"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.22.enum0",
+        "options": {
+            "1": "At least one solar disabled",
+            "2": "At least one solar has warning(s)",
+            "4": "At least one solar in error restarting",
+            "8": "At least one solar in error halted",
+            "16": "At least one solar in night",
+            "32": "At least one solar in dawn/dusk",
+            "64": "At least one solar in production",
+            "128": "At least one solar in production limited",
+            "256": "At least one solar in solar excess",
+            "512": "At least one external solar not compatible",
+            "1024": "At least one external solar added",
+            "2048": "At least one external solar disappeared"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.23 - Next3 - Solar 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.23.enum0",
+        "options": {
+            "0": "Production",
+            "1": "Night",
+            "2": "Dawn/dusk",
+            "3": "Disabled",
+            "4": "Starting",
+            "5": "Stopping",
+            "6": "Error halted",
+            "7": "Error restarting"
+        }
+    },
+    {
+        "enum_id": "10.x.23.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "overvoltage",
+            "2": "overcurrent",
+            "4": "polarity inversion",
+            "8": "insulation default",
+            "16": "stop failed",
+            "32": "start failed",
+            "64": "device fault",
+            "128": "depolarization failed",
+            "256": "Negativ current"
+        }
+    },
+    {
+        "enum_id": "10.x.23.enum2",
+        "options": {
+            "0": "End of warning",
+            "1": "overvoltage",
+            "2": "no production for 48h",
+            "4": "overtemperature"
+        }
+    },
+    {
+        "enum_id": "10.x.23.enum3",
+        "options": {
+            "0": "Not available",
+            "1": "Disabled",
+            "2": "Enabled",
+            "3": "Depolarizing"
+        }
+    },
+    {
+        "enum_id": "10.x.23.enum4",
+        "options": {
+            "0": "Not limited",
+            "1": "Temperature limited",
+            "2": "Max power reached",
+            "3": "Max current reached",
+            "4": "System limited"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.24 - Next3 - Solar 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.24.enum0",
+        "options": {
+            "0": "Production",
+            "1": "Night",
+            "2": "Dawn/dusk",
+            "3": "Disabled",
+            "4": "Starting",
+            "5": "Stopping",
+            "6": "Error halted",
+            "7": "Error restarting"
+        }
+    },
+    {
+        "enum_id": "10.x.24.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "overvoltage",
+            "2": "overcurrent",
+            "4": "polarity inversion",
+            "8": "insulation default",
+            "16": "stop failed",
+            "32": "start failed",
+            "64": "device fault",
+            "128": "depolarization failed",
+            "256": "Negativ current"
+        }
+    },
+    {
+        "enum_id": "10.x.24.enum2",
+        "options": {
+            "0": "End of warning",
+            "1": "overvoltage",
+            "2": "no production for 48h",
+            "4": "overtemperature"
+        }
+    },
+    {
+        "enum_id": "10.x.24.enum3",
+        "options": {
+            "0": "Not available",
+            "1": "Disabled",
+            "2": "Enabled",
+            "3": "Depolarizing"
+        }
+    },
+    {
+        "enum_id": "10.x.24.enum4",
+        "options": {
+            "0": "Not limited",
+            "1": "Temperature limited",
+            "2": "Max power reached",
+            "3": "Max current reached",
+            "4": "System limited"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.25- Next3 - MPPT algorithm 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.25.enum0",
+        "options": {
+            "0": "Least square fit",
+            "1": "Fixed voltage",
+            "2": "Manual"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.26 - Next3 - MPPT algorithm 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.26.enum0",
+        "options": {
+            "0": "Least square fit",
+            "1": "Fixed voltage",
+            "2": "Manual"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.27 - Next3 - Aux relay 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.27.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "10.x.27.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.28 - Next3 - Aux relay 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.28.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "10.x.28.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.29 - Next3 - Aux relay 1 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.29.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "10.x.29.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+    {
+        "enum_id": "10.x.29.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.30 - Next3 - Aux relay 2 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.30.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "10.x.30.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+    {
+        "enum_id": "10.x.30.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.31 - Next3 - Cmd input 1"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.31.enum0",
+        "options": {
+            "1": "Active when dry contact closed",
+            "2": "Active when dry contact opened",
+            "4": "Active when a voltage is supplied.",
+            "8": "Active when no voltage is supllied.",
+            "16": "DRED port for DRM0",
+            "32": "Active when internal aux relay connected",
+            "64": "Active when internal aux relay disconnected",
+            "128": "Analog mode"
+        }
+    },
+    {
+        "enum_id": "10.x.31.enum1",
+        "options": {
+            "1": "Active when dry contact closed",
+            "2": "Active when dry contact opened",
+            "4": "Active when a voltage is supplied.",
+            "8": "Active when no voltage is supllied.",
+            "16": "DRED port for DRM0",
+            "32": "Active when internal aux relay connected",
+            "64": "Active when internal aux relay disconnected",
+            "128": "Analog mode"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.32 - Next3 - Cmd input 2"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.32.enum0",
+        "options": {
+            "1": "Active when dry contact closed",
+            "2": "Active when dry contact opened",
+            "4": "Active when a voltage is supplied.",
+            "8": "Active when no voltage is supllied.",
+            "16": "DRED port for DRM0",
+            "32": "Active when internal aux relay connected",
+            "64": "Active when internal aux relay disconnected",
+            "128": "Analog mode"
+        }
+    },
+    {
+        "enum_id": "10.x.32.enum1",
+        "options": {
+            "1": "Active when dry contact closed",
+            "2": "Active when dry contact opened",
+            "4": "Active when a voltage is supplied.",
+            "8": "Active when no voltage is supllied.",
+            "16": "DRED port for DRM0",
+            "32": "Active when internal aux relay connected",
+            "64": "Active when internal aux relay disconnected",
+            "128": "Analog mode"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.33 - Next3 - Battery contributor"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.33.enum0",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "ShortCircuit"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.34 - Next3 - RS 485i bus"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.34.enum1",
+        "options": {
+            "9600": "9600bps",
+            "19200": "19200bps",
+            "38400": "38400bps",
+            "115200": "115200bps",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.34.enum2",
+        "options": {
+            "0": "None",
+            "2": "Even",
+            "3": "Odd",
+            "4": "Space",
+            "5": "Mark",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.34.enum3",
+        "options": {
+            "1": "One",
+            "2": "Two",
+            "3": "One and a half",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.34.enum4",
+        "options": {
+            "5": "Five",
+            "6": "Six",
+            "7": "Seven",
+            "8": "Eight",
+            "4294967295": "Not configurable"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.35 - Next3 - CANi bus"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.35.enum1",
+        "options": {
+            "9600": "9600bps",
+            "19200": "19200bps",
+            "38400": "38400bps",
+            "115200": "115200bps",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.35.enum2",
+        "options": {
+            "0": "None",
+            "2": "Even",
+            "3": "Odd",
+            "4": "Space",
+            "5": "Mark",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.35.enum3",
+        "options": {
+            "1": "One",
+            "2": "Two",
+            "3": "One and a half",
+            "4294967295": "Not configurable"
+        }
+    },
+    {
+        "enum_id": "10.x.35.enum4",
+        "options": {
+            "5": "Five",
+            "6": "Six",
+            "7": "Seven",
+            "8": "Eight",
+            "4294967295": "Not configurable"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.36 - Next3 - Virtual aux relay 3"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.36.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "10.x.36.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.37 - Next3 - Virtual aux relay 4"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.37.enum0",
+        "options": {
+            "0": "Manual Off",
+            "1": "Manual On",
+            "2": "Auto"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum1",
+        "options": {
+            "0": "Battery voltage",
+            "1": "Battery SOC",
+            "2": "Battery temperature",
+            "3": "Battery charg. state",
+            "4": "Power AC",
+            "15": "Solar power",
+            "5": "On-Source",
+            "12": "Off-Source",
+            "6": "Solar excess on-grid",
+            "7": "Solar excess",
+            "8": "Schedule time",
+            "9": "Cmd input",
+            "10": "Errors and warnings",
+            "11": "Ext bypass",
+            "13": "AC coupling",
+            "14": "Advanced logics"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum2",
+        "options": {
+            "0": "Safe Off",
+            "1": "Safe On",
+            "2": "Last manual"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum3",
+        "options": {
+            "0": "AC input 1 all",
+            "1": "AC input 1 L1",
+            "2": "AC input 1 L2",
+            "3": "AC input 1 L3",
+            "4": "AC input 2 all",
+            "5": "AC input 2 L1",
+            "6": "AC input 2 L2",
+            "7": "AC input 2 L3",
+            "8": "FlexLoads all",
+            "9": "FlexLoads L1",
+            "10": "FlexLoads L2",
+            "11": "FlexLoads L3",
+            "12": "AC-Loads all",
+            "13": "AC-Loads L1",
+            "14": "AC-Loads L2",
+            "15": "AC-Loads L3"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum4",
+        "options": {
+            "0": "Trig on all conditions",
+            "1": "Trig on warnings",
+            "2": "Trig on errors restarting",
+            "4": "Trig on errors halted"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum5",
+        "options": {
+            "0": "Safe state opened",
+            "1": "Safe state closed",
+            "2": "Rel. man. opened",
+            "3": "Rel. man. closed",
+            "4": "Rel. auto. opened",
+            "5": "Rel. auto. closed"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum6",
+        "options": {
+            "0": "No error",
+            "1": "No hysteresis",
+            "2": "Property access error",
+            "3": "Undefined error",
+            "4": "Advanced logics not available",
+            "5": "Wrong advanced logics indexes"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum8",
+        "options": {
+            "0": "None",
+            "1": "Bulk",
+            "2": "Reduced floating",
+            "4": "Floating",
+            "8": "Periodical absorption",
+            "16": "Absorption",
+            "32": "Equalization"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum9",
+        "options": {
+            "0": "On AC input 1 connection",
+            "1": "On AC input 2 connection",
+            "2": "On any AC input connection"
+        }
+    },
+    {
+        "enum_id": "10.x.37.enum10",
+        "options": {
+            "0": "Connected battery idx",
+            "1": "Battery idx 0",
+            "2": "Battery idx 1",
+            "3": "Battery idx 2",
+            "4": "Battery idx 3",
+            "5": "Battery idx 4"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.38 - Next3 - Virtual aux relay 3 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.38.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "10.x.38.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+    {
+        "enum_id": "10.x.38.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.39 - Next3 - Virtual aux relay 4 time control"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.39.enum0",
+        "options": {
+            "0": "Bypass",
+            "1": "Temporal restriction",
+            "2": "Schedule time"
+        }
+    },
+    {
+        "enum_id": "10.x.39.enum1",
+        "options": {
+            "0": "No end date",
+            "1": "End after occurrence",
+            "2": "End date"
+        }
+    },
+    {
+        "enum_id": "10.x.39.enum2",
+        "options": {
+            "64": "Monday",
+            "32": "Tuesday",
+            "16": "Wednesday",
+            "8": "Thursday",
+            "4": "Friday",
+            "2": "Saturday",
+            "1": "Sunday"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.40 - Next3 - Battery contributor ext. solar chargers"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.40.enum0",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "ShortCircuit"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.41 - Next3 - Solar common ext. solar chargers"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 10.x.42 - Next3 - Ext. solar chargers group"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "10.x.42.enum0",
+        "options": {
+            "1": "At least one solar disabled",
+            "2": "At least one solar has warning(s)",
+            "4": "At least one solar in error restarting",
+            "8": "At least one solar in error halted",
+            "16": "At least one solar in night",
+            "32": "At least one solar in dawn/dusk",
+            "64": "At least one solar in production",
+            "128": "At least one solar in production limited",
+            "256": "At least one solar in solar excess",
+            "512": "At least one external solar not compatible",
+            "1024": "At least one external solar added",
+            "2048": "At least one external solar disappeared"
+        }
+    },
+        
+    
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

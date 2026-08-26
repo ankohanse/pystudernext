@@ -1,0 +1,63 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.73"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+
+
+    {  "_rem": "###"},
+    {  "_rem": "### 30.x.1 - Powermeters - Powermeter"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "30.x.1.enum0",
+        "options": {
+            "0": "None",
+            "1": "Carlo Gavazzi EM300 Series",
+            "3": "Carlo Gavazzi EM511",
+            "7": "Carlo Gavazzi EM530",
+            "2": "Carlo Gavazzi EM540",
+            "4": "Wago 879-3000",
+            "5": "Wago 879-3020",
+            "6": "Wago 879-3040"
+        }
+    },
+    {
+        "enum_id": "30.x.1.enum1",
+        "options": {
+            "0": "No function",
+            "1": "Self-consumption",
+            "2": "Simple metering"
+        }
+    },
+    {
+        "enum_id": "30.x.1.enum2",
+        "options": {
+            "0": "No warning"
+        }
+    },
+    {
+        "enum_id": "30.x.1.enum3",
+        "options": {
+            "0": "No error",
+            "1": "Communication lost"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 30.x.2 - Powermeters - Powermeter measure"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 30.x.2 - Powermeters - Powermeter measure upstream"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

@@ -1,0 +1,359 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.153"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.3 - System - earthing scheme"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "0.1.3.enum0",
+        "options": {
+            "0": "Off-grid self managed",
+            "1": "Solid neutral",
+            "2": "Disabled"
+        }
+    },
+    {
+        "enum_id": "0.1.3.enum1",
+        "options": {
+            "0": "End of error",
+            "1": "AC input continuity failed OSM",
+            "2": "AC input continuity failed SN",
+            "4": "Relay continuity failed",
+            "8": "Discontinuity failed",
+            "16": "Earth supply error",
+            "32": "Grid connection timeout",
+            "64": "Solar disconnection timeout",
+            "128": "Inconsistent request",
+            "256": "Device fault"
+        }
+    },
+    {
+        "enum_id": "0.1.3.enum3",
+        "options": {
+            "0": "End of warning",
+            "1": "AC input continuity failed OSM",
+            "2": "AC input continuity failed SN",
+            "4": "Relay continuity failed",
+            "8": "Discontinuity failed",
+            "16": "Earth supply error",
+            "32": "Grid connection timeout",
+            "64": "Solar disconnection timeout"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.5 - System - energy policy"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "0.1.5.enum0",
+        "options": {
+            "0": "Priority to grid",
+            "1": "Priority to getset"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.6 - System - Installation configuration"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.7 - System - all devices"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "0.1.7.enum0",
+        "options": {
+            "1": "No warning(s) or error(s)",
+            "2": "At least one device in warning",
+            "4": "At least one device in error restarting"
+        }
+    },
+    
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.8 - System - 3-phase inverters"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.8.enum0",
+        "options": {
+            "0": "User defined",
+            "1": "Symmetric",
+            "2": "High-leg delta"
+        }
+    },
+    {
+        "enum_id": "0.1.8.enum2",
+        "options": {
+            "0": "User defined",
+            "1": "None",
+            "2": "Very fine",
+            "3": "Fine",
+            "4": "Coarse",
+            "5": "Very coarse"
+        }
+    },
+    {
+        "enum_id": "0.1.8.enum3",
+        "options": {
+            "1": "At least one phase disabled",
+            "2": "At least one phase enabled",
+            "4": "At least one phhase has warning(s)",
+            "8": "At least one phase has error restarting",
+            "16": "At least one phase in error halted"
+        }
+    },
+    {
+        "enum_id": "0.1.8.enum4",
+        "options": {
+            "1": "Phase L1 exists",
+            "2": "Phase L2 exists",
+            "4": "Phase L3 exists"
+        }
+    },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.9 - System - inverter L1"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.9.enum0",
+        "options": {
+            "0": "Enabled",
+            "1": "Disabled",
+            "2": "Error restarting",
+            "3": "Error halted"
+        }
+    },
+    {
+        "enum_id": "0.1.9.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Overload",
+            "2": "Overtemperature"
+        }
+    },
+    {
+        "enum_id": "0.1.9.enum2",
+        "options": {
+            "0": "End of error",
+            "1": "Overload",
+            "2": "device fault",
+            "4": "Communication error",
+            "8": "Earthing error",
+            "16": "Backfeed power error",
+            "32": "AC source error",
+            "2147483648": "Other error"
+        }
+    },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### System - inverter L2"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.10.enum0",
+        "options": {
+            "0": "Enabled",
+            "1": "Disabled",
+            "2": "Error restarting",
+            "3": "Error halted"
+        }
+    },
+    {
+        "enum_id": "0.1.10.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Overload",
+            "2": "Overtemperature"
+        }
+    },
+    {
+        "enum_id": "0.1.10.enum2",
+        "options": {
+            "0": "End of error",
+            "1": "Overload",
+            "2": "device fault",
+            "4": "Communication error",
+            "8": "Earthing error",
+            "16": "Backfeed power error",
+            "32": "AC source error",
+            "2147483648": "Other error"
+        }
+    },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### System - inverter L3"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.11.enum0",
+        "options": {
+            "0": "Enabled",
+            "1": "Disabled",
+            "2": "Error restarting",
+            "3": "Error halted"
+        }
+    },
+    {
+        "enum_id": "0.1.11.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Overload",
+            "2": "Overtemperature"
+        }
+    },
+    {
+        "enum_id": "0.1.11.enum2",
+        "options": {
+            "0": "End of error",
+            "1": "Overload",
+            "2": "device fault",
+            "4": "Communication error",
+            "8": "Earthing error",
+            "16": "Backfeed power error",
+            "32": "AC source error",
+            "2147483648": "Other error"
+        }
+    },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.12 - System - 3-phase AC-Loads"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.13 - System - AC-Loads L1"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.14 - System - AC-Loads L2"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.15 - System - AC-Loads L3"},
+    {  "_rem": "###"}, 
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.16 - System - 3-phase inverters measure"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.17 - System - inverter measure L1"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },    
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.18 - System - inverter measure L2"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.19 - System - inverter measure L3"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },    
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.20 - System - FlexLoads measure"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.21 - System - all FlexLoads measure L1"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },    
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.22 - System - all FlexLoads measure L2"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.23 - System - all FlexLoads measure L3"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### System - all solars common"},
+    {  "_rem": "###"}, 
+    {  "_rem": "none" },    
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### System - all solars group"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.25.enum0",
+        "options": {
+            "1": "At least one solar disabled",
+            "2": "At least one solar has warning(s)",
+            "4": "At least one solar in error restarting",
+            "8": "At least one solar in error halted",
+            "16": "At least one solar in night",
+            "32": "At least one solar in dawn/dusk",
+            "64": "At least one solar in production",
+            "128": "At least one solar in production limited",
+            "256": "At least one solar in solar excess",
+            "512": "At least one external solar not compatible",
+            "1024": "At lease one external solar added",
+            "2048": "At lease one external solar has disappeared"
+        }
+    },
+
+    {  "_rem": "###"},
+    {  "_rem": "### System - system total"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.26.enum0",
+        "options": {
+            "0": "None",
+            "1": "At least one device",
+            "2": "At least one battery",
+            "4": "At least one solar",
+            "8": "At least one phase",
+            "16": "At least one source phase",
+            "32": "At least one flex source phase",
+            "64": "At least one flex load phase",
+            "128": "At lease one AC Inpput 1 phase",
+            "256": "At lease one AC Inpput 2 phase",
+            "512": "At lease one powermeter"
+        }
+    },
+    {
+        "enum_id": "0.1.26.enum1",
+        "options": {
+            "0": "No warning(s) or error(s)",
+            "1": "In warning",
+            "2": "In error restarting",
+            "3": "In error halted",
+            "4": "In emergency stop"
+        }
+    },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.27 - System - all batteries common"},
+    {  "_rem": "###"},  
+    {  "_rem": "none" },
+ 
+    {  "_rem": "###"},
+    {  "_rem": "### 0.1.28 - System - all batteries group"},
+    {  "_rem": "###"}, 
+    {
+        "enum_id": "0.1.28.enum0",
+        "options": {
+            "1": "No warning(s) or error(s)",
+            "2": "At least one battery in warning",
+            "4": "At least one battery in error restarting",
+            "8": "At least one battery in error halted",
+            "16": "At least one battery has charging recovery mode activatable"
+        }
+    },
+
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]

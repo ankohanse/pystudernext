@@ -1,0 +1,448 @@
+[
+    {  "_rem": "Definitions below were retrieved from:"},
+    {  "_rem": "  Studer Technical Specification - Next Modbus appendix - v10.153"},
+    {  "_rem": "  https://technext3.studer-innotec.com/web/content/208609"},
+
+    {  "_rem": "Generated from PDF to Word to Excel to csv to json (last step via https://www.convertcsv.com/csv-to-json.htm)"},
+    {  "_rem": "To compare appendix pdf with a newer version, use https://www.draftable.com/compare"},
+
+   
+
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.1 - AC Source - 3-phase measure"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.2 - AC Source - Measure L1"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.3 - AC Source - Measure L2"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.4 - AC Source - Measure L3"},
+    {  "_rem": "###"},
+    {  "_rem": "none" },
+
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.5 - AC Source - 3-phase input config"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "2.x.5.enum0",
+        "options": {
+            "0": "None",
+            "1": "Grid",
+            "2": "Genset"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum1",
+        "options": {
+            "0": "None",
+            "11": "Switzerland (EN-50549-1, AES RR/IPE-NR 7 - CH Type A)",
+            "18": "Australia A (AS/NZS 4777.2)",
+            "19": "Australia B (AS/NZS 4777.2)",
+            "20": "Australia C (AS/NZS 4777.2",
+            "8": "Austria (TOR Erzeuger Typ A)",
+            "4": "Belgium (C10/11 Synergrid)",
+            "22": "Belgium <10kW (C10/11 Synergrid)",
+            "24": "Croatia (EN-50549-1)",
+            "10": "Cyprus (CY EN-50549-1 EAC)",
+            "12": "Czech Republic (EN-50549-1)",
+            "2": "Europe (EN-50549-1)",
+            "28": "Finland (EN-50549-1)",
+            "1": "Germany (VDE-AR-N 4105)",
+            "26": "Greece (EN-50549-1)",
+            "13": "Ireland (EN-50549-1)",
+            "31": "Ireland (EN-50549-1)",
+            "32": "Ireland <6kW (EN-50549-1)",
+            "30": "Ireland <11kW (EN-50549-1)",
+            "16": "Hungary (EN-50549-1)",
+            "15": "Netherlands (EN-50549-1)",
+            "21": "New Zealand (AS/NZS 4777.2)",
+            "27": "Norway (EN-50549-1)",
+            "25": "Serbia industrial (EN-50549-1)",
+            "29": "Serbia <10.8kW (EN-50549-1)",
+            "14": "Slovakia (EN-50549-1)",
+            "23": "Slovenia (EN-50549-1)",
+            "9": "Spain (RD 1699/2011, UNE 206007-1 and UNE 217002)",
+            "17": "Sweden (EN-50549-1 and EIFS 2018-2)"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum2",
+        "options": {
+            "0": "Fixed reactive power",
+            "1": "Q=f(U) curve",
+            "2": "Fixed cos(φ)",
+            "3": "cos(φ)=f(P) curve",
+            "4": "None"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum3",
+        "options": {
+            "0": "Under-excited",
+            "1": "Over-excited"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum4",
+        "options": {
+            "0": "P maximum",
+            "1": "P momentary"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum5",
+        "options": {
+            "1": "Phase L1 exists",
+            "2": "Phase L2 exists",
+            "4": "Phase L3 exists"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum6",
+        "options": {
+            "0": "Disabled",
+            "1": "Vector shift",
+            "2": "RoCoF tripping"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum7",
+        "options": {
+            "0": "Disabled",
+            "1": "Enabled",
+            "2": "Smart"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum8",
+        "options": {
+            "0": "Custom settings",
+            "1": "Very sensitive",
+            "2": "Sensitive",
+            "3": "Normal",
+            "4": "Robust",
+            "5": "Very robust"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum9",
+        "options": {
+            "1": "Start signal received",
+            "2": "Running and processing",
+            "4": "Running and finishing",
+            "8": "Stopped and new test allowed",
+            "16": "Stopped and new test forbidden"
+        }
+    },
+    {
+        "enum_id": "2.x.5.enum10",
+        "options": {
+            "0": "Not allowed",
+            "1": "Allowed only if phase is enabled",
+            "2": "Allowed even if phase is disabled"
+        }
+    },
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.6 - AC Source - L1 input config"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "2.x.6.enum0",
+        "options": {
+            "0": "No reasons (connected)",
+            "1": "No voltage",
+            "2": "Waiting observation time",
+            "4": "Individual phase not allowed",
+            "8": "Unconnected due to the user",
+            "16": "Unconnected due to command entry",
+            "32": "Unconnected due to inverter",
+            "64": "Unconnected due to the energy policy",
+            "256": "Unconnected due to another cause",
+            "2147483648": "Unconnected due to an error"
+        }
+    },
+    {
+        "enum_id": "2.x.6.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Active power response to overfrequency",
+            "2": "Active power response to underfrequency",
+            "4": "Reactive power response to voltage",
+            "8": "Undervoltage ride through",
+            "16": "Overvoltage ride through",
+            "32": "Power limited by increase gradient",
+            "64": "Ceasing active power",
+            "128": "Reduced active power on setpoint",
+            "256": "Active power response to overvoltage",
+            "512": "Overtemperature",
+            "1024": "Self-test in progress"
+        }
+    },
+    {
+        "enum_id": "2.x.6.enum2",
+        "options": {
+            "0": "End of error",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing error",
+            "524288": "Error relay failure 1",
+            "1048576": "Synchronization failed",
+            "2097152": "Error relay failure 2",
+            "4194304": "Error relay failure 3",
+            "8388608": "Error relay failure 4",
+            "16777216": "Error relay failure 5",
+            "33554432": "Error relay failure 6",
+            "67108864": "Error too large current at rel.open",
+            "134217728": "Overtemperature",
+            "268435456": "Self-test failed",
+            "536870912": "Error indicator 1",
+            "1073741824": "Error indicator 2"
+        }
+    },
+    {
+        "enum_id": "2.x.6.enum3",
+        "options": {
+            "0": "No disconnection",
+            "4": "Another phase disconnects",
+            "8": "Disconnected by the user",
+            "16": "Disconnected by command entry",
+            "32": "Disconnected due to inverter",
+            "64": "Disconnected due to the energy policy",
+            "256": "Disconnected due to another cause",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing fault",
+            "524288": "Error relay failure 1",
+            "134217728": "Thermal protection",
+            "268435456": "Self-test failed"
+        }
+    },
+    {
+        "enum_id": "2.x.6.enum4",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "Error restarting",
+            "4": "Error halted"
+        }
+    },
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.7 - AC Source - L2 input config "},
+    {  "_rem": "###"},
+    {
+        "enum_id": "2.x.7.enum0",
+        "options": {
+            "0": "No reasons (connected)",
+            "1": "No voltage",
+            "2": "Waiting observation time",
+            "4": "Individual phase not allowed",
+            "8": "Unconnected due to the user",
+            "16": "Unconnected due to command entry",
+            "32": "Unconnected due to inverter",
+            "64": "Unconnected due to the energy policy",
+            "256": "Unconnected due to another cause",
+            "2147483648": "Unconnected due to an error"
+        }
+    },
+    {
+        "enum_id": "2.x.7.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Active power response to overfrequency",
+            "2": "Active power response to underfrequency",
+            "4": "Reactive power response to voltage",
+            "8": "Undervoltage ride through",
+            "16": "Overvoltage ride through",
+            "32": "Power limited by increase gradient",
+            "64": "Ceasing active power",
+            "128": "Reduced active power on setpoint",
+            "256": "Active power response to overvoltage",
+            "512": "Overtemperature",
+            "1024": "Self-test in progress"
+        }
+    },
+    {
+        "enum_id": "2.x.7.enum2",
+        "options": {
+            "0": "End of error",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing error",
+            "524288": "Error relay failure 1",
+            "1048576": "Synchronization failed",
+            "2097152": "Error relay failure 2",
+            "4194304": "Error relay failure 3",
+            "8388608": "Error relay failure 4",
+            "16777216": "Error relay failure 5",
+            "33554432": "Error relay failure 6",
+            "67108864": "Error too large current at rel.open",
+            "134217728": "Overtemperature",
+            "268435456": "Self-test failed",
+            "536870912": "Error indicator 1",
+            "1073741824": "Error indicator 2"
+        }
+    },
+    {
+        "enum_id": "2.x.7.enum3",
+        "options": {
+            "0": "No disconnection",
+            "4": "Another phase disconnects",
+            "8": "Disconnected by the user",
+            "16": "Disconnected by command entry",
+            "32": "Disconnected due to inverter",
+            "64": "Disconnected due to the energy policy",
+            "256": "Disconnected due to another cause",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing fault",
+            "524288": "Error relay failure 1",
+            "134217728": "Thermal protection",
+            "268435456": "Self-test failed"
+        }
+    },
+    {
+        "enum_id": "2.x.7.enum4",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "Error restarting",
+            "4": "Error halted"
+        }
+    },
+    {  "_rem": "###"},
+    {  "_rem": "### 2.x.8 - AC Source - L3 input config"},
+    {  "_rem": "###"},
+    {
+        "enum_id": "2.x.8.enum0",
+        "options": {
+            "0": "No reasons (connected)",
+            "1": "No voltage",
+            "2": "Waiting observation time",
+            "4": "Individual phase not allowed",
+            "8": "Unconnected due to the user",
+            "16": "Unconnected due to command entry",
+            "32": "Unconnected due to inverter",
+            "64": "Unconnected due to the energy policy",
+            "256": "Unconnected due to another cause",
+            "2147483648": "Unconnected due to an error"
+        }
+    },
+    {
+        "enum_id": "2.x.8.enum1",
+        "options": {
+            "0": "End of warning",
+            "1": "Active power response to overfrequency",
+            "2": "Active power response to underfrequency",
+            "4": "Reactive power response to voltage",
+            "8": "Undervoltage ride through",
+            "16": "Overvoltage ride through",
+            "32": "Power limited by increase gradient",
+            "64": "Ceasing active power",
+            "128": "Reduced active power on setpoint",
+            "256": "Active power response to overvoltage",
+            "512": "Overtemperature",
+            "1024": "Self-test in progress"
+        }
+    },
+    {
+        "enum_id": "2.x.8.enum2",
+        "options": {
+            "0": "End of error",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing error",
+            "524288": "Error relay failure 1",
+            "1048576": "Synchronization failed",
+            "2097152": "Error relay failure 2",
+            "4194304": "Error relay failure 3",
+            "8388608": "Error relay failure 4",
+            "16777216": "Error relay failure 5",
+            "33554432": "Error relay failure 6",
+            "67108864": "Error too large current at rel.open",
+            "134217728": "Overtemperature",
+            "268435456": "Self-test failed",
+            "536870912": "Error indicator 1",
+            "1073741824": "Error indicator 2"
+        }
+    },
+    {
+        "enum_id": "2.x.8.enum3",
+        "options": {
+            "0": "No disconnection",
+            "4": "Another phase disconnects",
+            "8": "Disconnected by the user",
+            "16": "Disconnected by command entry",
+            "32": "Disconnected due to inverter",
+            "64": "Disconnected due to the energy policy",
+            "256": "Disconnected due to another cause",
+            "512": "Overfrequency",
+            "1024": "Underfrequency",
+            "2048": "Overvoltage",
+            "4096": "Undervoltage",
+            "8192": "Synchronization loss",
+            "16384": "Outside of envelope",
+            "32768": "Islanding detected",
+            "65536": "Phase error",
+            "131072": "Excessive dc voltage",
+            "262144": "Earthing fault",
+            "524288": "Error relay failure 1",
+            "134217728": "Thermal protection",
+            "268435456": "Self-test failed"
+        }
+    },
+    {
+        "enum_id": "2.x.8.enum4",
+        "options": {
+            "0": "Disconnected",
+            "1": "Connected",
+            "2": "Error restarting",
+            "4": "Error halted"
+        }
+    },
+
+    { "_rem": "###"},
+    { "_rem": "### End of file"},
+    { "_rem": "###"}    
+]
