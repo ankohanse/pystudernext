@@ -22,7 +22,7 @@ from . import AsyncNextApiStub, NextApiStub
     "name, rsp_slaves, rsp_dict, exp_devices",
     [
         ("SYS",               [1],          { 
-                                                "2103": "00112233-4455-6677-8899-aabbccddeeff" 
+                                                "1200": 1 
                                             },  ["SYS"]),
         ("BAT_1",             [2],          { 
                                                 "0": 1234.0 
@@ -60,6 +60,12 @@ from . import AsyncNextApiStub, NextApiStub
         ("NXG_1,NXG_2",       [59,60],      { 
                                                 "4": "1122334455667788" 
                                             },  ["NXG_1", "NXG_2"]),
+        ("PWR_1",             [89],         { 
+                                                "0": 3 
+                                            },  ["PWR_1"]),
+        ("PWR_1,PWR_2",       [89,90],      { 
+                                                "0": 3 
+                                            },  ["PWR_1","PWR_2"]),
     ]
 )
 def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
@@ -95,45 +101,51 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
         assert device.slave in rsp_slaves
         assert device.family_id is not None
         assert device.family_model is not None
-      
+
+        assert device.model is None
         assert device.serial is None
         assert device.sw_version is None
         assert device.om_version is None
 
 
 @pytest.mark.parametrize(
-    "name, rsp_slaves, rsp_dict, exp_devices, exp_serial, exp_sw_version, exp_om_version",
+    "name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version",
     [
         ("SYS none",    [1],    { 
+                                    "1200": 1,
                                     "2103": "00112233-4455-6677-8899-aabbccddeeff" 
-                                },  ["SYS"], None, None, None),
+                                },  ["SYS"], None, None, None, None),
         ("BAT none",    [2],    { 
-                                    "0": 1234.0 
-                                },  ["BAT_1"], None, None, None),
+                                    "0": 1234.0,
+                                    "395": 3,
+                                },  ["BAT_1"], "BYD", None, None, None),
         ("ACS none",    [7],    { 
                                     "0": 1234.0 
-                                },  ["ACS_1"], None, None, None),
+                                },  ["ACS_1"], None, None, None, None),
         ("FLX none",    [9],    { 
                                     "0": 1234.0 
-                                },  ["FLX_1"], None, None, None),
+                                },  ["FLX_1"], None, None, None, None),
         ("NX3 ext",     [14],   { 
                                     "4": "1122334455667788",
                                     "14": 0x01020304,
                                     "30": 0x00010002
-                                }, ["NX3_1"], "1122334455667788", "1.2.3.4", "1.2"),
+                                }, ["NX3_1"], None, "1122334455667788", "1.2.3.4", "1.2"),
         ("NX1 ext",     [29],   { 
                                     "4": "1122334455667788",
                                     "14": 0x01020304,
                                     "30": 0x00010002
-                                }, ["NX1_1"], "1122334455667788", "1.2.3.4", "1.2"),
+                                }, ["NX1_1"], None, "1122334455667788", "1.2.3.4", "1.2"),
         ("NXG ext",     [59],   { 
                                     "4": "1122334455667788",
                                     "14": 0x01020304,
                                     "30": 0x00010002
-                                }, ["NXG_1"], "1122334455667788", "1.2.3.4", "1.2"),
+                                }, ["NXG_1"], None, "1122334455667788", "1.2.3.4", "1.2"),
+        ("PWR ext",     [89],   { 
+                                    "0": 1 
+                                },  ["PWR_1"], "Carlo Gavazzi EM300 Series", None, None, None),
     ]
 )
-def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_serial, exp_sw_version, exp_om_version, request):
+def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
     dataset = NextFactory.create_dataset()
 
@@ -165,7 +177,8 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_seri
         assert device.slave in rsp_slaves
         assert device.family_id is not None
         assert device.family_model is not None
-      
+
+        assert device.model == exp_model
         assert device.serial == exp_serial
         assert device.sw_version == exp_sw_version
         assert device.om_version == exp_om_version

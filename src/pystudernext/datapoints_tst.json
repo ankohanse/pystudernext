@@ -32,8 +32,9 @@
     {  "_rem": "### Test - General (Victron)"},
     {  "_rem": "###"},
     {   "fam": "tst", "pid": "99.1.1", "addr": 800, "size": 6, "lvl": "ViewOnly", "id": "0",   "lbl": "Serial", "def": "", "unit": "", "rng": null, "type": "string", "rw": "R" },
-    {   "fam": "tst", "pid": "99.1.1", "addr": 868, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Inverter/Charger current", "def": "", "unit": "A", "rng": null, "type": "int", "rw": "R" },
-    {   "fam": "tst", "pid": "99.1.1", "addr": 870, "size": 2, "lvl": "ViewOnly", "id": "2",   "lbl": "Inverter/Charger power", "def": "", "unit": "W", "rng": null, "type": "int", "rw": "R" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 834, "size": 1, "lvl": "ViewOnly", "id": "1",   "lbl": "Firmware version", "def": "", "unit": "", "rng": null, "type": "int16", "rw": "R" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 868, "size": 2, "lvl": "ViewOnly", "id": "2",   "lbl": "Inverter/Charger current", "def": "", "unit": "A", "rng": null, "type": "int", "rw": "R" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 870, "size": 2, "lvl": "ViewOnly", "id": "3",   "lbl": "Inverter/Charger power", "def": "", "unit": "W", "rng": null, "type": "int", "rw": "R" },
 
 
     { "_rem": "###"},

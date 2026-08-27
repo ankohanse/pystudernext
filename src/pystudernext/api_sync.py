@@ -147,7 +147,12 @@ class NextApi:
 
         # Unpack the response value
         try:
-            return ModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
+            value = ModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
+
+            match parameter.data_type:
+                case NextDataType.ENUM: return parameter.enum_value(value)
+                case NextDataType.BITFIELD: return value    # TODO: turn bits into ';' separaterd list
+                case _: return value
 
         except Exception as e:
             raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None

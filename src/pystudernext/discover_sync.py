@@ -20,6 +20,7 @@ from .api_sync import (
     NextApi,
 )
 from .data import (
+    NextDataType,
     NextDiscoveredDevice,
     NextDiscoveredGateway,
     NextDiscoverNotConnected,
@@ -124,15 +125,18 @@ class NextDiscover:
             _LOGGER.info(f"Trying to get extended device info for device {device.code})")
             family = NextDeviceFamilies.get_by_id(device.family_id)
 
+            param_model      = self._dataset.get_by_address(family.address_model,      family.id) if family.address_model is not None else None
             param_serial     = self._dataset.get_by_address(family.address_serial,     family.id) if family.address_serial is not None else None
             param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id) if family.address_sw_version is not None else None
             param_om_version = self._dataset.get_by_address(family.address_om_version, family.id) if family.address_om_version is not None else None
 
+            value_model      = self._api.request_value(param_model,      device.slave, verbose=verbose)
             value_serial     = self._api.request_value(param_serial,     device.slave, verbose=verbose)
             value_sw_version = self._api.request_value(param_sw_version, device.slave, verbose=verbose)
             value_om_version = self._api.request_value(param_om_version, device.slave, verbose=verbose)
 
-            device.serial       = value_serial # String
+            device.model        = str(value_model) if value_model is not None else None
+            device.serial       = str(value_serial) if value_serial is not None else None
             device.sw_version   = self._decode_sw_version(value_sw_version) # Major.Middle.Minor.Patch
             device.om_version   = self._decode_om_version(value_om_version) # Major.Minor
 

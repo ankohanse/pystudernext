@@ -11,8 +11,7 @@ from pystudernext import NextUserLevel, NextDataType
         ("ViewOnly", "ViewOnly", None, NextUserLevel.VIEWONLY, None),
         ("Basic",    "Basic",    None, NextUserLevel.BASIC,    None),
         ("Expert",   "Expert",   None, NextUserLevel.EXPERT,   None),
-        ("Inst",     "Inst",     None, NextUserLevel.INST,     None),
-        ("QSP",      "QSP",      None, NextUserLevel.QSP,      None),
+        ("Studer",   "Studer",   None, NextUserLevel.STUDER,   None),
 
         ("value",    "Expert",   NextUserLevel.BASIC, NextUserLevel.EXPERT, None),
         ("default",  "xxxxxx",   NextUserLevel.BASIC, NextUserLevel.BASIC,  None),
@@ -44,8 +43,6 @@ def test_level(description:str, inp_str:str, inp_default: NextUserLevel|None, ex
         ("uint64",        "uint64",        None, NextDataType.UINT64,   None),
         ("float64",       "float64",       None, NextDataType.FLOAT64,  None),
         ("string",        "string",        None, NextDataType.STRING,   None),
-        ("bytes",         "bytes",         None, NextDataType.BYTES,    None),
-        ("BYTES",         "BYTES",         None, NextDataType.BYTES,    None),
         ("MENU",          "MENU",          None, NextDataType.MENU,     None),
         ("NOT SUPPORTED", "NOT SUPPORTED", None, NextDataType.INVALID,  None),
 

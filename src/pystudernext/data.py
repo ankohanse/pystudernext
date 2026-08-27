@@ -58,6 +58,7 @@ class NextDiscoveredDevice:
     family_model: str
 
     # Extended info
+    model: str = None       # Model name
     serial: str = None      # Serial number
     sw_version: str = None  # Softwate version
     om_version: str = None  # ObjectModel version
@@ -94,6 +95,8 @@ class NextUserLevel(IntEnum):
 class NextDataType(StrEnum):
     BOOL       = "bool"         # 1 register  / 2 bytes
     SIGNAL     = "signal"       # 1 register  / 2 bytes
+    INT16      = "int16"        # 1 registers / 2 bytes
+    UINT16     = "uint16"       # 1 registers / 2 bytes
     INT        = "int"          # 2 registers / 4 bytes
     UINT       = "uint"         # 2 registers / 4 bytes
     FLOAT      = "float"        # 2 registers / 4 bytes
@@ -111,8 +114,10 @@ class NextDataType(StrEnum):
         match s.lower():
             case 'bool': return NextDataType.BOOL
             case 'signal': return NextDataType.SIGNAL
-            case 'int': return NextDataType.INT
-            case 'uint': return NextDataType.UINT
+            case 'int16': return NextDataType.INT16
+            case 'uint16': return NextDataType.UINT16
+            case 'int32' | 'int': return NextDataType.INT
+            case 'uint32' | 'uint': return NextDataType.UINT
             case 'float': return NextDataType.FLOAT
             case 'enum': return NextDataType.ENUM
             case 'bitfield': return NextDataType.BITFIELD
@@ -133,6 +138,8 @@ class NextDataType(StrEnum):
         match format:
             case NextDataType.BOOL:       return ModbusTcpClient.DATATYPE.UINT16 
             case NextDataType.SIGNAL:     return ModbusTcpClient.DATATYPE.UINT16 
+            case NextDataType.INT16:      return ModbusTcpClient.DATATYPE.INT16  
+            case NextDataType.UINT16:     return ModbusTcpClient.DATATYPE.UINT16 
             case NextDataType.INT:        return ModbusTcpClient.DATATYPE.INT32  
             case NextDataType.UINT:       return ModbusTcpClient.DATATYPE.UINT32 
             case NextDataType.FLOAT:      return ModbusTcpClient.DATATYPE.FLOAT32

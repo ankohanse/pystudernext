@@ -28,6 +28,7 @@ class NextDeviceFamily:
     slaves_start: int       # First possible slave number
     slaves_end: int         # Last possible slave number
     address_discover: int   # Address used to discover presence of the device
+    address_model: int      # Model name
     address_serial: int     # Serial number
     address_sw_version: int # Software version
     address_om_version: int # ObjectModel version
@@ -54,82 +55,91 @@ class NextDeviceFamilies:
 
     TEST = NextDeviceFamily(            # Fake device to be able to test against Victron Cerbo GX
         "tst",              # id
-        "Test",             # model 
+        "Test",             # model (default) 
         100, 100,           # modbus device slaves,  start to end
         800,                # address for discovery
+        None,               # Address for Model
         800,                # address for Serial number
-        None,               # address for Software version
+        834,                # address for Software version
         None,               # address for ObjectModel version
     )
 
     SYSTEM = NextDeviceFamily(
         "sys",              # id
-        "System",           # model 
+        "System",           # model (default) 
         1, 1,               # modbus device slaves,  start to end
-        2103,               # address for discovery
+        1200,               # address for discovery
+        None,               # Address for Model
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version
     )
     BATTERY = NextDeviceFamily(
         "bat",              # id
-        "Battery",          # model 
+        "Battery",          # model (default) 
         2, 6,               # modbus device slaves,  start to end
         0,                  # address for discovery
+        395,                # Address for Model
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version
     )
     AC_SOURCE = NextDeviceFamily(
         "acs",              # id
-        "AC Source",        # model 
+        "AC Source",        # model (default) 
         7, 8,               # modbus device slaves,  start to end
         0,                  # address for discovery
+        None,               # Address for Model
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version
     )
     AC_FLEX_LOAD = NextDeviceFamily(
         "flx",              # id
-        "AC FlexLoad",      # model 
+        "AC FlexLoad",      # model (default) 
         9, 13,              # modbus device slaves,  start to end
         0,                  # address for discovery
+        None,               # Address for Model
         None,               # address for Serial number
         None,               # address for Software version
         None,               # address for ObjectModel version
     )
     NEXT3 = NextDeviceFamily(
         "nx3",              # id
-        "Next3",            # model 
+        "Next3",            # model (default)
         14, 28,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        None,               # Address for Model
         4,                  # address for Serial number
         14,                 # address for Software version
         30,                 # address for ObjectModel version
     )
     NEXT1 = NextDeviceFamily(
         "nx1",              # id
-        "Next1",            # model 
+        "Next1",            # model (default)
         29, 58,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        None,               # Address for Model
         4,                  # address for Serial number
         14,                 # address for Software version
         30,                 # address for ObjectModel version
     )
     NEXT_GATEWAY = NextDeviceFamily(
         "nxg",              # id
-        "Next Gateway",     # model 
+        "Next Gateway",     # model (default)
         59, 60,             # modbus device slaves,  start to end
         4,                  # address for discovery
+        None,               # Address for Model
         4,                  # address for Serial number
         14,                 # address for Software version
         30,                 # address for ObjectModel version
     )
     NEXT_POWERMETER = NextDeviceFamily(
         "pwr",             # id
-        "Powermeter",      # model 
+        "Powermeter",      # model (default)
         89, 94,            # modbus device slaves,  start to end
-        None,              # address for discovery
+        0,                 # address for discovery
+        0,                 # Address for Model
         None,              # address for Serial number
         None,              # address for Software version
         None,              # address for ObjectModel version
