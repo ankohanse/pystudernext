@@ -5,6 +5,7 @@ import pytest_asyncio
 
 from pystudernext import (
     NextDataset, 
+    NextDatasetFlag,
     NextDataType, 
     NextDatapointUnknownException,
     NextParamException,
@@ -14,14 +15,18 @@ from pystudernext import (
 from pystudernext.families import NextDeviceFamilies
 
 
+FLAGS_DEFAULT = None
+FLAGS_TEST = { NextDatasetFlag.ADD_TEST_DATAPOINTS: True }
+
 @pytest.mark.parametrize(
-    "exp_len",
+    "name, flags, exp_len",
     [
-        (2039),
+        ("default", FLAGS_DEFAULT, 2034),
+        ("test",    FLAGS_TEST,    2039)
     ]
 )
-def test_create(exp_len):
-    dataset = NextFactory.create_dataset()    
+def test_create(name, flags, exp_len):
+    dataset = NextFactory.create_dataset(flags)    
 
     assert len(dataset._datapoints) == exp_len
 

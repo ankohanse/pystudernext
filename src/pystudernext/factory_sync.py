@@ -14,6 +14,7 @@ from .datapoints import (
     NextDatapointEnum,
     NextDatapointEnumNotFoundException,
     NextDataset,
+    NextDatasetFlag,
 )
 
 
@@ -23,14 +24,21 @@ _LOGGER = logging.getLogger(__name__)
 class NextFactory:
 
     @staticmethod
-    def create_dataset() -> NextDataset:
+    def create_dataset(flags:dict=None) -> NextDataset:
         """
         The actual NextDataset list is kept in separate json files to reduce the memory size needed to load the integration.
         The list is only loaded during config flow and during initial startup, and then released again.
         """
+        flags = flags or {}
         datapoints = list()
+        add_test_datapoints = flags.get(NextDatasetFlag.ADD_TEST_DATAPOINTS, False)
 
         for (item_path, enum_path) in NextDataset.PATHS:
+
+            # Normally we skip the test family
+            if not add_test_datapoints and 'tst' in item_path:
+                continue
+
             with open(item_path, "r", encoding="UTF-8") as item_file:
                 item_text = item_file.read()
 

@@ -2,6 +2,7 @@
 Definition of all parameters / constants used in the Next protocol
 """
 
+from enum import StrEnum
 import logging
 
 from dataclasses import dataclass
@@ -205,6 +206,11 @@ class NextDatapointEnum:
             enum_id = enum_id, 
             options = options
         )
+
+
+class NextDatasetFlag(StrEnum):
+    """Extra flags to pass to Api"""
+    ADD_TEST_DATAPOINTS     = "add_test_datapoints"       # bool
 
 
 class NextDataset:

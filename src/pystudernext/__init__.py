@@ -9,8 +9,9 @@ from .const import DEFAULT_HOST, DEFAULT_PORT
 from .data import NextDiscoveredGateway, NextDiscoveredDevice
 from .data import NextUserLevel, NextDataType
 from .data import NextApiConnectException, NextApiTimeoutException, NextPackException, NextUnpackException, NextDiscoverNotConnected, NextParamException
-from .datapoints import NextDataset, NextDatapoint, NextDatapointUnknownException
+from .datapoints import NextDataset, NextDatasetFlag, NextDatapoint, NextDatapointUnknownException
 from .families import NextDeviceFamily, NextDeviceFamilies, NextDeviceFamilyUnknownException, NextDeviceCodeUnknownException, NextDeviceSlaveUnknownException
 
 # For unit testing
+from .datapoints import NextDatapointSyntaxException, NextDatapointEnumNotFoundException
 
