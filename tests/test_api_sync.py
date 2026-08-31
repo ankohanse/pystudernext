@@ -8,27 +8,41 @@ import pytest_asyncio
 from datetime import datetime
 from pymodbus.pdu import ModbusPDU
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
+from pymodbus.pdu.utils import unpack_bitstring
 
 from pystudernext import AsyncNextFactory, NextFactory
-from pystudernext import NextDataType
+from pystudernext import NextDataType, NextDiscoveredDevice
 from pystudernext import NextParamException
 
 from . import AsyncNextApiStub, NextApiStub
 
+DEVICE_NX3_1 = NextDiscoveredDevice(
+    code = 'NX3_1',
+    slave = 14,
+    family_id = 'nx3',
+    family_model = 'Next3',
+)
 
 @pytest.mark.parametrize(
-    "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
+    "name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except",
     [
-        ("request bool ok",      'sys', 1,  2121, True,   NextDataType.BOOL, None),
-        ("request int ok",       'sys', 1,  2122, 1234,   NextDataType.INT, None),
-        ("request uint ok",      'nx3', 14, 14,   1234,   NextDataType.UINT, None),
-        ("request float ok",     'sys', 1,  3908, 1234.0, NextDataType.FLOAT, None),
-        ("request float64 ok",   'sys', 1,  3924, 1234.0, NextDataType.FLOAT64, None),
-        ("request string ok",    'sys', 1,  2103, "00112233-4455-6677-8899-aabbccddeeff", NextDataType.STRING, None),
-        ("request signal fail",  "bat", 2,  435,  None,   NextDataType.SIGNAL, NextParamException)      # Not readable
+        ("request bool ok",      'sys', 1,  2121, NextDataType.BOOL, True,   True, 1, None),
+        ("request int ok",       'sys', 1,  2122, NextDataType.INT,  1234,   1234, 1, None),
+        ("request uint ok",      'nx3', 14, 30,   NextDataType.UINT, 1234,   1234, 14, None),
+        ("request float ok",     'sys', 1,  3908, NextDataType.FLOAT, 1234.0, 1234.0, 1, None),
+        ("request float64 ok",   'sys', 1,  3924, NextDataType.FLOAT64, 1234.0, 1234.0, 1, None),
+        ("request string ok",    'sys', 1,  2103, NextDataType.STRING, "00112233-4455-6677-8899-aabbccddeeff", "00112233-4455-6677-8899-aabbccddeeff", 1, None),
+        ("request enum ok",      'sys', 1,  1200, NextDataType.ENUM,   1, "Solid neutral", 1, None),
+        ("request bitfield ok",  'sys', 1,  1205, NextDataType.BITFIELD, 0, ["End of error"], 1, None),
+        ("request bitfield ok",  'sys', 1,  1205, NextDataType.BITFIELD, 48, ["Earth supply error","Grid connection timeout"], 1, None),
+        ("request signal fail",  "bat", 2,  435,  NextDataType.SIGNAL, None, None, 2, NextParamException),      # Not readable
+        ("request slave ok",     'nx3', 14,           30, NextDataType.UINT, 1234, 1234, 14, None),
+        ("request code ok",      'nx3', 'NX3_1',      30, NextDataType.UINT, 1234, 1234, 14, None),
+        ("request device ok",    'nx3', DEVICE_NX3_1, 30, NextDataType.UINT, 1234, 1234, 14, None),
+        ("request slave fail",   'nx3', None,         30, NextDataType.UINT, 1234, 1234, 14, NextParamException),
     ]
 )
-def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):
+def test_request_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except):
 
     read_called = False
     read_address = None
@@ -41,6 +55,8 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
         nonlocal read_address
         nonlocal read_count
         nonlocal read_slave
+        nonlocal test_value
+        nonlocal test_format
 
         read_called = True
         read_address = address
@@ -48,6 +64,9 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
         read_slave = slave
 
         data_type = NextDataType.to_datatype(test_format)
+        if data_type == ModbusTcpClient.DATATYPE.BITS:
+            test_value = unpack_bitstring( [test_value] )
+
         registers = ModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
 
         return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
@@ -61,11 +80,11 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
         rsp_value = api.request_value(param, test_slave)
 
         assert read_called
-        assert read_slave == test_slave
+        assert read_slave == exp_slave
         assert read_address == param.address
         assert read_count == param.size
 
-        assert rsp_value == test_value
+        assert rsp_value == exp_value
 
     else:
         with pytest.raises(exp_except):
@@ -73,18 +92,23 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_value, test_f
 
 
 @pytest.mark.parametrize(
-    "name, test_fam, test_slave, test_addr, test_value, test_format, exp_except",
+    "name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except",
     [
-        ("request bool ok",      'sys', 1,  1202, True,   NextDataType.BOOL, None),
-        ("request int ok",       'nx3', 14, 8710, 1234,   NextDataType.INT, None),
-        ("request uint ok",      'nx3', 14, 7505, 1234,   NextDataType.UINT, None),
-        ("request float ok",     'sys', 1,  2719, 1234.0, NextDataType.FLOAT, None),
-        ("request float64 ok",   'sys', 1,  3920, 1234.0, NextDataType.FLOAT64, None),
-        ("request string ok",    'nxg', 59, 4800, "1234", NextDataType.STRING, None),
-        ("request bool fail",    'sys', 1,  1203, True,   NextDataType.BOOL, NextParamException),   # Readonly
+        ("update bool ok",      'sys', 1,  1202, NextDataType.BOOL, True,   1, None),
+        ("update int ok",       'nx3', 14, 8710, NextDataType.INT, 1234,   14, None),
+        ("update uint ok",      'nx3', 14, 7505, NextDataType.UINT, 1234,   14, None),
+        ("update float ok",     'sys', 1,  2719, NextDataType.FLOAT, 1234.0, 1, None),
+        ("update float64 ok",   'sys', 1,  3920, NextDataType.FLOAT64, 1234.0, 1, None),
+        ("update string ok",    'nxg', 59, 4800, NextDataType.STRING, "1234", 59, None),
+        ("update enum ok",      'sys', 1,  1200, NextDataType.ENUM,   1, 1, None),
+        ("update bool fail",    'sys', 1,  1203, NextDataType.BOOL, True,   1, NextParamException),   # Readonly
+        ("update slave ok",     'nx3', 14,           7505, NextDataType.UINT, 1234, 14, None),
+        ("update code ok",      'nx3', 'NX3_1',      7505, NextDataType.UINT, 1234, 14, None),
+        ("update device ok",    'nx3', DEVICE_NX3_1, 7505, NextDataType.UINT, 1234, 14, None),
+        ("update slave fail",   'nx3', None,         7505, NextDataType.UINT, 1234, 14, NextParamException),
     ]
 )
-def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_format, exp_except):
+def test_write_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except):
 
     write_called = False
     write_address = None
@@ -114,7 +138,7 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_value, test_for
         rsp_value = api.update_value(param, test_value, test_slave)
 
         assert write_called
-        assert write_slave == test_slave
+        assert write_slave == exp_slave
         assert write_address == param.address
         assert write_regs is not None
 

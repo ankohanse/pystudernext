@@ -151,7 +151,7 @@ class NextApi:
 
             match parameter.data_type:
                 case NextDataType.ENUM: return parameter.enum_value(value)
-                case NextDataType.BITFIELD: return value    # TODO: turn bits into ';' separaterd list
+                case NextDataType.BITFIELD: return parameter.bitfield_value(value)
                 case _: return value
 
         except Exception as e:

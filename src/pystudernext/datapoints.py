@@ -161,7 +161,7 @@ class NextDatapoint:
 
             
     def enum_value(self, key):
-        if self.data_type not in [NextDataType.ENUM, NextDataType.BITFIELD]:
+        if self.data_type not in [NextDataType.ENUM]:
             return None
         
         key = str(key)
@@ -171,7 +171,7 @@ class NextDatapoint:
             return self.enum_options[key]
     
     def enum_key(self, value):
-        if self.data_type not in [NextDataType.ENUM, NextDataType.BITFIELD]:
+        if self.data_type not in [NextDataType.ENUM]:
             return None
         
         if not isinstance(self.enum_options, dict) or value not in self.enum_options.values():
@@ -180,6 +180,26 @@ class NextDatapoint:
             key = next((key for key,val in self.enum_options.items() if val==value), None)
             return int(key)
 
+
+    def bitfield_value(self, bits:list[bool]):
+        if self.data_type not in [NextDataType.BITFIELD]:
+            return None
+
+        if not isinstance(bits, list):
+            raise NextParamException(f"Unexpected key {bits} ({type(bits)}) while decoding bitfield; family={self.family_id}, address={self.address}, type={self.data_type}")
+
+        result = []
+        if not any(bits):
+            result.append( self.enum_options.get('0', None) )
+        else:
+            key = 1
+            for bit in bits:
+                if bit:
+                    result.append( self.enum_options.get(str(key), None) )
+                key = key * 2
+
+        return list(filter(None, result))
+                                
 
 @dataclass
 class NextDatapointEnum:

@@ -84,6 +84,7 @@ async def test_enum():
     dataset = await AsyncNextFactory.create_dataset()
 
     param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
+    assert param.data_type == NextDataType.ENUM
     assert param.enum_options != None
     assert type(param.enum_options) is dict
     assert len(param.enum_options) == 5
@@ -97,6 +98,26 @@ async def test_enum():
     assert param.enum_key("Unknown") == None
     assert param.enum_key(9) == None
     assert param.enum_key("9") == None
+
+
+async def test_bitfield():
+    dataset = await AsyncNextFactory.create_dataset()
+
+    param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM)
+    assert param.data_type == NextDataType.BITFIELD
+    assert param.enum_options != None
+    assert type(param.enum_options) is dict
+    assert len(param.enum_options) == 10
+
+    assert param.bitfield_value([False,False,False,False,False,False,False,False]) == ["End of error"]
+    assert param.bitfield_value([False,False,True, False,False,False,False,False]) == ["Relay continuity failed"]
+    assert param.bitfield_value([False,False,True, True, False,False,False,False]) == ["Relay continuity failed","Discontinuity failed"]
+
+    with pytest.raises(NextParamException):
+        param.bitfield_value(None)
+
+    with pytest.raises(NextParamException):
+        param.bitfield_value(0)
 
 
 @pytest.mark.parametrize(

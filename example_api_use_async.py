@@ -55,7 +55,7 @@ async def main():
         logger.info(f"BAT_1 {param_0318.address}: {value} {param_0318.unit or ''} ({param_0318.name})")
 
         value = await api.request_value(param_5100, "NX3_1")  # Next3 slave range is 14 to 28, or use "NX3_1" to "NX3_15"
-        logger.info(f"NZ3_1 {param_5100.address}: {param_5100.enum_value(value)} {param_5100.unit or ''} ({param_5100.name})")
+        logger.info(f"NZ3_1 {param_5100.address}: {value} {param_5100.unit or ''} ({param_5100.name})")
 
         value = await api.request_value(param_6900, "NX3_1")  # Next3 slave range is 14 to 28, or use "NX3_1" to "NX3_15"
         logger.info(f"NZ3_1 {param_6900.address}: {value} {param_6900.unit or ''} ({param_6900.name})")
