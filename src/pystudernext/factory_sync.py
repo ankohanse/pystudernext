@@ -9,10 +9,12 @@ import orjson
 
 from aiofiles import open as aiofiles_open
 
+from .shared.dataset import (
+    StuderDatapointEnumNotFoundException,
+)
 from .datapoints import (
     NextDatapoint,
     NextDatapointEnum,
-    NextDatapointEnumNotFoundException,
     NextDataset,
     NextDatasetFlag,
 )
@@ -67,7 +69,7 @@ class NextFactory:
                     enum_id = f"{dp.parent_id}.enum{dp.enum_id}"
                     enum_def = next( (e for e in item_enums if e.enum_id==enum_id), None)
                     if enum_def is None:
-                        raise NextDatapointEnumNotFoundException(f"Missing definition for enum {dp.enum_id}; fam={dp.family_id}, pid={dp.parent_id}, addr={dp.address}")
+                        raise StuderDatapointEnumNotFoundException(f"Missing definition for enum {dp.enum_id}; fam={dp.family_id}, pid={dp.parent_id}, addr={dp.address}")
 
                     dp.enum_options = enum_def.options
 

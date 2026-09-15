@@ -13,17 +13,29 @@ import struct
 
 from dataclasses import dataclass
 
+from .shared.interfaces_async import (
+    AsyncStuderDiscover,
+)
+from .shared.interfaces_sync import (
+    StuderDiscover,
+)
+from .shared.dataset import (
+    StuderDataset,
+    StuderDatapoint,
+    StuderDatapointUnknownException,
+    StuderDatapointSyntaxException,
+)
+from .shared.types import (
+    StuderDataType,
+    StuderDiscoveredDevice,
+    StuderDiscoveredGateway,
+    StuderDiscoverNotConnected,
+)
 from .api_async import (
     AsyncNextApi,
 )
 from .api_sync import (
     NextApi,
-)
-from .data import (
-    NextDataType,
-    NextDiscoveredDevice,
-    NextDiscoveredGateway,
-    NextDiscoverNotConnected,
 )
 from .datapoints import (
     NextDatapoint,
@@ -39,9 +51,9 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
-class NextDiscover:
+class NextDiscover(StuderDiscover):
 
-    def __init__(self, api: NextApi, dataset: NextDataset):
+    def __init__(self, api: NextApi, dataset: StuderDataset):
         """
         We connect to the NX Gateway.
         Once it is connected we can send package requests.
@@ -50,15 +62,15 @@ class NextDiscover:
         self._dataset = dataset
 
 
-    def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[NextDiscoveredDevice]:
+    def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[StuderDiscoveredDevice]:
         """
         Discover which Studer devices can be reached via the Next client
         """
-        devices: list[NextDiscoveredDevice] = []
+        devices: list[StuderDiscoveredDevice] = []
 
         # Sanity check
         if not self._api.connected:
-            raise NextDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
+            raise StuderDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
         
         # Check presence of devices for each family
         for family in NextDeviceFamilies.get_list():
@@ -94,7 +106,7 @@ class NextDiscover:
                     if value is not None:
                         _LOGGER.info(f"  Found device {device_code}")
 
-                        device = NextDiscoveredDevice(device_code, device_slave, family.id, family.model)
+                        device = StuderDiscoveredDevice(device_code, device_slave, family.id, family.model)
                         if getExtendedInfo:
                             device = self.get_extended_device_info(device, verbose=verbose)
                         
@@ -111,7 +123,7 @@ class NextDiscover:
         return devices
 
 
-    def get_extended_device_info(self, device: NextDiscoveredDevice, verbose=False) -> NextDiscoveredDevice:
+    def get_extended_device_info(self, device: StuderDiscoveredDevice, verbose=False) -> StuderDiscoveredDevice:
         """
         Rough code taken from pystuderxcom.
         Still needs to have appropriate datapoint names set.
@@ -170,17 +182,17 @@ class NextDiscover:
         return f"{int.from_bytes(bytes[0:2], byteorder='big')}.{int.from_bytes(bytes[2:4], byteorder='big')}"
 
 
-    def discover_gateway_info(self, verbose=False) -> NextDiscoveredGateway:
+    def discover_gateway_info(self, verbose=False) -> StuderDiscoveredGateway:
         """
         Discover extended info about the remote NX Gateway we're connected to
         """
 
         # Sanity checks
         if not self._api.connected:
-            raise NextDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
+            raise StuderDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
 
         if not self._api.remote_host:
-            raise NextDiscoverNotConnected("No IP address was detected for the remote NX Gateway")
+            raise StuderDiscoverNotConnected("No IP address was detected for the remote NX Gateway")
 
         _LOGGER.info(f"Trying to get gateway info")
         gateway_host = None
@@ -205,7 +217,7 @@ class NextDiscover:
         except Exception as e:
             _LOGGER.warning(f"  Exception in discover_gateway_info: {e}")
 
-        return NextDiscoveredGateway(
+        return StuderDiscoveredGateway(
             host = gateway_host,
             port = gateway_port,
             guid = gateway_guid,

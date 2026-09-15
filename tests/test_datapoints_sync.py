@@ -6,11 +6,11 @@ import pytest_asyncio
 from pystudernext import (
     NextDataset, 
     NextDatasetFlag,
-    NextDataType, 
-    NextDatapointUnknownException,
-    NextParamException,
     AsyncNextFactory,
     NextFactory,
+    StuderDataType, 
+    StuderDatapointUnknownException,
+    StuderParamException,
 )
 from pystudernext.families import NextDeviceFamilies
 
@@ -34,31 +34,31 @@ def test_create(name, flags, exp_len):
 def test_address():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
+    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3.id)
     assert param.family_id == "nx3"
     assert param.address == 6900
-    assert param.data_type == NextDataType.FLOAT
+    assert param.data_type == StuderDataType.FLOAT32
 
     param = dataset.get_by_address(5100, 'nx3')
     assert param.family_id == "nx3"
     assert param.address == 5100
-    assert param.data_type == NextDataType.ENUM
+    assert param.data_type == StuderDataType.ENUM32
     assert param.enum_options != None
     assert type(param.enum_options) is dict
     assert len(param.enum_options) == 4
 
-    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM)
+    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM.id)
     assert param.family_id == "sys"
     assert param.address == 1200
-    assert param.data_type == NextDataType.ENUM
+    assert param.data_type == StuderDataType.ENUM32
     assert param.enum_options != None
     assert type(param.enum_options) is dict
 
-    with pytest.raises(NextDatapointUnknownException):
+    with pytest.raises(StuderDatapointUnknownException):
         param = dataset.get_by_address(9999, 'sys')
 
-    with pytest.raises(NextDatapointUnknownException):
-        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY)
+    with pytest.raises(StuderDatapointUnknownException):
+        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY.id)
 
 
 def test_id():
@@ -67,26 +67,26 @@ def test_id():
     param = dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
     assert param.family_id == "sys"
     assert param.address == 2103
-    assert param.data_type == NextDataType.STRING
+    assert param.data_type == StuderDataType.STRING
 
-    with pytest.raises(NextParamException):
+    with pytest.raises(StuderParamException):
         param = dataset.get_by_id(None)
 
-    with pytest.raises(NextDatapointUnknownException):
+    with pytest.raises(StuderDatapointUnknownException):
         param = dataset.get_by_id("")
 
-    with pytest.raises(NextDatapointUnknownException):
+    with pytest.raises(StuderDatapointUnknownException):
         param = dataset.get_by_id("9.9.9.9")
 
-    with pytest.raises(NextDatapointUnknownException):
+    with pytest.raises(StuderDatapointUnknownException):
         param = dataset.get_by_id("dummy")
 
 
 def test_enum():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
-    assert param.data_type == NextDataType.ENUM
+    param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM.id)
+    assert param.data_type == StuderDataType.ENUM32
     assert param.enum_options != None
     assert type(param.enum_options) is dict
     assert len(param.enum_options) == 5
@@ -105,8 +105,8 @@ def test_enum():
 def test_bitfield():
     dataset = NextFactory.create_dataset()
 
-    param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM)
-    assert param.data_type == NextDataType.BITFIELD
+    param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM.id)
+    assert param.data_type == StuderDataType.BITFIELD
     assert param.enum_options != None
     assert type(param.enum_options) is dict
     assert len(param.enum_options) == 10
@@ -115,10 +115,10 @@ def test_bitfield():
     assert param.bitfield_value([False,False,True, False,False,False,False,False]) == ["Relay continuity failed"]
     assert param.bitfield_value([False,False,True, True, False,False,False,False]) == ["Relay continuity failed","Discontinuity failed"]
 
-    with pytest.raises(NextParamException):
+    with pytest.raises(StuderParamException):
         param.bitfield_value(None)
 
-    with pytest.raises(NextParamException):
+    with pytest.raises(StuderParamException):
         param.bitfield_value(0)
 
 
@@ -133,14 +133,14 @@ def test_bitfield():
         ("nx1", 23),
         ("nxg", 33),
         ("pwr",  0),
-        (NextDeviceFamilies.SYSTEM,          25),
-        (NextDeviceFamilies.BATTERY,          5),
-        (NextDeviceFamilies.AC_SOURCE,        8),
-        (NextDeviceFamilies.AC_FLEX_LOAD,    14),
-        (NextDeviceFamilies.NEXT3,           33),
-        (NextDeviceFamilies.NEXT1,           23),
-        (NextDeviceFamilies.NEXT_GATEWAY,    33),
-        (NextDeviceFamilies.NEXT_POWERMETER,  0),
+        (NextDeviceFamilies.SYSTEM.id,          25),
+        (NextDeviceFamilies.BATTERY.id,          5),
+        (NextDeviceFamilies.AC_SOURCE.id,        8),
+        (NextDeviceFamilies.AC_FLEX_LOAD.id,    14),
+        (NextDeviceFamilies.NEXT3.id,           33),
+        (NextDeviceFamilies.NEXT1.id,           23),
+        (NextDeviceFamilies.NEXT_GATEWAY.id,    33),
+        (NextDeviceFamilies.NEXT_POWERMETER.id,  0),
     ]
 )
 def test_menu(family_id, exp_len):

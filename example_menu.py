@@ -13,8 +13,8 @@ import sys
 
 from pystudernext import AsyncNextFactory
 from pystudernext import NextFactory
-from pystudernext import NextDataType
 from pystudernext import NextDeviceFamilies
+from pystudernext import StuderDataType
 from helper import RunHelper
 
 # Setup logging to StdOut
@@ -30,7 +30,7 @@ def main():
     def print_menu(family_id, parent_id, indent=""):
         items = dataset.get_menu_items(family_id, parent_id)
         for item in items:
-            if item.data_type == NextDataType.MENU:
+            if item.data_type == StuderDataType.MENU:
                 logger.info(f"{indent}{item.label}")
 
                 print_menu(family_id, item.id, indent+"  ")

@@ -17,7 +17,6 @@ from pystudernext import AsyncNextApi, NextApi
 from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDeviceFamilies
 from pystudernext import NextDataset, NextDatapoint
-from pystudernext import NextDataType
 from pystudernext import DEFAULT_PORT
 from helper import RunHelper
 

@@ -1,7 +1,7 @@
 
 import pytest
 from pystudernext import NextDeviceFamilies
-from pystudernext import NextDeviceFamilyUnknownException, NextDeviceCodeUnknownException, NextDeviceSlaveUnknownException, NextParamException
+from pystudernext import NextDeviceFamilyUnknownException, NextDeviceCodeUnknownException, NextDeviceSlaveUnknownException
 
 
 def test_list():

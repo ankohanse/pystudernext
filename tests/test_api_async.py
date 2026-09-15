@@ -9,14 +9,15 @@ from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from pymodbus.pdu.utils import unpack_bitstring
 
 from pystudernext import AsyncNextFactory, NextFactory
-from pystudernext import NextDataType, NextDiscoveredDevice
-from pystudernext import NextParamException
+from pystudernext import StuderParamException
+from pystudernext import StuderDataType, StuderDiscoveredDevice
+from pystudernext import NextDataType
 
 from . import AsyncNextApiStub, NextApiStub
 
-DEVICE_NX3_1 = NextDiscoveredDevice(
+DEVICE_NX3_1 = StuderDiscoveredDevice(
     code = 'NX3_1',
-    slave = 14,
+    address_or_slave = 14,
     family_id = 'nx3',
     family_model = 'Next3',
 )
@@ -24,20 +25,20 @@ DEVICE_NX3_1 = NextDiscoveredDevice(
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except",
     [
-        ("request bool ok",      'sys', 1,  2121, NextDataType.BOOL, True,   True, 1, None),
-        ("request int ok",       'sys', 1,  2122, NextDataType.INT,  1234,   1234, 1, None),
-        ("request uint ok",      'nx3', 14, 30,   NextDataType.UINT, 1234,   1234, 14, None),
-        ("request float ok",     'sys', 1,  3908, NextDataType.FLOAT, 1234.0, 1234.0, 1, None),
-        ("request float64 ok",   'sys', 1,  3924, NextDataType.FLOAT64, 1234.0, 1234.0, 1, None),
-        ("request string ok",    'sys', 1,  2103, NextDataType.STRING, "00112233-4455-6677-8899-aabbccddeeff", "00112233-4455-6677-8899-aabbccddeeff", 1, None),
-        ("request enum ok",      'sys', 1,  1200, NextDataType.ENUM,   1, "Solid neutral", 1, None),
-        ("request bitfield ok",  'sys', 1,  1205, NextDataType.BITFIELD, 0, ["End of error"], 1, None),
-        ("request bitfield ok",  'sys', 1,  1205, NextDataType.BITFIELD, 48, ["Earth supply error","Grid connection timeout"], 1, None),
-        ("request signal fail",  "bat", 2,  435,  NextDataType.SIGNAL, None, None, 2, NextParamException),      # Not readable
-        ("request slave ok",     'nx3', 14,           30, NextDataType.UINT, 1234, 1234, 14, None),
-        ("request code ok",      'nx3', 'NX3_1',      30, NextDataType.UINT, 1234, 1234, 14, None),
-        ("request device ok",    'nx3', DEVICE_NX3_1, 30, NextDataType.UINT, 1234, 1234, 14, None),
-        ("request slave fail",   'nx3', None,         30, NextDataType.UINT, 1234, 1234, 14, NextParamException),
+        ("request bool ok",      'sys', 1,  2121, StuderDataType.BOOL, True,   True, 1, None),
+        ("request int ok",       'sys', 1,  2122, StuderDataType.INT32,  1234,   1234, 1, None),
+        ("request uint ok",      'nx3', 14, 30,   StuderDataType.UINT32, 1234,   1234, 14, None),
+        ("request float ok",     'sys', 1,  3908, StuderDataType.FLOAT32, 1234.0, 1234.0, 1, None),
+        ("request float64 ok",   'sys', 1,  3924, StuderDataType.FLOAT64, 1234.0, 1234.0, 1, None),
+        ("request string ok",    'sys', 1,  2103, StuderDataType.STRING, "00112233-4455-6677-8899-aabbccddeeff", "00112233-4455-6677-8899-aabbccddeeff", 1, None),
+        ("request enum ok",      'sys', 1,  1200, StuderDataType.ENUM32,   1, "Solid neutral", 1, None),
+        ("request bitfield ok",  'sys', 1,  1205, StuderDataType.BITFIELD, 0, ["End of error"], 1, None),
+        ("request bitfield ok",  'sys', 1,  1205, StuderDataType.BITFIELD, 48, ["Earth supply error","Grid connection timeout"], 1, None),
+        ("request signal fail",  "bat", 2,  435,  StuderDataType.SIGNAL, None, None, 2, StuderParamException),      # Not readable
+        ("request slave ok",     'nx3', 14,           30, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("request code ok",      'nx3', 'NX3_1',      30, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("request device ok",    'nx3', DEVICE_NX3_1, 30, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("request slave fail",   'nx3', None,         30, StuderDataType.UINT32, 1234, 1234, 14, StuderParamException),
     ]
 )
 async def test_request_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except):
@@ -92,18 +93,18 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_format,
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except",
     [
-        ("update bool ok",      'sys', 1,  1202, NextDataType.BOOL, True,   1, None),
-        ("update int ok",       'nx3', 14, 8710, NextDataType.INT, 1234,   14, None),
-        ("update uint ok",      'nx3', 14, 7505, NextDataType.UINT, 1234,   14, None),
-        ("update float ok",     'sys', 1,  2719, NextDataType.FLOAT, 1234.0, 1, None),
-        ("update float64 ok",   'sys', 1,  3920, NextDataType.FLOAT64, 1234.0, 1, None),
-        ("update string ok",    'nxg', 59, 4800, NextDataType.STRING, "1234", 59, None),
-        ("update enum ok",      'sys', 1,  1200, NextDataType.ENUM,   1, 1, None),
-        ("update bool fail",    'sys', 1,  1203, NextDataType.BOOL, True,   1, NextParamException),   # Readonly
-        ("update slave ok",     'nx3', 14,           7505, NextDataType.UINT, 1234, 14, None),
-        ("update code ok",      'nx3', 'NX3_1',      7505, NextDataType.UINT, 1234, 14, None),
-        ("update device ok",    'nx3', DEVICE_NX3_1, 7505, NextDataType.UINT, 1234, 14, None),
-        ("update slave fail",   'nx3', None,         7505, NextDataType.UINT, 1234, 14, NextParamException),
+        ("update bool ok",      'sys', 1,  1202, StuderDataType.BOOL, True,   1, None),
+        ("update int ok",       'nx3', 14, 8710, StuderDataType.INT32, 1234,   14, None),
+        ("update uint ok",      'nx3', 14, 7505, StuderDataType.UINT32, 1234,   14, None),
+        ("update float ok",     'sys', 1,  2719, StuderDataType.FLOAT32, 1234.0, 1, None),
+        ("update float64 ok",   'sys', 1,  3920, StuderDataType.FLOAT64, 1234.0, 1, None),
+        ("update string ok",    'nxg', 59, 4800, StuderDataType.STRING, "1234", 59, None),
+        ("update enum ok",      'sys', 1,  1200, StuderDataType.ENUM32,   1, 1, None),
+        ("update bool fail",    'sys', 1,  1203, StuderDataType.BOOL, True,   1, StuderParamException),   # Readonly
+        ("update slave ok",     'nx3', 14,           7505, StuderDataType.UINT32, 1234, 14, None),
+        ("update code ok",      'nx3', 'NX3_1',      7505, StuderDataType.UINT32, 1234, 14, None),
+        ("update device ok",    'nx3', DEVICE_NX3_1, 7505, StuderDataType.UINT32, 1234, 14, None),
+        ("update slave fail",   'nx3', None,         7505, StuderDataType.UINT32, 1234, 14, StuderParamException),
     ]
 )
 async def test_write_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except):

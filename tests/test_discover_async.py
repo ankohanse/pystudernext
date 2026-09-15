@@ -100,7 +100,7 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
         assert device.family_id is not None
         assert device.family_model is not None
 
-        assert device.model is None
+        assert device.device_model is None
         assert device.serial is None
         assert device.sw_version is None
         assert device.om_version is None

@@ -9,20 +9,23 @@ from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
 
+from .shared.types import (
+    StuderAccess,
+    StuderDataType,
+    StuderDiscoveredDevice,
+    StuderParamException,
+)
 from .const import (
     DEFAULT_HOST,
     DEFAULT_PORT,
 )
 from .data import (
+    NextDataType,
     NextApiConnectException,
     NextApiReadException,
     NextApiUpdateException,
-    NextDataType,
     NextPackException,
-    NextParamException,
-    NextRW,
     NextUnpackException,
-    NextDiscoveredDevice,
 )
 from .datapoints import (
     NextDatapoint,
@@ -100,14 +103,14 @@ class AsyncNextApi:
         return self._port
     
 
-    async def request_value(self, parameter: NextDatapoint, device: NextDiscoveredDevice=None, retries = None, timeout = None, verbose=False):
+    async def request_value(self, parameter: NextDatapoint, device: StuderDiscoveredDevice=None, retries = None, timeout = None, verbose=False):
         """
         Request a parameter.
         One of device, slave or code needs to be passed.
         Returns None if not connected, otherwise returns the requested value
 
         Throws
-            NextParamException
+            StuderParamException
             NextApiConnectException
             NextApiTimeoutException
             NextUnpackException
@@ -117,17 +120,17 @@ class AsyncNextApi:
         if parameter is None:
             return None
             
-        if parameter.read_write not in [NextRW.READ, NextRW.READ_WRITE]:
-            raise NextParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not readable")
+        if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
+            raise StuderParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not readable")
             
-        if isinstance(device, NextDiscoveredDevice):
+        if isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
             slave = NextDeviceFamilies.get_slave_by_code(code=device)
         else:
-            raise NextParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
+            raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
 
         # Send the request
         try:
@@ -148,21 +151,21 @@ class AsyncNextApi:
             value = AsyncModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
 
             match parameter.data_type:
-                case NextDataType.ENUM: return parameter.enum_value(value)
-                case NextDataType.BITFIELD: return parameter.bitfield_value(value)
+                case StuderDataType.ENUM32: return parameter.enum_value(value)
+                case StuderDataType.BITFIELD: return parameter.bitfield_value(value)
                 case _: return value
 
         except Exception as e:
             raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
 
 
-    async def update_value(self, parameter: NextDatapoint, value: Any, device: NextDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):
+    async def update_value(self, parameter: NextDatapoint, value: Any, device: StuderDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):
         """
         Update a parameter
         Returns None if not connected, otherwise returns True on success
 
         Throws
-            NextParamException
+            StuderParamException
             NextApiConnectException
             NextApiTimeoutException
             NextPackException
@@ -171,17 +174,17 @@ class AsyncNextApi:
         if parameter is None or value is None:
             return None
 
-        if parameter.read_write not in [NextRW.WRITE, NextRW.READ_WRITE]:
-            raise NextParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not writable")
+        if parameter.access not in [StuderAccess.WRITE, StuderAccess.READ_WRITE]:
+            raise StuderParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not writable")
             
-        if isinstance(device, NextDiscoveredDevice):
+        if isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
             slave = NextDeviceFamilies.get_slave_by_code(code=device)
         else:
-            raise NextParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to update_value")
+            raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to update_value")
 
         _LOGGER.debug(f"Update '{parameter.name}' ({parameter.address} via {slave}) to {value}")
 
