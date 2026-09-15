@@ -74,7 +74,8 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_format,
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = AsyncNextApiStub(on_read_handler=on_read)
-
+    await api.start()
+    
     if exp_except == None:
         rsp_value = await api.request_value(param, test_slave)
 
@@ -132,6 +133,7 @@ async def test_write_value(name, test_fam, test_slave, test_addr, test_format, t
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = AsyncNextApiStub(on_write_handler=on_write)
+    await api.start()
 
     if exp_except == None:
         rsp_value = await api.update_value(param, test_value, test_slave)

@@ -71,11 +71,12 @@ from . import AsyncNextApiStub, NextApiStub
 def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
     dataset = NextFactory.create_dataset()
+    families = NextFactory.create_families()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
-            family = NextDeviceFamilies.get_by_slave(slave)
+            family = families.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
@@ -148,11 +149,12 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
     dataset = NextFactory.create_dataset()
+    families = NextFactory.create_families()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
-            family = NextDeviceFamilies.get_by_slave(slave)
+            family = families.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
@@ -198,11 +200,12 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_mode
 def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
     dataset = NextFactory.create_dataset()
+    families = NextFactory.create_families()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""
             if slave in rsp_slaves and str(address) in rsp_dict:
-                family = NextDeviceFamilies.get_by_slave(slave)
+                family = families.get_by_slave(slave)
                 param = dataset.get_by_address(address, family.id)
                 value = rsp_dict[str(address)]
 

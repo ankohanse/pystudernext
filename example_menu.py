@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 def main():
     # Print entire menu structure
     dataset = NextFactory.create_dataset()
+    families = NextFactory.create_families()
 
     # Helper function to recursively print the entire menu
     def print_menu(family_id, parent_id, indent=""):
@@ -37,7 +38,7 @@ def main():
             else:
                 logger.info(f"{indent}{item.label} ({item.address})")
 
-    for family in NextDeviceFamilies.get_list():
+    for family in families:
         logger.info(f"")
         logger.info(f"{family.model}")
         print_menu(family.id, "", "  ")

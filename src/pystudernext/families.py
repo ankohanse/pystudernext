@@ -7,24 +7,23 @@ import logging
 
 from dataclasses import dataclass
 
+from .shared.studer_families import (
+    StuderDeviceFamilies,
+    StuderDeviceFamily,
+    StuderDeviceSlaveUnknownException,
+)
+
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class NextDeviceFamilyUnknownException(Exception):
-    pass
-
-class NextDeviceCodeUnknownException(Exception):
-    pass
-
-class NextDeviceSlaveUnknownException(Exception):
-    pass
-
-
 @dataclass
-class NextDeviceFamily:
+class NextDeviceFamily(StuderDeviceFamily):
+    # From super class
     id: str                 # Short id
     model: str              # Model name
+
+    # Specific for Next device family
     slaves_start: int       # First possible slave number
     slaves_end: int         # Last possible slave number
     address_discover: int   # Address used to discover presence of the device
@@ -42,7 +41,7 @@ class NextDeviceFamily:
             return f"{self.id.upper()}_{idx}"
         
         msg = f"Slave {slave} is not in range for family {self.id} ({self.slaves_start}-{self.slaves_end})"
-        raise NextDeviceSlaveUnknownException(msg)
+        raise StuderDeviceSlaveUnknownException(msg)
 
     def __str__(self):
         return self.id
@@ -51,8 +50,9 @@ class NextDeviceFamily:
         return self.id
     
 
-class NextDeviceFamilies:
+class NextDeviceFamilies(StuderDeviceFamilies):
 
+    # Static known families
     TEST = NextDeviceFamily(            # Fake device to be able to test against Victron Cerbo GX
         "tst",              # id
         "Test",             # model (default) 
@@ -146,78 +146,54 @@ class NextDeviceFamilies:
     )
 
 
-    @staticmethod
-    def get_by_id(id: str) -> NextDeviceFamily:
-        for f in NextDeviceFamilies.get_list():
-            if id == f.id:
-                return f
+    def __init__(self, list: list[NextDeviceFamily]):
+        super().__init__(list)
 
-        raise NextDeviceFamilyUnknownException(id)
+        # Fill helper variables once
+        self._code_to_family_map: dict[str,NextDeviceFamily]  = {}
+        self._code_to_slave_map: dict[str,int] = {}
+        self._slave_to_code_map: dict[str,int] = {}
 
-
-    @staticmethod
-    def get_list() -> list[NextDeviceFamily]:
-        return [val for val in NextDeviceFamilies.__dict__.values() if type(val) is NextDeviceFamily]
-
-
-    # Static variables to cache helper mappings
-    _code_to_family_map: dict[str,NextDeviceFamily] = None
-    _code_to_slave_map: dict[str,int] = None
-    _slave_to_code_map: dict[str,int] = None
-
-    @staticmethod
-    def _build_static_maps():
-        """Fill static variable once"""
-        if NextDeviceFamilies._code_to_family_map is None:
-
-            NextDeviceFamilies._code_to_family_map = {}
-            NextDeviceFamilies._code_to_slave_map = {}
-            NextDeviceFamilies._slave_to_code_map = {}
-
-            for f in NextDeviceFamilies.get_list():
-                for slave in range(f.slaves_start, f.slaves_end+1):
-                    code = f.get_code(slave)
-                    
-                    NextDeviceFamilies._code_to_family_map[code] = f
-                    NextDeviceFamilies._code_to_slave_map[code] = slave # BAT_1-BAT_5 -> 2-6,  NEXT3_1-NEXT3_15 -> 14-28,  etc
-                    NextDeviceFamilies._slave_to_code_map[slave] = code # 2-6 -> BAT_1-BAT_5,  14-28 -> NEXT3_1-NEXT3_15,  etc
+        for f in self:
+            for slave in range(f.slaves_start, f.slaves_end+1):
+                code = f.get_code(slave)
+                
+                self._code_to_family_map[code] = f
+                self._code_to_slave_map[code] = slave # BAT_1-BAT_5 -> 2-6,  NEXT3_1-NEXT3_15 -> 14-28,  etc
+                self._slave_to_code_map[slave] = code # 2-6 -> BAT_1-BAT_5,  14-28 -> NEXT3_1-NEXT3_15,  etc
 
 
-    @staticmethod
-    def get_by_code(code: str) -> NextDeviceFamily:
+    def get_by_id(self, id: str) -> NextDeviceFamily:
+        """
+        Lookup the id to find the device family
+        """
+        return super().get_by_id(id)
+
+
+    def get_by_code(self, code: str) -> NextDeviceFamily:
         """
         Lookup the code to find the device family
         """
-        NextDeviceFamilies._build_static_maps()
-
-        return NextDeviceFamilies._code_to_family_map.get(code, None)
+        return self._code_to_family_map.get(code, None)
     
 
-    @staticmethod
-    def get_by_slave(slave: int) -> NextDeviceFamily:
+    def get_by_slave(self, slave: int) -> NextDeviceFamily:
         """
-        Lookup the code to find the device family
+        Lookup the slave to find the device family
         """
-        NextDeviceFamilies._build_static_maps()
-        code = NextDeviceFamilies._slave_to_code_map.get(slave, None)
-        return NextDeviceFamilies._code_to_family_map.get(code, None)
+        code = self._slave_to_code_map.get(slave, None)
+        return self._code_to_family_map.get(code, None)
     
 
-    @staticmethod
-    def get_slave_by_code(code: str) -> int:
+    def get_slave_by_code(self, code: str) -> int:
         """
         Lookup the code to find the slave
         """
-        NextDeviceFamilies._build_static_maps()
-
-        return NextDeviceFamilies._code_to_slave_map.get(code, None)
+        return self._code_to_slave_map.get(code, None)
 
 
-    @staticmethod
-    def get_code_by_slave(slave: str) -> int:
+    def get_code_by_slave(self, slave: str) -> int:
         """
         Lookup the slave to find the code
         """
-        NextDeviceFamilies._build_static_maps()
-
-        return NextDeviceFamilies._slave_to_code_map.get(slave, None)
+        return self._slave_to_code_map.get(slave, None)

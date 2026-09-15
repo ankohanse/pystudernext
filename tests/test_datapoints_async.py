@@ -4,13 +4,13 @@ import pytest_asyncio
 from pystudernext import (
     NextDataset, 
     NextDatasetFlag,
+    NextDeviceFamilies,
     AsyncNextFactory,
     NextFactory,
     StuderDataType, 
     StuderDatapointUnknownException,
     StuderParamException,
 )
-from pystudernext.families import NextDeviceFamilies
 
 
 FLAGS_DEFAULT = None
@@ -32,7 +32,7 @@ async def test_create(name, flags, exp_len):
 async def test_address():
     dataset = await AsyncNextFactory.create_dataset()
 
-    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3.id)
+    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
     assert param.family_id == "nx3"
     assert param.address == 6900
     assert param.data_type == StuderDataType.FLOAT32
@@ -45,7 +45,7 @@ async def test_address():
     assert type(param.enum_options) is dict
     assert len(param.enum_options) == 4
 
-    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM.id)
+    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM)
     assert param.family_id == "sys"
     assert param.address == 1200
     assert param.data_type == StuderDataType.ENUM32
@@ -56,7 +56,7 @@ async def test_address():
         param = dataset.get_by_address(9999, 'sys')
 
     with pytest.raises(StuderDatapointUnknownException):
-        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY.id)
+        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY)
 
 
 async def test_id():
@@ -83,7 +83,7 @@ async def test_id():
 async def test_enum():
     dataset = await AsyncNextFactory.create_dataset()
 
-    param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM.id)
+    param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
     assert param.data_type == StuderDataType.ENUM32
     assert param.enum_options != None
     assert type(param.enum_options) is dict
@@ -103,7 +103,7 @@ async def test_enum():
 async def test_bitfield():
     dataset = await AsyncNextFactory.create_dataset()
 
-    param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM.id)
+    param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM)
     assert param.data_type == StuderDataType.BITFIELD
     assert param.enum_options != None
     assert type(param.enum_options) is dict
@@ -129,16 +129,16 @@ async def test_bitfield():
         ("flx", 14),
         ("nx3", 33),
         ("nx1", 23),
-        ("nxg", 33),
-        ("pwr",  0),
-        (NextDeviceFamilies.SYSTEM.id,          25),
-        (NextDeviceFamilies.BATTERY.id,          5),
-        (NextDeviceFamilies.AC_SOURCE.id,        8),
-        (NextDeviceFamilies.AC_FLEX_LOAD.id,    14),
-        (NextDeviceFamilies.NEXT3.id,           33),
-        (NextDeviceFamilies.NEXT1.id,           23),
-        (NextDeviceFamilies.NEXT_GATEWAY.id,    33),
-        (NextDeviceFamilies.NEXT_POWERMETER.id,  0),
+        ("nxg", 30),
+        ("pwr",  3),
+        (NextDeviceFamilies.SYSTEM,          25),
+        (NextDeviceFamilies.BATTERY,          5),
+        (NextDeviceFamilies.AC_SOURCE,        8),
+        (NextDeviceFamilies.AC_FLEX_LOAD,    14),
+        (NextDeviceFamilies.NEXT3,           33),
+        (NextDeviceFamilies.NEXT1,           23),
+        (NextDeviceFamilies.NEXT_GATEWAY,    30),
+        (NextDeviceFamilies.NEXT_POWERMETER,  3),
     ]
 )
 async def test_menu(family_id, exp_len):

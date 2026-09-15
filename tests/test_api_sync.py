@@ -76,7 +76,8 @@ def test_request_value(name, test_fam, test_slave, test_addr, test_format, test_
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = NextApiStub(on_read_handler=on_read)
-
+    api.start()
+    
     if exp_except == None:
         rsp_value = api.request_value(param, test_slave)
 
@@ -134,6 +135,7 @@ def test_write_value(name, test_fam, test_slave, test_addr, test_format, test_va
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = NextApiStub(on_write_handler=on_write)
+    api.start()
 
     if exp_except == None:
         rsp_value = api.update_value(param, test_value, test_slave)

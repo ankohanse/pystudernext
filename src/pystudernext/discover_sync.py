@@ -13,19 +13,19 @@ import struct
 
 from dataclasses import dataclass
 
-from .shared.interfaces_async import (
+from .shared.studer_interfaces_async import (
     AsyncStuderDiscover,
 )
-from .shared.interfaces_sync import (
+from .shared.studer_interfaces_sync import (
     StuderDiscover,
 )
-from .shared.dataset import (
+from .shared.studer_dataset import (
     StuderDataset,
     StuderDatapoint,
     StuderDatapointUnknownException,
     StuderDatapointSyntaxException,
 )
-from .shared.types import (
+from .shared.studer_types import (
     StuderDataType,
     StuderDiscoveredDevice,
     StuderDiscoveredGateway,
@@ -44,6 +44,12 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
+from .factory_async import (
+    AsyncNextFactory,
+)
+from .factory_sync import (
+    NextFactory,
+)
 import concurrent.futures
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,6 +66,7 @@ class NextDiscover(StuderDiscover):
         """
         self._api = api
         self._dataset = dataset
+        self._families = dataset.families
 
 
     def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[StuderDiscoveredDevice]:
@@ -73,7 +80,7 @@ class NextDiscover(StuderDiscover):
             raise StuderDiscoverNotConnected("NextApi is not connected to remote NX Gateway; please connect first.")
         
         # Check presence of devices for each family
-        for family in NextDeviceFamilies.get_list():
+        for family in self._families:
 
             _LOGGER.info(f"Trying family {family.id} ({family.model})")
 
@@ -98,7 +105,7 @@ class NextDiscover(StuderDiscover):
                 # - the device does not support the param (INVALID_DATA), used to distinguish BSP from BMS
                 try:
                     address_discover = family.address_discover
-                    param_discover = self._dataset.get_by_address(address_discover, family.id)
+                    param_discover = self._dataset.get_by_address(address_discover, family)
 
                     _LOGGER.info(f"Trying device {device_code} (slave {device_slave}) for address {address_discover}")
 
@@ -135,12 +142,12 @@ class NextDiscover(StuderDiscover):
         # ID SID
         try:
             _LOGGER.info(f"Trying to get extended device info for device {device.code})")
-            family = NextDeviceFamilies.get_by_id(device.family_id)
+            family = self._families.get_by_id(device.family_id)
 
-            param_model      = self._dataset.get_by_address(family.address_model,      family.id) if family.address_model is not None else None
-            param_serial     = self._dataset.get_by_address(family.address_serial,     family.id) if family.address_serial is not None else None
-            param_sw_version = self._dataset.get_by_address(family.address_sw_version, family.id) if family.address_sw_version is not None else None
-            param_om_version = self._dataset.get_by_address(family.address_om_version, family.id) if family.address_om_version is not None else None
+            param_model      = self._dataset.get_by_address(family.address_model,      family) if family.address_model is not None else None
+            param_serial     = self._dataset.get_by_address(family.address_serial,     family) if family.address_serial is not None else None
+            param_sw_version = self._dataset.get_by_address(family.address_sw_version, family) if family.address_sw_version is not None else None
+            param_om_version = self._dataset.get_by_address(family.address_om_version, family) if family.address_om_version is not None else None
 
             value_model      = self._api.request_value(param_model,      device.slave, verbose=verbose)
             value_serial     = self._api.request_value(param_serial,     device.slave, verbose=verbose)

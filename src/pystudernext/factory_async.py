@@ -7,7 +7,10 @@ import orjson
 
 from aiofiles import open as aiofiles_open
 
-from .shared.dataset import (
+from .shared.studer_dataset import (
+    StuderDeviceFamilies,
+    StuderDeviceFamily,
+    StuderDeviceFamilyUnknownException,
     StuderDatapointEnumNotFoundException,
 )
 from .datapoints import (
@@ -16,12 +19,28 @@ from .datapoints import (
     NextDataset,
     NextDatasetFlag,
 )
+from .families import (
+    NextDeviceFamilies,
+    NextDeviceFamily,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class AsyncNextFactory:
+
+    @staticmethod
+    async def create_families(flags:dict=None) -> NextDeviceFamilies:
+        """
+        The actual NextDataset list is kept in separate json files to reduce the memory size needed to load the integration.
+        The list is only loaded during config flow and during initial startup, and then released again.
+        """
+        flags = flags or {}
+        list = [val for val in NextDeviceFamilies.__dict__.values() if type(val) is NextDeviceFamily]
+
+        return NextDeviceFamilies(list)
+
 
     @staticmethod
     async def create_dataset(flags:dict=None) -> NextDataset:
@@ -74,6 +93,10 @@ class AsyncNextFactory:
             # Merge the datapoints from this file
             datapoints = datapoints + item_datapoints
 
-        _LOGGER.info(f"Using {len(datapoints)} datapoints")
+        # Also add all known device-families
+        families = await AsyncNextFactory.create_families(flags)
 
-        return NextDataset(datapoints)
+        _LOGGER.info(f"Using {len(datapoints)} datapoints")
+        return NextDataset(datapoints, families)
+
+

@@ -8,8 +8,7 @@ from datetime import datetime, timedelta
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
-
-from .shared.types import (
+from .shared.studer_types import (
     StuderAccess,
     StuderDataType,
     StuderDiscoveredDevice,
@@ -33,6 +32,12 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
+from .factory_async import (
+    AsyncNextFactory, 
+)
+from .factory_sync import (
+    NextFactory,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,7 +57,8 @@ class AsyncNextApi:
         self._host = host
         self._port = port
 
-        self._client: AsyncModbusTcpClient | None = None
+        self._client: AsyncModbusTcpClient = None
+        self._families: NextDeviceFamilies = None
 
         # Diagnostics gathering
         self._diag_retries = {}
@@ -64,6 +70,10 @@ class AsyncNextApi:
         Connect the client.
         """
         try:
+            # Init properties depending on async
+            self._families = await AsyncNextFactory.create_families()
+
+            # Connect to the remote gateway
             await self._get_connected_client()
             return True
         
@@ -128,7 +138,7 @@ class AsyncNextApi:
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
-            slave = NextDeviceFamilies.get_slave_by_code(code=device)
+            slave = self._families.get_slave_by_code(code=device)
         else:
             raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
 
@@ -182,7 +192,7 @@ class AsyncNextApi:
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
-            slave = NextDeviceFamilies.get_slave_by_code(code=device)
+            slave = self._families.get_slave_by_code(code=device)
         else:
             raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to update_value")
 

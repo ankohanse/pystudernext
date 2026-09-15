@@ -7,7 +7,7 @@ Do not place code that is specific to only one of these libraries in here!
 
 from enum import StrEnum
 
-from ..shared.types import (
+from .studer_types import (
     StuderDiscoveredDevice,
     StuderDiscoveredGateway,
 )

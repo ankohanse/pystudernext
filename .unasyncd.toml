@@ -9,7 +9,7 @@ exclude = [
 ]
 
 [tool.unasyncd.files]
-    "src/pystudernext/shared/interfaces_async.py" = "src/pystudernext/shared/interfaces_sync.py"
+    "src/pystudernext/shared/studer_interfaces_async.py" = "src/pystudernext/shared/studer_interfaces_sync.py"
     "src/pystudernext/api_async.py" = "src/pystudernext/api_sync.py"
     "src/pystudernext/discover_async.py" = "src/pystudernext/discover_sync.py"
     "src/pystudernext/factory_async.py" = "src/pystudernext/factory_sync.py"

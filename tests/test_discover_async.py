@@ -69,11 +69,12 @@ from . import AsyncNextApiStub, NextApiStub
 async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
     dataset = await AsyncNextFactory.create_dataset()
+    families = await AsyncNextFactory.create_families()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
-            family = NextDeviceFamilies.get_by_slave(slave)
+            family = families.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
@@ -146,11 +147,12 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
 async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
     dataset = await AsyncNextFactory.create_dataset()
+    families = await AsyncNextFactory.create_families()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
         if slave in rsp_slaves and str(address) in rsp_dict:
-            family = NextDeviceFamilies.get_by_slave(slave)
+            family = families.get_by_slave(slave)
             param = dataset.get_by_address(address, family.id)
             value = rsp_dict[str(address)]
 
@@ -196,11 +198,12 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
 async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
     dataset = await AsyncNextFactory.create_dataset()
+    families = await AsyncNextFactory.create_families()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""
             if slave in rsp_slaves and str(address) in rsp_dict:
-                family = NextDeviceFamilies.get_by_slave(slave)
+                family = families.get_by_slave(slave)
                 param = dataset.get_by_address(address, family.id)
                 value = rsp_dict[str(address)]
 

@@ -7,22 +7,18 @@ import logging
 
 from dataclasses import dataclass
 
-from pystudernext.shared.types import StuderAccess, StuderDataType, StuderTarget
+from pystudernext.shared.studer_types import StuderAccess, StuderDataType, StuderTarget
 
-from .shared.dataset import (
+from .shared.studer_dataset import (
     StuderDataset,
     StuderDatapoint,
     StuderDatapointSyntaxException,
 )
-from .shared.types import (
+from .shared.studer_types import (
     StuderAccess,
 )
 from .data import (
     NextUserLevel,
-)
-from .families import (
-    NextDeviceFamilies,
-    NextDeviceFamily,
 )
 
 

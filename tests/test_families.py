@@ -1,21 +1,29 @@
 
 import pytest
+from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDeviceFamilies
-from pystudernext import NextDeviceFamilyUnknownException, NextDeviceCodeUnknownException, NextDeviceSlaveUnknownException
+from pystudernext import StuderDeviceFamilyUnknownException
 
 
-def test_list():
-    families = NextDeviceFamilies.get_list()
+async def test_create_async():
+    families = await AsyncNextFactory.create_families()
+    assert isinstance(families, NextDeviceFamilies)
+    assert len(families) == 9
+
+
+def test_create_sync():
+    families = NextFactory.create_families()
+    assert isinstance(families, NextDeviceFamilies)
     assert len(families) == 9
 
 
 def test_id():
-    families = NextDeviceFamilies.get_list()
+    families = NextFactory.create_families()
     for family in families:
-        assert family == NextDeviceFamilies.get_by_id(family.id)
+        assert family == families.get_by_id(family.id)
 
-    with pytest.raises(NextDeviceFamilyUnknownException):
-        family = NextDeviceFamilies.get_by_id("XXX")
+    with pytest.raises(StuderDeviceFamilyUnknownException):
+        family = families.get_by_id("XXX")
 
 
 @pytest.mark.parametrize(
@@ -40,14 +48,15 @@ def test_id():
 )
 def test_code(family_id, code, slave):
 
-    family = NextDeviceFamilies.get_by_id(family_id)
+    families = NextFactory.create_families()
+    family = families.get_by_id(family_id)
 
     if code is not None:
-        assert NextDeviceFamilies.get_by_code(code) == family
+        assert families.get_by_code(code) == family
     else:
-        assert NextDeviceFamilies.get_by_code(code) is None
+        assert families.get_by_code(code) is None
 
-    assert NextDeviceFamilies.get_slave_by_code(code) == slave
-    assert NextDeviceFamilies.get_code_by_slave(slave) == code
+    assert families.get_slave_by_code(code) == slave
+    assert families.get_code_by_slave(slave) == code
 
 

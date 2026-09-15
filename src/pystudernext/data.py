@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from enum import IntEnum, StrEnum
 from pymodbus.client import ModbusTcpClient
 
-from pystudernext.shared.types import (
+from pystudernext.shared.studer_types import (
     StuderDataType,
     StuderUserLevel,
     StuderParamException,
