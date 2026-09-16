@@ -32,15 +32,27 @@ _LOGGER = logging.getLogger(__name__)
 
 class NextFactory:
 
+    _cached_families = None
+
     @staticmethod
     def create_families(flags:dict=None) -> NextDeviceFamilies:
         """
         The actual NextDataset list is kept in separate json files to reduce the memory size needed to load the integration.
         The list is only loaded during config flow and during initial startup, and then released again.
         """
-        flags = flags or {}
-        list = [val for val in NextDeviceFamilies.__dict__.values() if type(val) is NextDeviceFamily]
+        if NextFactory._cached_families is not None:
+            return NextFactory._cached_families
 
+        flags = flags or {}
+        add_test_families = flags.get(NextDatasetFlag.ADD_TEST_FAMILIES, False)
+
+        list = []
+        for val in NextDeviceFamilies.__dict__.values():
+            if type(val) is NextDeviceFamily:
+                if val.id!='tst' or add_test_families:
+                    list.append(val)
+
+        NextFactory._cached_families = list
         return NextDeviceFamilies(list)
 
 
@@ -95,11 +107,10 @@ class NextFactory:
             # Merge the datapoints from this file
             datapoints = datapoints + item_datapoints
 
-        _LOGGER.info(f"Using {len(datapoints)} datapoints")
-
         # Also add all known device-families
         families = NextFactory.create_families(flags)
 
+        _LOGGER.info(f"Using {len(datapoints)} datapoints")
         return NextDataset(datapoints, families)
 
 

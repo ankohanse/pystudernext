@@ -30,15 +30,27 @@ _LOGGER = logging.getLogger(__name__)
 
 class AsyncNextFactory:
 
+    _cached_families = None
+
     @staticmethod
     async def create_families(flags:dict=None) -> NextDeviceFamilies:
         """
         The actual NextDataset list is kept in separate json files to reduce the memory size needed to load the integration.
         The list is only loaded during config flow and during initial startup, and then released again.
         """
-        flags = flags or {}
-        list = [val for val in NextDeviceFamilies.__dict__.values() if type(val) is NextDeviceFamily]
+        if AsyncNextFactory._cached_families is not None:
+            return AsyncNextFactory._cached_families
 
+        flags = flags or {}
+        add_test_families = flags.get(NextDatasetFlag.ADD_TEST_FAMILIES, False)
+
+        list = []
+        for val in NextDeviceFamilies.__dict__.values():
+            if isinstance(val, NextDeviceFamily):
+                if val.id!='tst' or add_test_families:
+                    list.append(val)
+
+        AsyncNextFactory._cached_families = list
         return NextDeviceFamilies(list)
 
 

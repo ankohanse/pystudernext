@@ -20,8 +20,8 @@ _LOGGER = logging.getLogger(__name__)
 @dataclass
 class NextDeviceFamily(StuderDeviceFamily):
     # From super class
-    id: str                 # Short id
-    model: str              # Model name
+    # id: str               # Short id
+    # model: str            # Model name
 
     # Specific for Next device family
     slaves_start: int       # First possible slave number

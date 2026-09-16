@@ -178,6 +178,7 @@ class NextDatapointEnum:
 class NextDatasetFlag(StrEnum):
     """Extra flags to pass to Api"""
     ADD_TEST_DATAPOINTS     = "add_test_datapoints"       # bool
+    ADD_TEST_FAMILIES       = "add_test_families"       # bool
 
 
 class NextDataset(StuderDataset):
