@@ -14,7 +14,7 @@ from pystudernext import (
 
 
 FLAGS_DEFAULT = None
-FLAGS_TEST = { NextDatasetFlag.ADD_TEST_DATAPOINTS: True }
+FLAGS_TEST = { NextDatasetFlag.ADD_TEST: True }
 
 @pytest.mark.parametrize(
     "name, flags, exp_len",

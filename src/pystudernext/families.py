@@ -3,6 +3,7 @@
 Definition of all known device families used in the Next protocol
 """
 
+from enum import StrEnum
 import logging
 
 from dataclasses import dataclass
@@ -49,6 +50,11 @@ class NextDeviceFamily(StuderDeviceFamily):
     def __repr__(self):
         return self.id
     
+
+class NextDeviceFamiliesFlag(StrEnum):
+    """Extra flags to pass to Api"""
+    ADD_TEST     = "add_test"       # bool
+
 
 class NextDeviceFamilies(StuderDeviceFamilies):
 
@@ -145,8 +151,28 @@ class NextDeviceFamilies(StuderDeviceFamilies):
         None,              # address for ObjectModel version
     )
 
+    # Single instance of the NextDeviceFamilies
+    _instance = None
 
-    def __init__(self, list: list[NextDeviceFamily]):
+    def __new__(cls, *args, **kwargs):
+        """Singleton design pattern to make sure we only have a single NextDeviceFamilies instance"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self, flags:dict=None):
+        """Initialize the single NextDeviceFamilies instance"""
+        flags = flags or {}
+
+        # Gather the list of defined Device Families
+        list = [val for val in NextDeviceFamilies.__dict__.values() if isinstance(val, NextDeviceFamily)]
+
+        if flags.get(NextDeviceFamiliesFlag.ADD_TEST, False):
+            try:
+                list.remove(NextDeviceFamilies.TEST)
+            except:
+                pass
+
         super().__init__(list)
 
         # Fill helper variables once

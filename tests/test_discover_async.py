@@ -69,7 +69,7 @@ from . import AsyncNextApiStub, NextApiStub
 async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
     dataset = await AsyncNextFactory.create_dataset()
-    families = await AsyncNextFactory.create_families()
+    families = NextDeviceFamilies()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -147,7 +147,7 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
 async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
     dataset = await AsyncNextFactory.create_dataset()
-    families = await AsyncNextFactory.create_families()
+    families = NextDeviceFamilies()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -198,7 +198,7 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
 async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
     dataset = await AsyncNextFactory.create_dataset()
-    families = await AsyncNextFactory.create_families()
+    families = NextDeviceFamilies()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""

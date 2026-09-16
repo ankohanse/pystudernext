@@ -113,13 +113,9 @@ class StuderDatapoint:
 
 class StuderDataset:
 
-    def __init__(self, datapoints: list[StuderDatapoint], families: list[StuderDeviceFamily]):
+    def __init__(self, datapoints: list[StuderDatapoint], families: StuderDeviceFamilies):
         self._datapoints = datapoints
-        self._families = StuderDeviceFamilies(families)
-
-    @property
-    def families(self):
-        return self._families
+        self._families = families
 
 
     def get_by_id(self, id: str, family: StuderDeviceFamily|str|int = None) -> StuderDatapoint:

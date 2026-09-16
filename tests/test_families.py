@@ -6,19 +6,19 @@ from pystudernext import StuderDeviceFamilyUnknownException
 
 
 async def test_create_async():
-    families = await AsyncNextFactory.create_families()
+    families = NextDeviceFamilies()
     assert isinstance(families, NextDeviceFamilies)
     assert len(families) == 9
 
 
 def test_create_sync():
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
     assert isinstance(families, NextDeviceFamilies)
     assert len(families) == 9
 
 
 def test_id():
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
     for family in families:
         assert family == families.get_by_id(family.id)
 
@@ -48,7 +48,7 @@ def test_id():
 )
 def test_code(family_id, code, slave):
 
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
     family = families.get_by_id(family_id)
 
     if code is not None:

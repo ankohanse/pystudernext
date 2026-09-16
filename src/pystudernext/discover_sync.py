@@ -66,7 +66,7 @@ class NextDiscover(StuderDiscover):
         """
         self._api = api
         self._dataset = dataset
-        self._families = dataset.families
+        self._families = NextDeviceFamilies()   # singleton instance
 
 
     def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[StuderDiscoveredDevice]:

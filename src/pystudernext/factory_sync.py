@@ -32,30 +32,6 @@ _LOGGER = logging.getLogger(__name__)
 
 class NextFactory:
 
-    _cached_families = None
-
-    @staticmethod
-    def create_families(flags:dict=None) -> NextDeviceFamilies:
-        """
-        The actual NextDataset list is kept in separate json files to reduce the memory size needed to load the integration.
-        The list is only loaded during config flow and during initial startup, and then released again.
-        """
-        if NextFactory._cached_families is not None:
-            return NextFactory._cached_families
-
-        flags = flags or {}
-        add_test_families = flags.get(NextDatasetFlag.ADD_TEST_FAMILIES, False)
-
-        list = []
-        for val in NextDeviceFamilies.__dict__.values():
-            if isinstance(val, NextDeviceFamily):
-                if val.id!='tst' or add_test_families:
-                    list.append(val)
-
-        NextFactory._cached_families = list
-        return NextDeviceFamilies(list)
-
-
     @staticmethod
     def create_dataset(flags:dict=None) -> NextDataset:
         """
@@ -64,12 +40,12 @@ class NextFactory:
         """
         flags = flags or {}
         datapoints = list()
-        add_test_datapoints = flags.get(NextDatasetFlag.ADD_TEST_DATAPOINTS, False)
+        add_test = flags.get(NextDatasetFlag.ADD_TEST, False)
 
         for (item_path, enum_path) in NextDataset.PATHS:
 
             # Normally we skip the test family
-            if not add_test_datapoints and 'tst' in item_path:
+            if not add_test and 'tst' in item_path:
                 continue
 
             with open(item_path, "r", encoding="UTF-8") as item_file:
@@ -107,10 +83,8 @@ class NextFactory:
             # Merge the datapoints from this file
             datapoints = datapoints + item_datapoints
 
-        # Also add all known device-families
-        families = NextFactory.create_families(flags)
-
         _LOGGER.info(f"Using {len(datapoints)} datapoints")
-        return NextDataset(datapoints, families)
+
+        return NextDataset(datapoints)
 
 

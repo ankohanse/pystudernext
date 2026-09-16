@@ -60,7 +60,6 @@ class NextApi:
         self._port = port
 
         self._client: ModbusTcpClient = None
-        self._families: NextDeviceFamilies = None
 
         # Diagnostics gathering
         self._diag_retries = {}
@@ -69,13 +68,9 @@ class NextApi:
 
     def start(self) -> bool:
         """
-        Connect the client.
+        Connect to the remote gateway
         """
         try:
-            # Init properties depending on async
-            self._families = NextFactory.create_families()
-
-            # Connect to the remote gateway
             self._get_connected_client()
             return True
         
@@ -140,7 +135,7 @@ class NextApi:
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
-            slave = self._families.get_slave_by_code(code=device)
+            slave = NextDeviceFamilies().get_slave_by_code(code=device)
         else:
             raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
 
@@ -194,7 +189,7 @@ class NextApi:
         elif isinstance(device, int):
             slave = device
         elif isinstance(device, str):  
-            slave = self._families.get_slave_by_code(code=device)
+            slave = NextDeviceFamilies().get_slave_by_code(code=device)
         else:
             raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to update_value")
 

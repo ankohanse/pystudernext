@@ -58,7 +58,7 @@ class AsyncNextApi:
         self._port = port
 
         self._client: AsyncModbusTcpClient = None
-        self._families: NextDeviceFamilies = None
+        self._families = NextDeviceFamilies() # singleton instance
 
         # Diagnostics gathering
         self._diag_retries = {}
@@ -67,13 +67,9 @@ class AsyncNextApi:
 
     async def start(self) -> bool:
         """
-        Connect the client.
+        Connect to the remote gateway
         """
         try:
-            # Init properties depending on async
-            self._families = await AsyncNextFactory.create_families()
-
-            # Connect to the remote gateway
             await self._get_connected_client()
             return True
         

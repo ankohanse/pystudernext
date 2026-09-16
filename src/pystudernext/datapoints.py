@@ -7,6 +7,7 @@ import logging
 
 from dataclasses import dataclass
 
+from pystudernext.families import NextDeviceFamilies
 from pystudernext.shared.studer_types import StuderAccess, StuderDataType, StuderTarget
 
 from .shared.studer_dataset import (
@@ -177,8 +178,7 @@ class NextDatapointEnum:
 
 class NextDatasetFlag(StrEnum):
     """Extra flags to pass to Api"""
-    ADD_TEST_DATAPOINTS     = "add_test_datapoints"       # bool
-    ADD_TEST_FAMILIES       = "add_test_families"       # bool
+    ADD_TEST     = "add_test"       # bool
 
 
 class NextDataset(StuderDataset):
@@ -200,4 +200,11 @@ class NextDataset(StuderDataset):
 
     # Some known datapoint ID's
     ID_INSTALLATION_GUID = "0.1.6.2"    # family="System", address=2103
+
+
+    def __init__(self, datapoints: list[StuderDatapoint]):
+        """"""
+        families = NextDeviceFamilies() # singleton instance
+
+        super().__init__(datapoints, families)
 

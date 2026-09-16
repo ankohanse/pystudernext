@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 async def main():
     # Print entire menu structure
     dataset = await AsyncNextFactory.create_dataset()
-    families = await AsyncNextFactory.create_families()
+    families = NextDeviceFamilies()
 
     # Helper function to recursively print the entire menu
     async def print_menu(family_id, parent_id, indent=""):

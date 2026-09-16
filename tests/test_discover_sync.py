@@ -71,7 +71,7 @@ from . import AsyncNextApiStub, NextApiStub
 def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
     dataset = NextFactory.create_dataset()
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -149,7 +149,7 @@ def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
     dataset = NextFactory.create_dataset()
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -200,7 +200,7 @@ def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_mode
 def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
     dataset = NextFactory.create_dataset()
-    families = NextFactory.create_families()
+    families = NextDeviceFamilies()
 
     def on_read(api: NextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""

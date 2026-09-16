@@ -15,9 +15,8 @@ from .discover_sync import NextDiscover, NextApi
 
 from .const import DEFAULT_HOST, DEFAULT_PORT
 from .data import NextApiConnectException, NextApiTimeoutException, NextPackException, NextUnpackException
-from .datapoints import NextDataset, NextDatapoint
-from .families import NextDeviceFamily, NextDeviceFamilies
+from .datapoints import NextDataset, NextDatapoint, NextDatasetFlag
+from .families import NextDeviceFamily, NextDeviceFamilies, NextDeviceFamiliesFlag
 
 # For unit testing
 from .data import NextDataType, NextUserLevel
-from .datapoints import NextDatasetFlag
