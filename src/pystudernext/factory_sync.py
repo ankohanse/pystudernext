@@ -48,7 +48,7 @@ class NextFactory:
 
         list = []
         for val in NextDeviceFamilies.__dict__.values():
-            if type(val) is NextDeviceFamily:
+            if isinstance(val, NextDeviceFamily):
                 if val.id!='tst' or add_test_families:
                     list.append(val)
 
