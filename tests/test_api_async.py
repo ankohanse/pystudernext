@@ -8,10 +8,10 @@ from pymodbus.pdu import ModbusPDU
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from pymodbus.pdu.utils import unpack_bitstring
 
-from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import StuderParamException
 from pystudernext import StuderDataType, StuderDiscoveredDevice
 from pystudernext import NextDataType
+from pystudernext import NextDataset
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -70,7 +70,7 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_format,
 
         return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
 
-    dataset = await AsyncNextFactory.create_dataset()
+    dataset = await NextDataset.async_get_instance()
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = AsyncNextApiStub(on_read_handler=on_read)
@@ -129,7 +129,7 @@ async def test_write_value(name, test_fam, test_slave, test_addr, test_format, t
 
         return ModbusPDU(dev_id=slave, transaction_id=9876, address=address)
 
-    dataset = await AsyncNextFactory.create_dataset()
+    dataset = await NextDataset.async_get_instance()
     param = dataset.get_by_address(test_addr, test_fam)
 
     api = AsyncNextApiStub(on_write_handler=on_write)

@@ -5,8 +5,6 @@ from pystudernext import (
     NextDataset, 
     NextDatasetFlag,
     NextDeviceFamilies,
-    AsyncNextFactory,
-    NextFactory,
     StuderDataType, 
     StuderDatapointUnknownException,
     StuderParamException,
@@ -16,6 +14,13 @@ from pystudernext import (
 FLAGS_DEFAULT = None
 FLAGS_TEST = { NextDatasetFlag.ADD_TEST: True }
 
+
+def test_init():
+    NextDataset.del_instance()
+    with pytest.raises(RuntimeError):
+        dataset = NextDataset() 
+
+
 @pytest.mark.parametrize(
     "name, flags, exp_len",
     [
@@ -23,14 +28,29 @@ FLAGS_TEST = { NextDatasetFlag.ADD_TEST: True }
         ("test",    FLAGS_TEST,    2039)
     ]
 )
-async def test_create(name, flags, exp_len):
-    dataset = await AsyncNextFactory.create_dataset(flags)    
+async def test_get_instance_async(name, flags, exp_len):
+    NextDataset.del_instance()
+    dataset = await NextDataset.async_get_instance(flags) 
 
     assert len(dataset._datapoints) == exp_len
 
 
-async def test_address():
-    dataset = await AsyncNextFactory.create_dataset()
+@pytest.mark.parametrize(
+    "name, flags, exp_len",
+    [
+        ("default", FLAGS_DEFAULT, 2034),
+        ("test",    FLAGS_TEST,    2039)
+    ]
+)
+def test_get_instance_sync(name, flags, exp_len):
+    NextDataset.del_instance()
+    dataset = NextDataset.get_instance(flags) 
+
+    assert len(dataset._datapoints) == exp_len
+
+
+def test_address():
+    dataset = NextDataset.get_instance()
 
     param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
     assert param.family_id == "nx3"
@@ -59,8 +79,8 @@ async def test_address():
         param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY)
 
 
-async def test_id():
-    dataset = await AsyncNextFactory.create_dataset()
+def test_id():
+    dataset = NextDataset.get_instance()
 
     param = dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
     assert param.family_id == "sys"
@@ -80,8 +100,8 @@ async def test_id():
         param = dataset.get_by_id("dummy")
 
 
-async def test_enum():
-    dataset = await AsyncNextFactory.create_dataset()
+def test_enum():
+    dataset = NextDataset.get_instance()
 
     param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
     assert param.data_type == StuderDataType.ENUM32
@@ -100,8 +120,8 @@ async def test_enum():
     assert param.enum_key("9") == None
 
 
-async def test_bitfield():
-    dataset = await AsyncNextFactory.create_dataset()
+def test_bitfield():
+    dataset = NextDataset.get_instance()
 
     param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM)
     assert param.data_type == StuderDataType.BITFIELD
@@ -141,8 +161,8 @@ async def test_bitfield():
         (NextDeviceFamilies.NEXT_POWERMETER,  3),
     ]
 )
-async def test_menu(family_id, exp_len):
-    dataset = await AsyncNextFactory.create_dataset()
+def test_menu(family_id, exp_len):
+    dataset = NextDataset.get_instance()
     
     root_items = dataset.get_menu_items(family_id)
     assert len(root_items) == exp_len

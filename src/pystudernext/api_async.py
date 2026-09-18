@@ -32,12 +32,6 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
-from .factory_async import (
-    AsyncNextFactory, 
-)
-from .factory_sync import (
-    NextFactory,
-)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -58,7 +52,7 @@ class AsyncNextApi:
         self._port = port
 
         self._client: AsyncModbusTcpClient = None
-        self._families = NextDeviceFamilies() # singleton instance
+        self._families = NextDeviceFamilies.get_instance()
 
         # Diagnostics gathering
         self._diag_retries = {}

@@ -40,7 +40,7 @@ To read or write to a param:
 
 ```
 import logging
-from pystudernext import NextApi, NextFactory, NextDeviceFamilies
+from pystudernext import NextApi, NextDeviceFamilies, NextDataset
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 GATEWAY_HOST = "192.168.1.123"
 GATEWAY_PORT = 502
 
-dataset = NextFactory.create_dataset()
+dataset = NextDataset.get_instance()
 param_2103 = dataset.get_by_address(2103, NextDeviceFamilies.SYSTEM)
 param_0318 = dataset.get_by_address(318,  NextDeviceFamilies.BATTERY)
 param_5100 = dataset.get_by_address(5100, NextDeviceFamilies.NEXT3)

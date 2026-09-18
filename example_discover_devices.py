@@ -16,7 +16,6 @@ import sys
 
 from pystudernext import AsyncNextApi, NextApi
 from pystudernext import AsyncNextDiscover, NextDiscover
-from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset, NextDatasetFlag
 from pystudernext import NextDeviceFamilies, NextDeviceFamiliesFlag
 from helper import RunHelper
@@ -33,8 +32,9 @@ GATEWAY_PORT = 502
 
 def main():
     api = NextApi(GATEWAY_HOST, GATEWAY_PORT)
-    families = NextDeviceFamilies(flags={NextDeviceFamiliesFlag.ADD_TEST:True})
-    dataset = NextFactory.create_dataset(flags={NextDatasetFlag.ADD_TEST:True})
+
+    families = NextDeviceFamilies.get_instance(flags={NextDeviceFamiliesFlag.ADD_TEST:True})
+    dataset = NextDataset.get_instance(flags={NextDatasetFlag.ADD_TEST:True})
 
     try:
         if not api.start():

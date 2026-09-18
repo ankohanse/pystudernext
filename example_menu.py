@@ -11,11 +11,11 @@ import asyncio
 import logging
 import sys
 
-from pystudernext import AsyncNextFactory
-from pystudernext import NextFactory
+from helper import RunHelper
+
 from pystudernext import NextDeviceFamilies
 from pystudernext import StuderDataType
-from helper import RunHelper
+from pystudernext import NextDataset
 
 # Setup logging to StdOut
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     # Print entire menu structure
-    dataset = NextFactory.create_dataset()
-    families = NextDeviceFamilies()
+    families = NextDeviceFamilies.get_instance()
+    dataset = NextDataset.get_instance()
 
     # Helper function to recursively print the entire menu
     def print_menu(family_id, parent_id, indent=""):

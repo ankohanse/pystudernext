@@ -8,8 +8,6 @@ from .shared.studer_interfaces_sync import StuderDiscover
 
 from .api_async import AsyncNextApi
 from .api_sync import NextApi
-from .factory_async import AsyncNextFactory
-from .factory_sync import NextFactory
 from .discover_async import AsyncNextDiscover, AsyncNextApi
 from .discover_sync import NextDiscover, NextApi
 

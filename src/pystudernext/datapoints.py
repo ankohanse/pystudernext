@@ -2,24 +2,32 @@
 Definition of all parameters / constants used in the Next protocol
 """
 
-from enum import StrEnum
 import logging
+import orjson
 
+from aiofiles import open as aiofiles_open
 from dataclasses import dataclass
+from enum import StrEnum
 
-from pystudernext.families import NextDeviceFamilies
-from pystudernext.shared.studer_types import StuderAccess, StuderDataType, StuderTarget
-
+from .shared.helpers import (
+    HybridLock,
+)
 from .shared.studer_dataset import (
-    StuderDataset,
     StuderDatapoint,
+    StuderDatapointEnumNotFoundException,
     StuderDatapointSyntaxException,
+    StuderDataset,
 )
 from .shared.studer_types import (
     StuderAccess,
+    StuderDataType,
+    StuderTarget,
 )
 from .data import (
     NextUserLevel,
+)
+from .families import (
+    NextDeviceFamilies,
 )
 
 
@@ -202,9 +210,136 @@ class NextDataset(StuderDataset):
     ID_INSTALLATION_GUID = "0.1.6.2"    # family="System", address=2103
 
 
-    def __init__(self, datapoints: list[StuderDatapoint]):
-        """"""
-        families = NextDeviceFamilies() # singleton instance
+    def __init__(self):
+        raise RuntimeError("Use 'NextDataset.get_instance()' or 'await NextDataset.async_get_instance()' instead of direct instantiation.")
 
+    # Single instance of the NextDataset
+    _instance = None
+    _instance_lock = HybridLock()
+
+    @classmethod
+    async def async_get_instance(cls, flags:dict=None) -> 'NextDataset':
+        """
+        Async helper function to get singleton instance of NextDataset
+        """
+        async with cls._instance_lock:
+            if cls._instance is None:
+                # Create a bare instance without calling __init__
+                self = super().__new__(cls)
+                await self._async_init(flags)
+                cls._instance = self
+
+        return cls._instance
+
+    @classmethod
+    def get_instance(cls, flags:dict=None) -> 'NextDataset':
+        """
+        Sync helper function to get singleton instance of NextDataset
+        """
+        with cls._instance_lock:
+            if cls._instance is None:
+                # Create a bare instance without calling __init__
+                self = super().__new__(cls)
+                self._init(flags)
+                cls._instance = self
+            
+        return cls._instance
+
+    @classmethod
+    def del_instance(cls):
+        """Used for intermediate cleanup during unit tests"""
+        cls._instance = None
+
+
+    async def _async_init(self, flags:dict=None):
+        """
+        Perform the actual async initialization
+        """
+        datapoints = list()
+        flags = flags or {}
+        add_test = flags.get(NextDatasetFlag.ADD_TEST, False)
+
+        for (item_path, enum_path) in NextDataset.PATHS:
+
+            # Normally we skip the test family
+            if not add_test and 'tst' in item_path:
+                continue
+
+            async with aiofiles_open(item_path, "r", encoding="UTF-8") as item_file:
+                item_text = await item_file.read()
+
+            async with aiofiles_open(enum_path, "r", encoding="UTF-8") as enum_file:
+                enum_text = await enum_file.read()
+
+            item_values = orjson.loads(item_text)
+            enum_values = orjson.loads(enum_text)
+
+            # Merge the datapoints from this file
+            datapoints += self._get_datapoints_from_values(item_values, enum_values)
+
+        _LOGGER.info(f"Using {len(datapoints)} datapoints")
+
+        families = await NextDeviceFamilies.async_get_instance() # singleton instance
         super().__init__(datapoints, families)
+
+
+    def _init(self, flags:dict=None):
+        """
+        Perform the actual async initialization
+        """
+        datapoints = list()
+        flags = flags or {}
+        add_test = flags.get(NextDatasetFlag.ADD_TEST, False)
+
+        for (item_path, enum_path) in NextDataset.PATHS:
+
+            # Normally we skip the test family
+            if not add_test and 'tst' in item_path:
+                continue
+
+            with open(item_path, "r", encoding="UTF-8") as item_file:
+                item_text = item_file.read()
+
+            with open(enum_path, "r", encoding="UTF-8") as enum_file:
+                enum_text = enum_file.read()
+
+            item_values = orjson.loads(item_text)
+            enum_values = orjson.loads(enum_text)
+
+            # Merge the datapoints from this file
+            datapoints += self._get_datapoints_from_values(item_values, enum_values)
+
+        _LOGGER.info(f"Using {len(datapoints)} datapoints")
+
+        families = NextDeviceFamilies.get_instance() # singleton instance
+        super().__init__(datapoints, families)
+
+
+    def _get_datapoints_from_values(self, item_values: dict, enum_values: dict):
+        """
+        """
+        item_datapoints = list(filter(None, [NextDatapoint.from_dict(val) for val in item_values]))
+        item_enums = list(filter(None, [NextDatapointEnum.from_dict(val) for val in enum_values]))
+
+        dp_parent = None
+        for dp in item_datapoints:
+            # Resolve Name for each datapoint. It is composed of the parent label and the datapoint label.
+            # Datapoints are clustered with ones sharing the same parent next to each other.
+            # Therefore we often do not need to search the entire set for the parent but can use the last used one.
+            if dp_parent is None or dp_parent.id != dp.parent_id:
+                # Resolve next parent. Should be in the same file.
+                dp_parent = next( (d for d in item_datapoints if d.id==dp.parent_id), None)
+
+            dp.name = dp_parent.name + ' - ' + dp.label if dp_parent is not None else dp.label
+
+            # Resolve enum options for each datapoint (if needed).
+            if dp.enum_id is not None:
+                enum_id = f"{dp.parent_id}.enum{dp.enum_id}"
+                enum_def = next( (e for e in item_enums if e.enum_id==enum_id), None)
+                if enum_def is None:
+                    raise StuderDatapointEnumNotFoundException(f"Missing definition for enum {dp.enum_id}; fam={dp.family_id}, pid={dp.parent_id}, addr={dp.address}")
+
+                dp.enum_options = enum_def.options
+
+        return item_datapoints
 

@@ -42,12 +42,6 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
-from .factory_async import (
-    AsyncNextFactory,
-)
-from .factory_sync import (
-    NextFactory,
-)
 
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -63,7 +57,7 @@ class AsyncNextDiscover(AsyncStuderDiscover):
         """
         self._api = api
         self._dataset = dataset
-        self._families = NextDeviceFamilies()   # singleton instance
+        self._families = NextDeviceFamilies.get_instance()   # singleton instance
 
 
     async def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[StuderDiscoveredDevice]:

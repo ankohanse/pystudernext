@@ -8,6 +8,9 @@ import logging
 
 from dataclasses import dataclass
 
+from .shared.helpers import (
+    HybridLock,
+)
 from .shared.studer_families import (
     StuderDeviceFamilies,
     StuderDeviceFamily,
@@ -151,28 +154,51 @@ class NextDeviceFamilies(StuderDeviceFamilies):
         None,              # address for ObjectModel version
     )
 
+    def __init__(self):
+        raise RuntimeError("Use 'NextDeviceFamilies.get_instance()' or 'await NextDeviceFamilies.async_get_instance()' instead of direct instantiation.")
+
     # Single instance of the NextDeviceFamilies
     _instance = None
+    _instance_lock = HybridLock()
 
-    def __new__(cls, *args, **kwargs):
-        """Singleton design pattern to make sure we only have a single NextDeviceFamilies instance"""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
+    @classmethod
+    async def async_get_instance(cls, flags:dict=None) -> 'NextDeviceFamilies':
+        """
+        Async helper function to get singleton instance of NextDeviceFamilies
+        """
+        async with cls._instance_lock:
+            if cls._instance is None:
+                # Create a bare instance without calling __init__
+                self = super().__new__(cls)
+                self._init(flags)   # For now, we only need sync initalization
+                cls._instance = self
+
         return cls._instance
-    
-    def __init__(self, flags:dict=None):
-        """Initialize the single NextDeviceFamilies instance"""
+
+    @classmethod
+    def get_instance(cls, flags:dict=None) -> 'NextDeviceFamilies':
+        """
+        Sync helper function to get singleton instance of NextDeviceFamilies
+        """
+        with cls._instance_lock:
+            if cls._instance is None:
+                # Create a bare instance without calling __init__
+                self = super().__new__(cls)
+                self._init(flags)
+                cls._instance = self
+            
+        return cls._instance
+
+
+    def _init(self, flags:dict=None):
+        """
+        Initialize the NextDeviceFamilies instance
+        """
         flags = flags or {}
+        filter = ['tst'] if flags.get(NextDeviceFamiliesFlag.ADD_TEST, False) else []
 
         # Gather the list of defined Device Families
-        list = [val for val in NextDeviceFamilies.__dict__.values() if isinstance(val, NextDeviceFamily)]
-
-        if flags.get(NextDeviceFamiliesFlag.ADD_TEST, False):
-            try:
-                list.remove(NextDeviceFamilies.TEST)
-            except:
-                pass
-
+        list = [val for val in NextDeviceFamilies.__dict__.values() if isinstance(val, NextDeviceFamily) and val.id not in filter]
         super().__init__(list)
 
         # Fill helper variables once

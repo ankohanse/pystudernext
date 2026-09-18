@@ -14,7 +14,6 @@ import logging
 import sys
 
 from pystudernext import AsyncNextApi, NextApi
-from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDeviceFamilies
 from pystudernext import NextDataset, NextDatapoint
 from pystudernext import DEFAULT_PORT
@@ -31,7 +30,7 @@ GATEWAY_HOST = "192.168.1.123"
 GATEWAY_PORT = 502
 
 def main():
-    dataset = NextFactory.create_dataset()
+    dataset = NextDataset.get_instance()
     param_2103 = dataset.get_by_address(2103, NextDeviceFamilies.SYSTEM)
     param_0318 = dataset.get_by_address(318,  NextDeviceFamilies.BATTERY)
     param_1815 = dataset.get_by_address(1815, NextDeviceFamilies.AC_SOURCE)

@@ -44,12 +44,6 @@ from .datapoints import (
 from .families import (
     NextDeviceFamilies
 )
-from .factory_async import (
-    AsyncNextFactory,
-)
-from .factory_sync import (
-    NextFactory,
-)
 import concurrent.futures
 
 _LOGGER = logging.getLogger(__name__)
@@ -66,7 +60,7 @@ class NextDiscover(StuderDiscover):
         """
         self._api = api
         self._dataset = dataset
-        self._families = NextDeviceFamilies()   # singleton instance
+        self._families = NextDeviceFamilies.get_instance()   # singleton instance
 
 
     def discover_devices(self, getExtendedInfo = False, verbose = False) -> list[StuderDiscoveredDevice]:

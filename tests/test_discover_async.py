@@ -8,7 +8,6 @@ from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from pymodbus.pdu import ModbusPDU
 
 from pystudernext import AsyncNextDiscover, NextDiscover
-from pystudernext import AsyncNextFactory, NextFactory
 from pystudernext import NextDataset
 from pystudernext import NextDeviceFamilies
 from pystudernext import NextDataType
@@ -68,8 +67,8 @@ from . import AsyncNextApiStub, NextApiStub
 )
 async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request):
 
-    dataset = await AsyncNextFactory.create_dataset()
-    families = NextDeviceFamilies()
+    families = await NextDeviceFamilies.async_get_instance()
+    dataset = await NextDataset.async_get_instance()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -146,8 +145,8 @@ async def test_discover_devices(name, rsp_slaves, rsp_dict, exp_devices, request
 )
 async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, exp_model, exp_serial, exp_sw_version, exp_om_version, request):
 
-    dataset = await AsyncNextFactory.create_dataset()
-    families = NextDeviceFamilies()
+    families = await NextDeviceFamilies.async_get_instance()
+    dataset = await NextDataset.async_get_instance()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
         """Helper to return the registers for a read"""
@@ -197,8 +196,8 @@ async def test_discover_extendedinfo(name, rsp_slaves, rsp_dict, exp_devices, ex
 )
 async def test_gateway_info(name, rsp_slaves, rsp_dict, exp_host, exp_guid, request):
 
-    dataset = await AsyncNextFactory.create_dataset()
-    families = NextDeviceFamilies()
+    families = await NextDeviceFamilies.async_get_instance()
+    dataset = await NextDataset.async_get_instance()
 
     async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int):
             """Helper to return the registers for a read"""
