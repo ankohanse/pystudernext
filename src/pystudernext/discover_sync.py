@@ -5,6 +5,7 @@ Discover Next Gateway and Next Devices
 """
 
 import asyncio
+import re
 import httpx
 import ipaddress
 import logging
@@ -256,18 +257,14 @@ class NextDiscover(StuderDiscover):
         def check_url(client:httpx.Client, url:str) -> str|None:
             _LOGGER.info(f"Trying {url}")
             try:
-                rsp = client.get(url)
+                rsp = client.get(url, follow_redirects=True)
+                if rsp and rsp.is_success:
+                    match = re.search(r"<title>\s*(.+?)\s*</title>", rsp.text, re.IGNORECASE | re.DOTALL)
 
-                # TODO: The check below is probably not correct yet.
-                # Possible alternatives: 
-                #  - user-agent header
-                #  - x-headers
-                #  - Body of the response
-                #
-                if rsp and rsp.is_success and rsp.headers.get("Server", "").startswith("Studer"):
-                    return url
-                else:
-                    return None
+                    if match and match.group(1).startswith("nextOS"):
+                        return url
+
+                return None
             except:
                 return None
 
