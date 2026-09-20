@@ -20,6 +20,7 @@ exclude = [
     "example_menu_async.py" = "example_menu.py"
 
 [tool.unasyncd.add_replacements]
+    "AsyncStuderApi" = "StuderApi"
     "AsyncStuderDiscover" = "StuderDiscover"
     "AsyncNextApi" = "NextApi"
     "AsyncNextDiscover" = "NextDiscover"

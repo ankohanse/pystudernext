@@ -12,6 +12,7 @@ from pystudernext import StuderParamException
 from pystudernext import StuderDataType, StuderDiscoveredDevice
 from pystudernext import NextDataType
 from pystudernext import NextDataset
+from pystudernext.values import NextValueItem, NextValueSet
 
 from . import AsyncNextApiStub, NextApiStub
 
@@ -21,6 +22,32 @@ DEVICE_NX3_1 = StuderDiscoveredDevice(
     family_id = 'nx3',
     family_model = 'Next3',
 )
+
+@pytest_asyncio.fixture
+async def dataset():
+    dataset = await NextDataset.async_get_instance()
+    yield dataset
+
+@pytest_asyncio.fixture
+async def data_multi(dataset):
+    req_data = NextValueSet([
+        NextValueItem(datapoint=dataset.get_by_address(2121, 'sys'), device="SYS"),
+        NextValueItem(datapoint=dataset.get_by_address(2122, 'sys'), device="SYS"),
+        NextValueItem(datapoint=dataset.get_by_address(  30, 'nx3'), device="NX3_1"),
+        NextValueItem(datapoint=dataset.get_by_address(3908, 'sys'), device="SYS"),
+        NextValueItem(datapoint=dataset.get_by_address(3924, 'sys'), device="SYS"),
+    ])
+    rsp_single = NextValueSet(
+        items=[
+            NextValueItem(datapoint=dataset.get_by_address(2121, 'sys'), device="SYS", value=True),
+            NextValueItem(datapoint=dataset.get_by_address(2122, 'sys'), device="SYS", value=1234),
+            NextValueItem(datapoint=dataset.get_by_address(  30, 'nx3'), device="NX3_1", value=1234),
+            NextValueItem(datapoint=dataset.get_by_address(3908, 'sys'), device="SYS", value=1234.0),
+            NextValueItem(datapoint=dataset.get_by_address(3924, 'sys'), device="SYS", value=1234.0),
+        ]
+    )
+    yield req_data, rsp_single
+
 
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except",
@@ -91,6 +118,70 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_format,
             rsp_value = await api.request_value(param, test_slave)
 
 
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("dataset", "data_multi")
+@pytest.mark.parametrize(
+    "name, values_fixture, exp_value, exp_error, exp_except",
+    [
+        ("request values ok",       "data_multi",         True,  False, None),
+    ]
+)
+async def test_request_values(name, values_fixture, exp_value, exp_error, exp_except, request):
+    
+    req_data, exp_rsp_single = request.getfixturevalue(values_fixture)
+
+    async def on_read(api: AsyncNextApiStub, address: int, count: int, slave: int) -> ModbusPDU:
+        """Helper to return the registers for a read"""
+        nonlocal exp_rsp_single
+
+        # Lookup the reponse value we need
+        rsp_item = next((i for i in exp_rsp_single.items if i.datapoint.address==address), None)
+        rsp_value = rsp_item.value
+
+        datatype = NextDataType.to_datatype(rsp_item.datapoint.data_type)
+        if datatype == AsyncModbusTcpClient.DATATYPE.BITS:
+            rsp_value = unpack_bitstring( [rsp_value] )
+
+        registers = AsyncModbusTcpClient.convert_to_registers(value=rsp_value, data_type=datatype)
+
+        return ModbusPDU(dev_id=slave, transaction_id=9876, address=address, registers=registers)
+
+    # Run the request
+    api = AsyncNextApiStub(on_read_handler=on_read)
+    await api.start()
+
+    if exp_except == None:
+        rsp_data = await api.request_values(req_data, retries=1, timeout=5)
+
+        assert rsp_data is not None
+        assert len(rsp_data.items) == len(req_data.items)
+
+        for item in rsp_data.items:
+            if exp_value:
+                exp_item = next((i for i in exp_rsp_single.items if i.datapoint.address==item.datapoint.address), None)
+                if exp_item is not None:
+                    exp_val = exp_item.value
+                else:
+                    exp_val = None
+
+                match item.datapoint.data_type:
+                    case StuderDataType.FLOAT32 | StuderDataType.FLOAT64:
+                        # carefull with comparing floats
+                        assert item.value == pytest.approx(exp_val, abs=0.01)
+                    case _:
+                        assert item.value == exp_val
+            else:
+                assert item.value is None
+
+            if exp_error:
+                assert item.error is not None
+            else:
+                assert item.error is None
+    else:
+        with pytest.raises(exp_except):
+            rsp_data = await api.request_values(req_data, retries=1, timeout=5)
+
+
 @pytest.mark.parametrize(
     "name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except",
     [
@@ -108,7 +199,7 @@ async def test_request_value(name, test_fam, test_slave, test_addr, test_format,
         ("update slave fail",   'nx3', None,         7505, StuderDataType.UINT32, 1234, 14, StuderParamException),
     ]
 )
-async def test_write_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except):
+async def test_update_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except):
 
     write_called = False
     write_address = None

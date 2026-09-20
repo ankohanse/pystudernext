@@ -4,43 +4,30 @@
 api.py: communication api to Studer Next via Modbus over TCP.
 """
 
+import asyncio
 import logging
 
 from datetime import datetime, timedelta
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
-from .shared.studer_types import (
-    StuderAccess,
-    StuderDataType,
-    StuderDiscoveredDevice,
-    StuderParamException,
-)
-from .const import (
-    DEFAULT_HOST,
-    DEFAULT_PORT,
-)
-from .data import (
-    NextDataType,
-    NextApiConnectException,
-    NextApiReadException,
-    NextApiUpdateException,
-    NextPackException,
-    NextUnpackException,
-)
-from .datapoints import (
-    NextDatapoint,
-)
-from .families import (
-    NextDeviceFamilies
-)
+from .shared.studer_dataset import StuderDatapoint
+from .shared.studer_interfaces_async import AsyncStuderApi
+from .shared.studer_interfaces_sync import StuderApi
+from .shared.studer_types import StuderAccess, StuderDataType, StuderDiscoveredDevice, StuderParamException
+from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD
+from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextPackException, NextUnpackException
+from .datapoints import NextDatapoint
+from .families import NextDeviceFamilies
+from .values import NextValueItem, NextValueSet
+import time
 
 
 _LOGGER = logging.getLogger(__name__)
 logging.getLogger("pymodbus").setLevel(logging.WARNING)
 
 
-class NextApi:
+class NextApi(StuderApi):
     """
     The actual Api for requesting and updating parameters via an async modbus tcp client.
     """
@@ -105,7 +92,7 @@ class NextApi:
         return self._port
     
 
-    def request_value(self, parameter: NextDatapoint, device: StuderDiscoveredDevice=None, retries = None, timeout = None, verbose=False):
+    def request_value(self, parameter: StuderDatapoint, device: StuderDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False) -> Any:
         """
         Request a parameter.
         One of device, slave or code needs to be passed.
@@ -123,7 +110,7 @@ class NextApi:
             return None
             
         if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
-            raise StuderParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not readable")
+            raise StuderParamException(f"Datapoint {parameter.family_id}:{parameter.address} is not readable")
             
         if isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
@@ -132,7 +119,7 @@ class NextApi:
         elif isinstance(device, str):  
             slave = self._families.get_slave_by_code(code=device)
         else:
-            raise StuderParamException(f"Device parameter must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
+            raise StuderParamException(f"Parameter 'device' must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
 
         # Send the request
         try:
@@ -159,6 +146,56 @@ class NextApi:
 
         except Exception as e:
             raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
+
+
+    def request_values(self, request_data: NextValueSet, retries = None, timeout = None, verbose=False) -> NextValueSet:
+        """
+        Request multiple parameters in one call.
+        Can only retrieve actual device values, NOT the average or sum over multiple devices.
+
+        Returns None if not connected, otherwise returns the list of requested values
+        Throws
+            StuderParamException
+            NextApiConnectException
+            NextApiTimeoutException
+            NextUnpackException
+        """
+
+        # Unlike the Studer Xcom protocol, the Studer Next protocol does not have a function to request multiple
+        # items in one call.
+        # As a result we just resolve all requested values sequentially
+        result_items: list[NextValueItem] = []
+        burst_start = datetime.now()
+
+        for req_single in request_data.items:
+            try:
+                error = None
+                value = self.request_value(req_single.datapoint, req_single.address, retries=retries, timeout=timeout, verbose=verbose)
+            
+            except Exception as ex:
+                value = None
+                error = str(ex)
+
+            if error is not None:
+                _LOGGER.debug(f"Failed to retrieve info or param {req_single.datapoint.nr}:{req_single.address}; {error}")
+
+            # Add to results
+            rsp_single = NextValueItem(
+                datapoint = req_single.datapoint, 
+                device = req_single.code,
+                value = value,
+                error = error,
+            )
+            result_items.append(rsp_single)
+
+            # Periodically wait for a second. 
+            # This will make sure we do not block the Next Gateway with too many requests at once
+            if (datetime.now() - burst_start).total_seconds() > REQ_BURST_PERIOD:
+                time.sleep(1)
+                burst_start = datetime.now()
+
+        # Return all reponse items as one XcomValueSet object
+        return NextValueSet(result_items)
 
 
     def update_value(self, parameter: NextDatapoint, value: Any, device: StuderDiscoveredDevice|int|str=None, retries = None, timeout = None, verbose=False):

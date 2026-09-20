@@ -244,7 +244,7 @@ class NextDeviceFamilies(StuderDeviceFamilies):
         return self._code_to_slave_map.get(code, None)
 
 
-    def get_code_by_slave(self, slave: str) -> int:
+    def get_code_by_slave(self, slave: int) -> str:
         """
         Lookup the slave to find the code
         """

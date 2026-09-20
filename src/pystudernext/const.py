@@ -13,6 +13,8 @@ from typing import Iterable
 DEFAULT_HOST = ""
 DEFAULT_PORT = 502
 
+REQ_BURST_PERIOD = 5 # do burst of requests for 5 seconds, then wait a second, then the next burst
+
    
 def safe_len(lst: Iterable):
     try:
