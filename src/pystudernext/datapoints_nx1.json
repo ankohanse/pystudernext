@@ -387,7 +387,7 @@
     {   "fam": "nx1", "pid": "11.x.25", "addr": 7213, "size": 2, "lvl": "Basic",    "id": "8",   "lbl": "Max analog value",   "def": "10",   "unit": "V",   "rng": [10,60],   "type": "float",   "rw": "R/W" },
 
     {  "_rem": "###"},
-    {  "_rem": "### Next3 - Battery contributor ext. solar chargers"},
+    {  "_rem": "### Next1 - Battery contributor ext. solar chargers"},
     {  "_rem": "###"},
     {   "fam": "nx1", "pid": "11.x.26", "addr": 7500, "size": 2, "lvl": "ViewOnly", "id": "0",   "lbl": "Charging current",   "def": "0",   "unit": "A",   "rng": null,   "type": "float",   "rw": "R" },
     {   "fam": "nx1", "pid": "11.x.26", "addr": 7502, "size": 2, "lvl": "ViewOnly", "id": "1",   "lbl": "Temp sensor",   "def": "Disconnected",   "unit": "",   "rng": null,   "type": "enum",   "rw": "R",   "enum_id": "0" },
@@ -395,7 +395,7 @@
     {   "fam": "nx1", "pid": "11.x.26", "addr": 7510, "size": 2, "lvl": "ViewOnly", "id": "5",   "lbl": "Voltage",   "def": "0",   "unit": "V",   "rng": null,   "type": "float",   "rw": "R" },
 
     {  "_rem": "###"},
-    {  "_rem": "### Next3 - Solar common ext. solar chargers"},
+    {  "_rem": "### Next1 - Application"},
     {  "_rem": "###"},
     {   "fam": "nx1", "pid": "11.x.27", "addr": 7800, "size": 1, "lvl": "Basic",    "id": "0",   "lbl": "Turn on",   "def": "-",   "unit": "",   "rng": null,   "type": "signal",   "rw": "W" },
     {   "fam": "nx1", "pid": "11.x.27", "addr": 7801, "size": 1, "lvl": "Basic",    "id": "1",   "lbl": "Turn off",   "def": "-",   "unit": "",   "rng": null,   "type": "signal",   "rw": "W" },
@@ -410,7 +410,7 @@
     {   "fam": "nx1", "pid": "11.x.27", "addr": 7819, "size": 4, "lvl": "ViewOnly", "id": "13",  "lbl": "Total energy",   "def": "0",   "unit": "Wh",   "rng": null,   "type": "float64",   "rw": "R" },
 
     {  "_rem": "###"},
-    {  "_rem": "### Next3 - Ext. solar chargers group"},
+    {  "_rem": "### Next1 - Ext. solar chargers group"},
     {  "_rem": "###"},
     {   "fam": "nx1", "pid": "11.x.28", "addr": 8100, "size": 2, "lvl": "ViewOnly",        "id": "0",   "lbl": "Number",   "def": "",   "unit": "",   "rng": null,   "type": "uint",   "rw": "R" },
     {   "fam": "nx1", "pid": "11.x.28", "addr": 8102, "size": 2, "lvl": "ViewOnly",        "id": "1",   "lbl": "Status",   "def": "AtLeastOneSolarDisabled",   "unit": "",   "rng": null,   "type": "bitfield",   "rw": "R",   "enum_id": "0" },
