@@ -22,7 +22,7 @@ class StuderValueItem():
     datapoint: StuderDatapoint                  # Both in request and response
     code: str|None                              # Both in request and response
     address_or_slave: int|None                  # Both in request and response
-    value: Any                                  # Only in response from request_values()
+    value: Any | None                           # Only in response from request_values()
     error: str|None                             # Only in response from request_values()
 
     @property
