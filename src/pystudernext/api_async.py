@@ -13,8 +13,8 @@ from .shared.studer_dataset import StuderDatapoint
 from .shared.studer_interfaces_async import AsyncStuderApi
 from .shared.studer_interfaces_sync import StuderApi
 from .shared.studer_types import StuderAccess, StuderDataType, StuderDiscoveredDevice, StuderParamException
-from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD
-from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextPackException, NextUnpackException
+from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD, safe_isinstance
+from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextApiPackException, NextApiUnpackException
 from .datapoints import NextDatapoint
 from .families import NextDeviceFamilies
 from .values import NextValueItem, NextValueSet
@@ -99,7 +99,7 @@ class AsyncNextApi(AsyncStuderApi):
             StuderParamException
             NextApiConnectException
             NextApiTimeoutException
-            NextUnpackException
+            NextApiUnpackException
         """
 
         # Sanity check
@@ -109,7 +109,7 @@ class AsyncNextApi(AsyncStuderApi):
         if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Datapoint {parameter.family_id}:{parameter.address} is not readable")
             
-        if isinstance(device, StuderDiscoveredDevice):
+        if safe_isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
@@ -142,7 +142,7 @@ class AsyncNextApi(AsyncStuderApi):
                 case _: return value
 
         except Exception as e:
-            raise NextPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
+            raise NextApiPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
 
 
     async def request_values(self, request_data: NextValueSet, retries = None, timeout = None, verbose=False) -> NextValueSet:
@@ -155,7 +155,7 @@ class AsyncNextApi(AsyncStuderApi):
             StuderParamException
             NextApiConnectException
             NextApiTimeoutException
-            NextUnpackException
+            NextApiUnpackException
         """
 
         # Unlike the Studer Xcom protocol, the Studer Next protocol does not have a function to request multiple
@@ -204,7 +204,7 @@ class AsyncNextApi(AsyncStuderApi):
             StuderParamException
             NextApiConnectException
             NextApiTimeoutException
-            NextPackException
+            NextApiPackException
         """
         # Sanity check
         if parameter is None or value is None:
@@ -213,7 +213,7 @@ class AsyncNextApi(AsyncStuderApi):
         if parameter.access not in [StuderAccess.WRITE, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not writable")
             
-        if isinstance(device, StuderDiscoveredDevice):
+        if safe_isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
@@ -230,7 +230,7 @@ class AsyncNextApi(AsyncStuderApi):
             regs = AsyncModbusTcpClient.convert_to_registers(value, data_type=NextDataType.to_datatype(parameter.data_type))
 
         except Exception as e:
-            raise NextPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.data_type}, size={parameter.size}") from None
+            raise NextApiPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.data_type}, size={parameter.size}") from None
         
         # Send the request
         try:

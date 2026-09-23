@@ -35,10 +35,10 @@ class NextApiReadException(Exception):
 class NextApiUpdateException(Exception):
     """Exception to indicate failure to update data via the Next gateway"""
 
-class NextUnpackException(Exception):
+class NextApiUnpackException(Exception):
     """Exception to indicate faulure to unpack a response value"""
 
-class NextPackException(Exception):
+class NextApiPackException(Exception):
     """Exception to indicate faulure to pack a update value"""
 
 

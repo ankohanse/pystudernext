@@ -21,3 +21,4 @@ def safe_len(lst: Iterable):
         return len(lst)
     except:
         return sum(1 for i in lst) 
+
