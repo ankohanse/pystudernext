@@ -12,10 +12,11 @@ from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
 from .shared.studer_dataset import StuderDatapoint
+from .shared.helpers import safe_isinstance
 from .shared.studer_interfaces_async import AsyncStuderApi
 from .shared.studer_interfaces_sync import StuderApi
 from .shared.studer_types import StuderAccess, StuderDataType, StuderDiscoveredDevice, StuderParamException
-from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD, safe_isinstance
+from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD
 from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextApiPackException, NextApiUnpackException
 from .datapoints import NextDatapoint
 from .families import NextDeviceFamilies
