@@ -57,6 +57,8 @@ def test_get_instance_sync(name, flags, exp_len):
         (1200,  NextDeviceFamilies.SYSTEM,  1200, "sys", StuderDataType.ENUM32,  None),
         (6900,  "nx3",                      6900, "nx3", StuderDataType.FLOAT32, None),
         (1200,  "sys",                      1200, "sys", StuderDataType.ENUM32,  None),
+        (None,  'nx3',                      None, None,  None,                   StuderParamException),
+        (6900,  None,                       None, None,  None,                   StuderParamException),
         (5100,  NextDeviceFamilies.BATTERY, None, None,  None,                   StuderDatapointUnknownException),
         (9999,  "sys",                      None, None,  None,                   StuderDatapointUnknownException),
     ]
