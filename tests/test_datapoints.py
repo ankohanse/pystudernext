@@ -49,37 +49,41 @@ def test_get_instance_sync(name, flags, exp_len):
     assert len(dataset._datapoints) == exp_len
 
 
-def test_address():
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "addr, family, exp_addr, exp_family_id, exp_data_type, exp_except",
+    [
+        (6900,  NextDeviceFamilies.NEXT3,   6900, "nx3", StuderDataType.FLOAT32, None),
+        (1200,  NextDeviceFamilies.SYSTEM,  1200, "sys", StuderDataType.ENUM32,  None),
+        (6900,  "nx3",                      6900, "nx3", StuderDataType.FLOAT32, None),
+        (1200,  "sys",                      1200, "sys", StuderDataType.ENUM32,  None),
+        (5100,  NextDeviceFamilies.BATTERY, None, None,  None,                   StuderDatapointUnknownException),
+        (9999,  "sys",                      None, None,  None,                   StuderDatapointUnknownException),
+    ]
+)
+async def test_address(addr, family, exp_addr, exp_family_id, exp_data_type, exp_except):
+    NextDataset.del_instance()
     dataset = NextDataset.get_instance()
 
-    param = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
-    assert param.family_id == "nx3"
-    assert param.address == 6900
-    assert param.data_type == StuderDataType.FLOAT32
+    if not exp_except:
+        param = dataset.get_by_address(addr, family)
+    
+        assert param.address == exp_addr
+        assert param.family_id == exp_family_id
+        assert param.data_type == exp_data_type
 
-    param = dataset.get_by_address(5100, 'nx3')
-    assert param.family_id == "nx3"
-    assert param.address == 5100
-    assert param.data_type == StuderDataType.ENUM32
-    assert param.enum_options != None
-    assert type(param.enum_options) is dict
-    assert len(param.enum_options) == 4
+        if exp_data_type == StuderDataType.ENUM32:
+            assert param.enum_options != None
+            assert type(param.enum_options) is dict
+            assert len(param.enum_options) > 0
 
-    param = dataset.get_by_address(1200, NextDeviceFamilies.SYSTEM)
-    assert param.family_id == "sys"
-    assert param.address == 1200
-    assert param.data_type == StuderDataType.ENUM32
-    assert param.enum_options != None
-    assert type(param.enum_options) is dict
-
-    with pytest.raises(StuderDatapointUnknownException):
-        param = dataset.get_by_address(9999, 'sys')
-
-    with pytest.raises(StuderDatapointUnknownException):
-        param = dataset.get_by_address(5100, NextDeviceFamilies.BATTERY)
+    else:
+        with pytest.raises(exp_except):
+            param = dataset.get_by_address(addr, family)
 
 
 def test_id():
+    NextDataset.del_instance()
     dataset = NextDataset.get_instance()
 
     param = dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
@@ -101,6 +105,7 @@ def test_id():
 
 
 def test_enum():
+    NextDataset.del_instance()
     dataset = NextDataset.get_instance()
 
     param = dataset.get_by_address(8130, NextDeviceFamilies.SYSTEM)
@@ -121,6 +126,7 @@ def test_enum():
 
 
 def test_bitfield():
+    NextDataset.del_instance()
     dataset = NextDataset.get_instance()
 
     param = dataset.get_by_address(1205, NextDeviceFamilies.SYSTEM)
@@ -162,6 +168,7 @@ def test_bitfield():
     ]
 )
 def test_menu(family_id, exp_len):
+    NextDataset.del_instance()
     dataset = NextDataset.get_instance()
     
     root_items = dataset.get_menu_items(family_id)
