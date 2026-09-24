@@ -25,7 +25,7 @@ def test_init():
     "name, flags, exp_len",
     [
         ("default", FLAGS_DEFAULT, 2034),
-        ("test",    FLAGS_TEST,    2039)
+        ("test",    FLAGS_TEST,    2046)
     ]
 )
 async def test_get_instance_async(name, flags, exp_len):
@@ -39,7 +39,7 @@ async def test_get_instance_async(name, flags, exp_len):
     "name, flags, exp_len",
     [
         ("default", FLAGS_DEFAULT, 2034),
-        ("test",    FLAGS_TEST,    2039)
+        ("test",    FLAGS_TEST,    2046)
     ]
 )
 def test_get_instance_sync(name, flags, exp_len):

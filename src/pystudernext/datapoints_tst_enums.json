@@ -10,8 +10,14 @@
     {  "_rem": "###"},
     {  "_rem": "### 99.1.1 - Test - General (Victron)"},
     {  "_rem": "###"},
-    {  "_rem": "none" },
-
+    {
+        "enum_id": "99.1.1.enum0",
+        "options": {
+            "0": "Idle",
+            "1": "Charging",
+            "2": "Discharging"
+        }
+    },
 
     { "_rem": "###"},
     { "_rem": "### End of file"},
