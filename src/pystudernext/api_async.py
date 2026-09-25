@@ -9,13 +9,13 @@ from datetime import datetime, timedelta
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
-from pystudernext.shared.studer_valueset import StuderValueItem, StuderValueSet
 
 from .shared.studer_dataset import StuderDatapoint
 from .shared.helpers import safe_isinstance
 from .shared.studer_interfaces_async import AsyncStuderApi
 from .shared.studer_interfaces_sync import StuderApi
 from .shared.studer_types import StuderAccess, StuderDataType, StuderDiscoveredDevice, StuderParamException
+from .shared.studer_valueset import StuderValueItem, StuderValueSet
 from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD
 from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextApiPackException, NextApiUnpackException
 from .datapoints import NextDatapoint
@@ -112,9 +112,6 @@ class AsyncNextApi(AsyncStuderApi):
         if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Datapoint {parameter.family_id}:{parameter.address} is not readable")
 
-        #AJH
-        _LOGGER.debug(f"request value; device={device} ({type(device)})")
-        
         if safe_isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
@@ -141,12 +138,7 @@ class AsyncNextApi(AsyncStuderApi):
         # Unpack the response value
         try:
             value = AsyncModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
-
-            match parameter.data_type:
-                case StuderDataType.ENUM16: return parameter.enum_value(value)
-                case StuderDataType.ENUM32: return parameter.enum_value(value)
-                case StuderDataType.BITFIELD: return parameter.bitfield_value(value)
-                case _: return value
+            return value
 
         except Exception as e:
             raise NextApiUnpackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
@@ -172,13 +164,9 @@ class AsyncNextApi(AsyncStuderApi):
         burst_start = datetime.now()
 
         for item in request_data.items:
-
-            _LOGGER.debug(f"request_values item pre: code={item.code}, addr_or_slave={item.address_or_slave} ({type(item.address_or_slave)}), nr={item.datapoint.nr}")
             # If needed, cast StuderValueItem into NextValueItem so that extra fields are resolved
             if not isinstance(item, NextValueItem) and safe_isinstance(item, StuderValueItem):
                 item = NextValueItem(datapoint=item.datapoint, device=item.code or item.slave)
-
-            _LOGGER.debug(f"request_values item post: code={item.code}, addr_or_slave={item.address_or_slave} ({type(item.address_or_slave)}), nr={item.datapoint.nr}")
                         
             try:
                 error = None
