@@ -182,7 +182,7 @@ class AsyncNextDiscover(AsyncStuderDiscover):
             _LOGGER.info(f"  Found host: {gateway_host}, port: {gateway_port}")
 
         except Exception as e:
-            _LOGGER.warning(f"  Exception in discoverClientInfo: {e}")
+            _LOGGER.info(f"  Warning, could not determine gateway host and port")
 
         try:
             param = self._dataset.get_by_id(NextDataset.ID_INSTALLATION_GUID)
@@ -191,7 +191,7 @@ class AsyncNextDiscover(AsyncStuderDiscover):
             _LOGGER.info(f"  Found guid: {gateway_guid}")
 
         except Exception as e:
-            _LOGGER.warning(f"  Exception in discover_gateway_info: {e}")
+            _LOGGER.info(f"  Warning, could not determine gateway guid")
 
         return StuderDiscoveredGateway(
             host = gateway_host,

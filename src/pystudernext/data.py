@@ -68,6 +68,7 @@ class NextDataType():
             case StuderDataType.SIGNAL:     return ModbusTcpClient.DATATYPE.UINT16 
             case StuderDataType.INT16:      return ModbusTcpClient.DATATYPE.INT16  
             case StuderDataType.UINT16:     return ModbusTcpClient.DATATYPE.UINT16 
+            case StuderDataType.ENUM16:     return ModbusTcpClient.DATATYPE.UINT16
             case StuderDataType.INT32:      return ModbusTcpClient.DATATYPE.INT32  
             case StuderDataType.UINT32:     return ModbusTcpClient.DATATYPE.UINT32 
             case StuderDataType.FLOAT32:    return ModbusTcpClient.DATATYPE.FLOAT32

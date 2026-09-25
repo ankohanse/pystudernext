@@ -141,12 +141,13 @@ class NextApi(StuderApi):
             value = ModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
 
             match parameter.data_type:
+                case StuderDataType.ENUM16: return parameter.enum_value(value)
                 case StuderDataType.ENUM32: return parameter.enum_value(value)
                 case StuderDataType.BITFIELD: return parameter.bitfield_value(value)
                 case _: return value
 
         except Exception as e:
-            raise NextApiPackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
+            raise NextApiUnpackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
 
 
     def request_values(self, request_data: NextValueSet, retries = None, timeout = None, verbose=False) -> NextValueSet:

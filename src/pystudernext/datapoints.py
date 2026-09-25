@@ -139,6 +139,7 @@ class NextDatapoint(StuderDatapoint):
             case 'signal': return StuderDataType.SIGNAL
             case 'int16': return StuderDataType.INT16
             case 'uint16': return StuderDataType.UINT16
+            case 'enum16': return StuderDataType.ENUM16
             case 'int32' | 'int': return StuderDataType.INT32
             case 'uint32' | 'uint': return StuderDataType.UINT32
             case 'float': return StuderDataType.FLOAT32

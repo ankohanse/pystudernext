@@ -39,7 +39,7 @@
     {   "fam": "tst", "pid": "99.1.1", "addr": 841, "size": 1, "lvl": "ViewOnly", "id": "5",   "lbl": "Battery Current", "def": "", "unit": "A DC", "rng": null, "type": "int16", "rw": "R" },
     {   "fam": "tst", "pid": "99.1.1", "addr": 842, "size": 1, "lvl": "ViewOnly", "id": "6",   "lbl": "Battery Power", "def": "", "unit": "W", "rng": null, "type": "int16", "rw": "R" },
     {   "fam": "tst", "pid": "99.1.1", "addr": 843, "size": 1, "lvl": "ViewOnly", "id": "7",   "lbl": "Battery State of Charge", "def": "", "unit": "%", "rng": null, "type": "uint16", "rw": "R" },
-    {   "fam": "tst", "pid": "99.1.1", "addr": 844, "size": 1, "lvl": "ViewOnly", "id": "8",   "lbl": "Battery State", "def": "", "unit": "%", "rng": null, "type": "enum", "rw": "R", "enum_id": "0" },
+    {   "fam": "tst", "pid": "99.1.1", "addr": 844, "size": 1, "lvl": "ViewOnly", "id": "8",   "lbl": "Battery State", "def": "", "unit": "", "rng": null, "type": "enum16", "rw": "R", "enum_id": "0" },
     {   "fam": "tst", "pid": "99.1.1", "addr": 868, "size": 2, "lvl": "ViewOnly", "id": "9",   "lbl": "Inverter/Charger current", "def": "", "unit": "A", "rng": null, "type": "int", "rw": "R" },
     {   "fam": "tst", "pid": "99.1.1", "addr": 870, "size": 2, "lvl": "ViewOnly", "id": "10",   "lbl": "Inverter/Charger power", "def": "", "unit": "W", "rng": null, "type": "int", "rw": "R" },
 
