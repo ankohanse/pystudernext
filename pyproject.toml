@@ -1,6 +1,6 @@
 [project]
 name = "pystudernext"
-version = "1.0.11"
+version = "1.0.12"
 authors = [
   { name="Anko Hanse", email="anko_hanse@hotmail.com" },
 ]
