@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
+from pystudernext.shared.studer_valueset import StuderValueItem, StuderValueSet
+
 from .shared.studer_dataset import StuderDatapoint
 from .shared.helpers import safe_isinstance
 from .shared.studer_interfaces_async import AsyncStuderApi
@@ -109,7 +111,10 @@ class AsyncNextApi(AsyncStuderApi):
             
         if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Datapoint {parameter.family_id}:{parameter.address} is not readable")
-            
+
+        #AJH
+        _LOGGER.debug(f"request value; device={device} ({type(device)})")
+        
         if safe_isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
@@ -117,7 +122,7 @@ class AsyncNextApi(AsyncStuderApi):
         elif isinstance(device, str):  
             slave = self._families.get_slave_by_code(code=device)
         else:
-            raise StuderParamException(f"Parameter 'device' must be a NextDiscoverdDevice, a slave number or a device code in call to request_value")
+            raise StuderParamException(f"Parameter 'device' must be a StuderDiscoverdDevice, a slave number or a device code in call to request_value; device={device} ({type(device)})")
 
         # Send the request
         try:
@@ -147,7 +152,7 @@ class AsyncNextApi(AsyncStuderApi):
             raise NextApiUnpackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
 
 
-    async def request_values(self, request_data: NextValueSet, retries = None, timeout = None, verbose=False) -> NextValueSet:
+    async def request_values(self, request_data: StuderValueSet, retries = None, timeout = None, verbose=False) -> NextValueSet:
         """
         Request multiple parameters in one call.
         Can only retrieve actual device values, NOT the average or sum over multiple devices.
@@ -166,26 +171,34 @@ class AsyncNextApi(AsyncStuderApi):
         result_items: list[NextValueItem] = []
         burst_start = datetime.now()
 
-        for req_single in request_data.items:
+        for item in request_data.items:
+
+            _LOGGER.debug(f"request_values item pre: code={item.code}, addr_or_slave={item.address_or_slave} ({type(item.address_or_slave)}), nr={item.datapoint.nr}")
+            # If needed, cast StuderValueItem into NextValueItem so that extra fields are resolved
+            if not isinstance(item, NextValueItem) and safe_isinstance(item, StuderValueItem):
+                item = NextValueItem(datapoint=item.datapoint, device=item.code or item.slave)
+
+            _LOGGER.debug(f"request_values item post: code={item.code}, addr_or_slave={item.address_or_slave} ({type(item.address_or_slave)}), nr={item.datapoint.nr}")
+                        
             try:
                 error = None
-                value = await self.request_value(req_single.datapoint, req_single.address, retries=retries, timeout=timeout, verbose=verbose)
+                value = await self.request_value(item.datapoint, item.slave, retries=retries, timeout=timeout, verbose=verbose)
             
             except Exception as ex:
                 value = None
                 error = str(ex)
 
             if error is not None:
-                _LOGGER.debug(f"Failed to retrieve info or param {req_single.datapoint.nr}:{req_single.address}; {error}")
+                _LOGGER.debug(f"Failed to retrieve value for {item.code}:{item.datapoint.nr}; {error}")
 
             # Add to results
-            rsp_single = NextValueItem(
-                datapoint = req_single.datapoint, 
-                device = req_single.code,
+            result_item = NextValueItem(
+                datapoint = item.datapoint, 
+                device = item.slave,
                 value = value,
                 error = error,
             )
-            result_items.append(rsp_single)
+            result_items.append(result_item)
 
             # Periodically wait for a second. 
             # This will make sure we do not block the Next Gateway with too many requests at once

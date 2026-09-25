@@ -35,7 +35,7 @@ class NextValueItem(StuderValueItem):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
-            code = families.get_code_by_slave(slave, datapoint.family_id)
+            code = families.get_code_by_slave(slave)
         elif isinstance(device, str):  
             code = device
             slave = families.get_slave_by_code(code)
