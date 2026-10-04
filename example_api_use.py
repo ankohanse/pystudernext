@@ -14,8 +14,9 @@ import logging
 import sys
 
 from pystudernext import AsyncNextApi, NextApi
-from pystudernext import NextDeviceFamilies
+from pystudernext import NextDeviceFamilies, NextDeviceFamiliesFlag
 from pystudernext import NextDataset, NextDatapoint
+from pystudernext import NextValueItem, NextValueSet
 from pystudernext import DEFAULT_PORT
 from helper import RunHelper
 
@@ -26,17 +27,27 @@ logger = logging.getLogger(__name__)
 
 # Set these values before running this example
 # Host/ip address and port number of the Next Gateway
-GATEWAY_HOST = "192.168.1.123"
+GATEWAY_HOST = "192.168.88.254"
 GATEWAY_PORT = 502
 
 def main():
-    dataset = NextDataset.get_instance()
+    dataset = NextDataset.get_instance(flags={ NextDeviceFamiliesFlag.ADD_TEST: True })
+
     param_2103 = dataset.get_by_address(2103, NextDeviceFamilies.SYSTEM)
-    param_0318 = dataset.get_by_address(318,  NextDeviceFamilies.BATTERY)
-    param_1815 = dataset.get_by_address(1815, NextDeviceFamilies.AC_SOURCE)
+    param_0318 = dataset.get_by_address( 318, NextDeviceFamilies.BATTERY)
     param_5100 = dataset.get_by_address(5100, NextDeviceFamilies.NEXT3)
     param_6900 = dataset.get_by_address(6900, NextDeviceFamilies.NEXT3)
     param_6902 = dataset.get_by_address(6902, NextDeviceFamilies.NEXT3)
+    param_1815 = dataset.get_by_address(1815, NextDeviceFamilies.AC_SOURCE)
+
+    # For testing
+    param_840 = dataset.get_by_address(840, NextDeviceFamilies.TEST)
+    param_841 = dataset.get_by_address(841, NextDeviceFamilies.TEST)
+    param_842 = dataset.get_by_address(842, NextDeviceFamilies.TEST)
+    param_843 = dataset.get_by_address(843, NextDeviceFamilies.TEST)
+    param_844 = dataset.get_by_address(844, NextDeviceFamilies.TEST)
+    param_868 = dataset.get_by_address(868, NextDeviceFamilies.TEST)
+    param_870 = dataset.get_by_address(870, NextDeviceFamilies.TEST)
 
     api = NextApi(GATEWAY_HOST, GATEWAY_PORT)    
     try:
@@ -44,9 +55,9 @@ def main():
             logger.info(f"Did not connect to Next Gateway")
             return
 
-        # Retrieve individual infos and params
+        # Retrieve individual params
         logger.info(f"")
-        logger.info(f"Retrieve infos and params via individual calls")
+        logger.info(f"Retrieve params via individual calls")
 
         value = api.request_value(param_2103, "SYS")    # System slave range is 1 to 1, or use "SYS"
         logger.info(f"SYS {param_2103.address}: {value} {param_2103.unit or ''} ({param_2103.name})")
@@ -62,6 +73,21 @@ def main():
 
         value = api.request_value(param_6902, "NX3_1")  # Next3 slave range is 14 to 28, or use "NX3_1" to "NX3_15"
         logger.info(f"NZ3_1 {param_6902.address}: {value} {param_6902.unit or ''} ({param_6902.name})")
+
+        # logger.info(f"")
+        # logger.info(f"Retrieve a set of infos and params in one call")
+        #
+        # request_data = NextValueSet([
+        #     NextValueItem(param_844, "TST"),
+        #     NextValueItem(param_840, "TST"),
+        #     NextValueItem(param_841, "TST"),
+        #     NextValueItem(param_842, "TST"),
+        #     NextValueItem(param_843, "TST"),
+        # ])
+        # response_data = await api.request_values(request_data)    # System slave range is 1 to 1, or use "SYS"
+        # logger.info(f"response_data: {len(response_data.items)}")
+        # for item in response_data.items:
+        #     logger.info(f"{item.code} {item.datapoint.nr}: {item.value} {item.datapoint.unit} ({item.datapoint.name})")
 
         # Retrieve and Update param 1815 (Grid feedin allowed))
         logger.info(f"")

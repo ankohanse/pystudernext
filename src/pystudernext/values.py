@@ -5,11 +5,11 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Iterable
 
+from pystudershared import StuderDatapoint
+from pystudershared import StuderDiscoveredDevice, StuderParamException
+from pystudershared import StuderValueItem, StuderValueSet
+
 from .families import NextDeviceFamilies
-from .shared.helpers import safe_isinstance
-from .shared.studer_dataset import StuderDatapoint
-from .shared.studer_types import StuderDiscoveredDevice, StuderParamException
-from .shared.studer_valueset import StuderValueItem, StuderValueSet
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class NextValueItem(StuderValueItem):
         # Convert from code, addr and aggr. Code trumps addr and aggr, while addr trumps aggr.
         families = NextDeviceFamilies.get_instance() # singleton instance
 
-        if safe_isinstance(device, StuderDiscoveredDevice):
+        if isinstance(device, StuderDiscoveredDevice):
             code = device.code
             slave = device.slave
         elif isinstance(device, int):

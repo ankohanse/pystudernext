@@ -13,11 +13,7 @@ from dataclasses import dataclass
 from enum import IntEnum, StrEnum
 from pymodbus.client import ModbusTcpClient
 
-from pystudernext import (
-    StuderDataType,
-    StuderUserLevel,
-    StuderParamException,
-)
+from pystudershared import StuderDataType, StuderUserLevel, StuderParamException
 
 
 _LOGGER = logging.getLogger(__name__)

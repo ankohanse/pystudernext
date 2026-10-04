@@ -9,7 +9,6 @@ exclude = [
 ]
 
 [tool.unasyncd.files]
-    "src/pystudernext/shared/studer_interfaces_async.py" = "src/pystudernext/shared/studer_interfaces_sync.py"
     "src/pystudernext/api_async.py" = "src/pystudernext/api_sync.py"
     "src/pystudernext/discover_async.py" = "src/pystudernext/discover_sync.py"
     "tests/test_api_async.py" = "tests/test_api_sync.py"
@@ -20,8 +19,6 @@ exclude = [
     "example_menu_async.py" = "example_menu.py"
 
 [tool.unasyncd.add_replacements]
-    "AsyncStuderApi" = "StuderApi"
-    "AsyncStuderDiscover" = "StuderDiscover"
     "AsyncNextApi" = "NextApi"
     "AsyncNextDiscover" = "NextDiscover"
     "AsyncModbusTcpClient" = "ModbusTcpClient"

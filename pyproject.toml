@@ -1,6 +1,6 @@
 [project]
 name = "pystudernext"
-version = "1.0.12"
+version = "1.1.0"
 authors = [
   { name="Anko Hanse", email="anko_hanse@hotmail.com" },
 ]
@@ -13,6 +13,7 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
+  'pystudershared>=1.0.0,<1.1.0',
   'httpx',
   'pymodbus',
   'aiofiles',

@@ -8,14 +8,8 @@ import logging
 
 from dataclasses import dataclass
 
-from .shared.helpers import (
-    HybridLock,
-)
-from .shared.studer_families import (
-    StuderDeviceFamilies,
-    StuderDeviceFamily,
-    StuderDeviceSlaveUnknownException,
-)
+from pystudershared import HybridLock
+from pystudershared import StuderDeviceFamilies, StuderDeviceFamily, StuderDeviceSlaveUnknownException
 
 
 _LOGGER = logging.getLogger(__name__)

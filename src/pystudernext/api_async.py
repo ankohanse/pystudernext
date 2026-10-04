@@ -9,13 +9,12 @@ from datetime import datetime, timedelta
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from typing import Any
 
+from pystudershared import AsyncStuderApi, StuderApi, StuderDataType
+from pystudershared import StuderAccess, StuderDiscoveredDevice
+from pystudershared import StuderDatapoint
+from pystudershared import StuderValueItem, StuderValueSet
+from pystudershared import StuderParamException
 
-from .shared.studer_dataset import StuderDatapoint
-from .shared.helpers import safe_isinstance
-from .shared.studer_interfaces_async import AsyncStuderApi
-from .shared.studer_interfaces_sync import StuderApi
-from .shared.studer_types import StuderAccess, StuderDataType, StuderDiscoveredDevice, StuderParamException
-from .shared.studer_valueset import StuderValueItem, StuderValueSet
 from .const import DEFAULT_HOST, DEFAULT_PORT, REQ_BURST_PERIOD
 from .data import NextDataType, NextApiConnectException, NextApiReadException, NextApiUpdateException, NextApiPackException, NextApiUnpackException
 from .datapoints import NextDatapoint
@@ -112,7 +111,7 @@ class AsyncNextApi(AsyncStuderApi):
         if parameter.access not in [StuderAccess.READ, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Datapoint {parameter.family_id}:{parameter.address} is not readable")
 
-        if safe_isinstance(device, StuderDiscoveredDevice):
+        if isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
@@ -138,7 +137,12 @@ class AsyncNextApi(AsyncStuderApi):
         # Unpack the response value
         try:
             value = AsyncModbusTcpClient.convert_from_registers(result.registers, data_type=NextDataType.to_datatype(parameter.data_type))
-            return value
+
+            match parameter.data_type:
+                case StuderDataType.ENUM16: return parameter.enum_value(value)
+                case StuderDataType.ENUM32: return parameter.enum_value(value)
+                case StuderDataType.BITFIELD: return parameter.bitfield_value(value)
+                case _: return value
 
         except Exception as e:
             raise NextApiUnpackException(f"Failed to unpack response value for slave {slave}, address {parameter.address}: registers={result.registers}, format={parameter.data_type}, size={parameter.size}") from None
@@ -165,7 +169,7 @@ class AsyncNextApi(AsyncStuderApi):
 
         for item in request_data.items:
             # If needed, cast StuderValueItem into NextValueItem so that extra fields are resolved
-            if not isinstance(item, NextValueItem) and safe_isinstance(item, StuderValueItem):
+            if not isinstance(item, NextValueItem) and isinstance(item, StuderValueItem):
                 item = NextValueItem(datapoint=item.datapoint, device=item.code or item.slave)
                         
             try:
@@ -216,7 +220,7 @@ class AsyncNextApi(AsyncStuderApi):
         if parameter.access not in [StuderAccess.WRITE, StuderAccess.READ_WRITE]:
             raise StuderParamException(f"Device parameter {parameter.family_id}:{parameter.address} is not writable")
             
-        if safe_isinstance(device, StuderDiscoveredDevice):
+        if isinstance(device, StuderDiscoveredDevice):
             slave = device.slave
         elif isinstance(device, int):
             slave = device
@@ -229,8 +233,13 @@ class AsyncNextApi(AsyncStuderApi):
 
         # Pack the data
         try:
-            client = await self._get_connected_client()
-            regs = AsyncModbusTcpClient.convert_to_registers(value, data_type=NextDataType.to_datatype(parameter.data_type))
+            match parameter.data_type:
+                case StuderDataType.ENUM16: val = parameter.enum_key(value)
+                case StuderDataType.ENUM32: val = parameter.enum_key(value)
+                case StuderDataType.BITFIELD: val = parameter.bitfield_key(value)
+                case _: val = value
+
+            regs = AsyncModbusTcpClient.convert_to_registers(val, data_type=NextDataType.to_datatype(parameter.data_type))
 
         except Exception as e:
             raise NextApiPackException(f"Failed to pack value for slave {slave}, address {parameter.address}: value={value}, format={parameter.data_type}, size={parameter.size}") from None
@@ -240,6 +249,7 @@ class AsyncNextApi(AsyncStuderApi):
             if verbose:
                 _LOGGER.debug(f"Modbus update registers for '{parameter.name}' ({parameter.address} via {slave})")
             
+            client = await self._get_connected_client()
             result = await client.write_registers(address=parameter.address, values=regs, device_id=slave)
 
         except Exception as err:

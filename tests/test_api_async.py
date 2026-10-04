@@ -8,8 +8,9 @@ from pymodbus.pdu import ModbusPDU
 from pymodbus.client import AsyncModbusTcpClient, ModbusTcpClient
 from pymodbus.pdu.utils import unpack_bitstring
 
-from pystudernext import StuderParamException
-from pystudernext import StuderDataType, StuderDiscoveredDevice
+from pystudershared import StuderParamException
+from pystudershared import StuderDataType, StuderDiscoveredDevice
+
 from pystudernext import NextDataType
 from pystudernext import NextDataset
 from pystudernext.values import NextValueItem, NextValueSet
@@ -183,23 +184,24 @@ async def test_request_values(name, values_fixture, exp_value, exp_error, exp_ex
 
 
 @pytest.mark.parametrize(
-    "name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except",
+    "name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except",
     [
-        ("update bool ok",      'sys', 1,  1202, StuderDataType.BOOL, True,   1, None),
-        ("update int ok",       'nx3', 14, 8710, StuderDataType.INT32, 1234,   14, None),
-        ("update uint ok",      'nx3', 14, 7505, StuderDataType.UINT32, 1234,   14, None),
-        ("update float ok",     'sys', 1,  2719, StuderDataType.FLOAT32, 1234.0, 1, None),
-        ("update float64 ok",   'sys', 1,  3920, StuderDataType.FLOAT64, 1234.0, 1, None),
-        ("update string ok",    'nxg', 59, 4800, StuderDataType.STRING, "1234", 59, None),
-        ("update enum ok",      'sys', 1,  1200, StuderDataType.ENUM32,   1, 1, None),
-        ("update bool fail",    'sys', 1,  1203, StuderDataType.BOOL, True,   1, StuderParamException),   # Readonly
-        ("update slave ok",     'nx3', 14,           7505, StuderDataType.UINT32, 1234, 14, None),
-        ("update code ok",      'nx3', 'NX3_1',      7505, StuderDataType.UINT32, 1234, 14, None),
-        ("update device ok",    'nx3', DEVICE_NX3_1, 7505, StuderDataType.UINT32, 1234, 14, None),
-        ("update slave fail",   'nx3', None,         7505, StuderDataType.UINT32, 1234, 14, StuderParamException),
+        ("update bool ok",      'sys', 1,  1202, StuderDataType.BOOL, True,   1, 1, None),
+        ("update int ok",       'nx3', 14, 8710, StuderDataType.INT32, 1234,   1234, 14, None),
+        ("update uint ok",      'nx3', 14, 7505, StuderDataType.UINT32, 1234,   1234, 14, None),
+        ("update float ok",     'sys', 1,  2719, StuderDataType.FLOAT32, 1234.0, 1234.0, 1, None),
+        ("update float64 ok",   'sys', 1,  3920, StuderDataType.FLOAT64, 1234.0, 1234.0, 1, None),
+        ("update string ok",    'nxg', 59, 4800, StuderDataType.STRING, "1234", "1234", 59, None),
+        ("update enum ok",      'sys', 1,  1200, StuderDataType.ENUM32, "Solid neutral", 1, 1, None),
+        ("update bitfield ok",  'bat', 2,   338, StuderDataType.BITFIELD, ["SOC for grid feeding","SOC for backup"], [False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False], 2, None),
+        ("update bool fail",    'sys', 1,  1203, StuderDataType.BOOL, True,   1, 1, StuderParamException),   # Readonly
+        ("update slave ok",     'nx3', 14,           7505, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("update code ok",      'nx3', 'NX3_1',      7505, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("update device ok",    'nx3', DEVICE_NX3_1, 7505, StuderDataType.UINT32, 1234, 1234, 14, None),
+        ("update slave fail",   'nx3', None,         7505, StuderDataType.UINT32, 1234, 1234, 14, StuderParamException),
     ]
 )
-async def test_update_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_slave, exp_except):
+async def test_update_value(name, test_fam, test_slave, test_addr, test_format, test_value, exp_value, exp_slave, exp_except):
 
     write_called = False
     write_address = None
@@ -235,7 +237,7 @@ async def test_update_value(name, test_fam, test_slave, test_addr, test_format, 
         assert write_regs is not None
 
         data_type = NextDataType.to_datatype(test_format)
-        registers = AsyncModbusTcpClient.convert_to_registers(value=test_value, data_type=data_type)
+        registers = AsyncModbusTcpClient.convert_to_registers(value=exp_value, data_type=data_type)
 
         assert write_regs == registers
 

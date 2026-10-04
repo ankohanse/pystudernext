@@ -1,14 +1,8 @@
 import pytest
 import pytest_asyncio
 
-from pystudernext import (
-    NextDataset, 
-    NextDatasetFlag,
-    NextDeviceFamilies,
-    StuderDataType, 
-    StuderDatapointUnknownException,
-    StuderParamException,
-)
+from pystudershared import StuderDataType, StuderDatapointUnknownException, StuderParamException
+from pystudernext import NextDataset, NextDatasetFlag, NextDeviceFamilies
 
 
 FLAGS_DEFAULT = None

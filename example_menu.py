@@ -13,9 +13,11 @@ import sys
 
 from helper import RunHelper
 
+from pystudershared import StuderDataType
 from pystudernext import NextDeviceFamilies
-from pystudernext import StuderDataType
 from pystudernext import NextDataset
+from pystudernext.datapoints import NextDatasetFlag
+from pystudernext.families import NextDeviceFamiliesFlag
 
 # Setup logging to StdOut
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -24,24 +26,25 @@ logger = logging.getLogger(__name__)
 
 def main():
     # Print entire menu structure
-    families = NextDeviceFamilies.get_instance()
-    dataset = NextDataset.get_instance()
-
+    families = NextDeviceFamilies.get_instance(flags={ NextDeviceFamiliesFlag.ADD_TEST: True })
+    dataset = NextDataset.get_instance(flags={ NextDatasetFlag.ADD_TEST: True })
+    units = set()
+    
     # Helper function to recursively print the entire menu
-    def print_menu(family_id, parent_id, indent=""):
-        items = dataset.get_menu_items(family_id, parent_id)
+    def print_menu(family, parent_id, indent=""):
+        items = dataset.get_menu_items(family, parent_id)
         for item in items:
             if item.data_type == StuderDataType.MENU:
                 logger.info(f"{indent}{item.label}")
 
-                print_menu(family_id, item.id, indent+"  ")
+                print_menu(family, item.id, indent+"  ")
             else:
                 logger.info(f"{indent}{item.label} ({item.address})")
 
     for family in families:
         logger.info(f"")
         logger.info(f"{family.model}")
-        print_menu(family.id, "", "  ")
+        print_menu(family, "", "  ")
 
     dataset = None  # Release memory of the dataset
 

@@ -2,7 +2,8 @@ from typing import Literal
 import pytest
 import pytest_asyncio
 
-from pystudernext import StuderUserLevel, NextUserLevel
+from pystudershared import StuderUserLevel
+from pystudernext import NextUserLevel
 
 
 @pytest.mark.parametrize(

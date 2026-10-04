@@ -9,26 +9,12 @@ from aiofiles import open as aiofiles_open
 from dataclasses import dataclass
 from enum import StrEnum
 
-from .shared.helpers import (
-    HybridLock,
-)
-from .shared.studer_dataset import (
-    StuderDatapoint,
-    StuderDatapointEnumNotFoundException,
-    StuderDatapointSyntaxException,
-    StuderDataset,
-)
-from .shared.studer_types import (
-    StuderAccess,
-    StuderDataType,
-    StuderTarget,
-)
-from .data import (
-    NextUserLevel,
-)
-from .families import (
-    NextDeviceFamilies,
-)
+from pystudershared import HybridLock
+from pystudershared import StuderDatapoint, StuderDataset, StuderDatapointEnumNotFoundException, StuderDatapointSyntaxException
+from pystudershared import StuderAccess, StuderDataType, StuderTarget
+
+from .data import NextUserLevel
+from .families import NextDeviceFamilies
 
 
 _LOGGER = logging.getLogger(__name__)

@@ -10,17 +10,14 @@ import httpx
 import logging
 import struct
 
-from ipaddress import IPv4Address, IPv6Address
-from dataclasses import dataclass
+from pystudershared import StuderNetworkHelper
+from pystudershared import AsyncStuderDiscover, StuderDiscover
+from pystudershared import StuderDataset
+from pystudershared import StuderDiscoveredDevice, StuderDiscoveredGateway, StuderDiscoverNotConnected
 
-from .shared.helpers import StuderNetworkHelper
-from .shared.studer_interfaces_async import AsyncStuderDiscover
-from .shared.studer_interfaces_sync import StuderDiscover
-from .shared.studer_dataset import StuderDataset, StuderDatapoint, StuderDatapointUnknownException, StuderDatapointSyntaxException
-from .shared.studer_types import StuderDataType, StuderDiscoveredDevice, StuderDiscoveredGateway, StuderDiscoverNotConnected
 from .api_async import AsyncNextApi
 from .api_sync import NextApi
-from .datapoints import NextDatapoint, NextDataset
+from .datapoints import NextDataset
 from .families import NextDeviceFamilies
 import concurrent.futures
 
@@ -29,7 +26,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
-class NextDiscover(StuderDiscover):
+class NextDiscover(AsyncStuderDiscover):
 
     def __init__(self, api: NextApi, dataset: StuderDataset):
         """

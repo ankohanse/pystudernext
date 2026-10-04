@@ -1,7 +1,7 @@
 
 import pytest
+from pystudershared import StuderDeviceFamilyUnknownException
 from pystudernext import NextDeviceFamilies
-from pystudernext import StuderDeviceFamilyUnknownException
 
 
 async def test_create_async():
